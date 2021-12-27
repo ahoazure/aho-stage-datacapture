@@ -290,9 +290,9 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
 
     # Format date created to disply only the day, month and year
     def start_date (obj):
-        return obj.start_period.strftime("%b, %Y")
+        return obj.start_period.strftime("%b %Y")
     start_date.admin_order_field = 'start_period'
-    start_date.short_description = 'Reporting Date'
+    start_date.short_description = 'Reporting Period'
 
     #Format date created to disply only the day, month and year
     def date_created (obj):
@@ -327,9 +327,8 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
         )
     resource_class = HSCFactsResourceExport
     # The list display includes a callable get_afrocode that returns indicator code
-    list_display=('indicator','location', get_afrocode,start_date,'period',
-        'categoryoption','value_received','datasource','get_comment_display',
-        date_created,)
+    list_display=('indicator','location', get_afrocode,start_date,'categoryoption',
+        'value_received','datasource','get_comment_display',date_created,)
 
     list_select_related = ('indicator','location','categoryoption','datasource',
         'measuremethod',)
