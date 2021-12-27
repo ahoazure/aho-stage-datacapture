@@ -2,7 +2,7 @@ from .settings import *
 DEBUG = True # Will be moved to external variables in Phase 2
 # Configure production domain names
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net',
-    'af-aho-datacapturetool-dev.azurewebsites.net',
+    'af-aho-datacapturetool-stage.azurewebsites.net',
         'dct.aho.afro.who.int'] if 'WEBSITE_SITE_NAME' in os.environ else []
 
 # WhiteNoise configuration
@@ -20,7 +20,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# 
+#
 # # Settings for serving and uploading media into Azure Blob storage container
 # AZURE_ACCOUNT_NAME = os.environ['AZURE_ACCOUNT']
 # AZURE_CONTAINER = os.environ['AZURE_CONTAINER']
