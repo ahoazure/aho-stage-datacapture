@@ -278,8 +278,8 @@ class FactDataIndicator(models.Model):
                 'Data Entry Problem! Both numeric and string values cannot\
                  be empty. Please supply data to both or either!')})
 
-        if FactDataIndicator.objects.filter(priority=self.priority).count()>=10:
-            raise ValidationError('Priority cannot exceed 10!')
+        # if FactDataIndicator.objects.filter(priority=self.priority).count()>=10:
+        #     raise ValidationError('Priority cannot exceed 10!')
 
     """
     The purpose of this method is to concatenate the date that are entered as

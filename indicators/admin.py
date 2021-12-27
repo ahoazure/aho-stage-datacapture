@@ -233,7 +233,7 @@ class IndicatorProxyForm(forms.ModelForm):
         widgets = {'user': forms.HiddenInput()} # hide user field for autofill
         fields = ('indicator','location', 'categoryoption','datasource',
             'measuremethod','start_period','end_period','value_received',
-            'string_value',)
+            'string_value','priority',)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -301,12 +301,12 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         user = request.user.id
         user_location = request.user.location.location_id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
-        db_locations = StgLocation.objects.all().select_related(
+        db_locations = StgLocation.objects.only('locationlevel',).select_related(
             'parent','locationlevel','wb_income','special').order_by(
             'location_id')
         qs = super().get_queryset(request).select_related(
             'indicator','location','categoryoption','datasource',
-            'measuremethod').filter(
+            'measuremethod','user',).filter(
             indicator__translations__language_code=language).order_by(
             'indicator__translations__name').filter(
             location__translations__language_code=language).order_by(
@@ -341,8 +341,8 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
         if db_field.name == "location":
             if request.user.is_superuser:
-                kwargs["queryset"] = StgLocation.objects.all().order_by(
-                'location_id')
+                kwargs["queryset"] = StgLocation.objects.only(
+                    'locationlevel',).order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.filter(
@@ -435,7 +435,7 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         'priority',date_created,)
 
     list_select_related = ('indicator','location','categoryoption','datasource',
-        'measuremethod',)
+        'measuremethod','user',)
 
     list_display_links = ('location',get_afrocode, 'indicator',)
     search_fields = ('indicator__translations__name','location__translations__name',
@@ -487,8 +487,8 @@ class FactIndicatorInline(admin.TabularInline):
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
         if db_field.name == "location":
             if request.user.is_superuser:
-                kwargs["queryset"] = StgLocation.objects.all().order_by(
-                'location_id')
+                kwargs["queryset"] = StgLocation.objects.only(
+                    'locationlevel').order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.filter(
@@ -637,7 +637,7 @@ class IndicatorFactArchiveAdmin(OverideExport):
         db_locations = StgLocation.objects.all().select_related(
             'parent','locationlevel','wb_income','special').order_by(
             'location_id')
-        facts_archive= aho_factsindicator_archive.objects.only(
+        facts_archive=aho_factsindicator_archive.objects.only(
             'indicator','location','categoryoption','datasource',
             'value_received','period','comment',)
         # Returns data for all the locations to the lowest location level
