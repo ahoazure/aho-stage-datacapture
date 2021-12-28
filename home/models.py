@@ -90,8 +90,8 @@ class StgCustomNationalObservatory(models.Model):
     class Meta:
         managed = True
         db_table = 'stg_national_observatory'
-        verbose_name = _('Health Observatory')
-        verbose_name_plural = _('    Health Observatories')
+        verbose_name = _('Customize Observatory')
+        verbose_name_plural = _('   Customize Observatory')
         ordering = ('name',)
 
     def __str__(self):

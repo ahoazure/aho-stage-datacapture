@@ -423,8 +423,10 @@ class HealthServicesProxyAdmin(TranslatableAdmin):
         user = request.user.username
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
         user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
+        db_locations = StgLocation.objects.only('locationlevel',).order_by(
+            'location_id')
         db_user=list(CustomUser.objects.values_list('username', flat=True))
+
         qs = super().get_queryset(request).filter(reference=5).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
@@ -504,13 +506,14 @@ class HealthServicesIndicatorsAdmin(TranslatableAdmin,OverideExport):
         user = request.user.username
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
         user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
+        db_locations = StgLocation.objects.only('locationlevel',).order_by(
+            'location_id')
         db_user=list(CustomUser.objects.values_list('username', flat=True))
 
-
-        qs = super().get_queryset(request).filter(reference=5).filter(
+        qs = super().get_queryset(request).filter(reference__code='GIR0005').filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
+
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
