@@ -19,7 +19,8 @@ SECRET_KEY = os.environ['SECRET']
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1',]
+ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
+        'af-aho-datacapturetool.azurewebsites.net']
 
 # Application definition
 INSTALLED_APPS = [

@@ -233,7 +233,7 @@ class MeasuredAdmin(TranslatableAdmin,OverideExport):
 # The classes overrides admin.py in site-packages/data_wizard/sources/
 # ------------------------------------------------------------------------------
 class FileSourceAdmin(ImportActionModelAdmin):
-    menu_title = _("Upload File... ")
+    menu_title = _("Import File... ")
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         # Get a query of groups the user belongs and flatten it to list object
@@ -281,7 +281,7 @@ class FileSourceAdmin(ImportActionModelAdmin):
 
     fieldsets = ( # used to create frameset sections on file import form
         ('File Import Details', {
-                'fields': ('name','file','url')
+                'fields': ('name','file',)
             }),
         )
     list_display=('name','location','url','date',)
