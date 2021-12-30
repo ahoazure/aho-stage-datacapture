@@ -20,7 +20,7 @@ SECRET_KEY = os.environ['SECRET']
 DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
-        'af-aho-datacapturetool.azurewebsites.net']
+                'af-aho-datacapturetool.azurewebsites.net']
 
 # Application definition
 INSTALLED_APPS = [
@@ -192,8 +192,8 @@ MICROSOFT = {
 # Settings for serving and uploading media into Azure Blob storage container
 AZURE_ACCOUNT_NAME = os.environ['AZURE_ACCOUNT']
 AZURE_CONTAINER = os.environ['AZURE_CONTAINER']
-# AZURE_CUSTOM_DOMAIN = os.environ['AZURE_DOMAIN']
-AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+AZURE_CUSTOM_DOMAIN = os.environ['AZURE_DOMAIN']
+# AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 
 if DEBUG:
     STATIC_URL = '/static/'
