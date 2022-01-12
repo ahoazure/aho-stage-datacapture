@@ -19,3 +19,4 @@ python-dotenv>=0.17.1
 pytz>=2018.5
 tablib[all]
 whitenoise
+xlrd==1.2.0 #downgraded xlrd to support xlsx
