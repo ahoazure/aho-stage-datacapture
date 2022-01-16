@@ -79,7 +79,7 @@ class NHOCustomizationAdmin(OverideExport):
                 'fields': ('name','location','custom_header','coat_arms',)
             }),
             ('Contact Details', {
-                'fields': ('address','email','phone_part','url',),
+                'fields': ('address','email','phone_code','phone_part','url',),
             }),
             ('Footer Details', {
                 'fields': ('custom_footer',),
@@ -94,6 +94,7 @@ class NHOCustomizationAdmin(OverideExport):
     search_fields = ('name', 'location','url') #display search field
     list_per_page = 30 #limit records displayed on admin site to 15
     exclude = ('date_created','date_lastupdated','code',)
+    readonly_fields = ('phone_code','phone_number',)
 
 
 
