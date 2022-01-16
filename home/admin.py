@@ -88,7 +88,6 @@ class NHOCustomizationAdmin(OverideExport):
                 'fields': ('announcement',),
             }),
         )
-
     #resource_class = DataTypeExport
     list_display=['name','location','custom_header','phone_number','url','coat_arms',]
     list_display_links = ('name', 'location','url')

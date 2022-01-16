@@ -68,8 +68,8 @@ class StgCustomNationalObservatory(models.Model):
     custom_footer = models.CharField(_('Custom Footer'),max_length=1000,
         blank=True, null=True,)
     announcement = models.TextField(_('Announcements'),blank=True,null=True)
-    coat_arms = models.ImageField(_('Coat of Arms'),upload_to='dev/images/',
-        blank=True,)
+    coat_arms = models.ImageField(_('Coat of Arms'),
+        upload_to='production/images/',blank=True,)
     address = models.CharField(_('Physical Address'),max_length=500,blank=True,
         null=True)  # Field name made lowercase.
     email = models.EmailField(_('Email'),unique=True,max_length=250,
