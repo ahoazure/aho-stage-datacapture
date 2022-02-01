@@ -526,7 +526,7 @@ class NHOCustomizationIcons(TranslatableModel):
 
 def delete_handler(sender, instance, **kwargs):
     qs = NHOCustomFactsindicator.objects.order_by('date_created') #order by date
-    if qs.count() > 2:
+    if qs.count() > 10:
         qs[0].delete() #remove the oldest element
 
 
@@ -569,18 +569,14 @@ class NHOCustomFactsindicator(models.Model):
         db_table = 'fact_priority_indicators'
         unique_together = ('indicator','location','categoryoption','datasource',
         'period',)
-        verbose_name = _('Set Priority')
-        verbose_name_plural = _('Set Priorities')
+        verbose_name = _('Indicator Priority')
+        verbose_name_plural = _('Indicators Priorities')
         ordering = ('indicator__translations__name',)
 
     def __str__(self):
          return str(self.indicator)
+post_save.connect(delete_handler,sender=NHOCustomFactsindicator)
 
-    # def save(self, *args, **kwargs):
-    #     if NHOCustomFactsindicator.objects.count() == 10:
-    #         NHOCustomFactsindicator.objects[0].delete()
-    #     super(NHOCustomFactsindicator, self).save(*args, **kwargs)
-post_save.connect(delete_handler, sender=NHOCustomFactsindicator)
 
 class StgNarrative_Type(TranslatableModel):
     type_id = models.AutoField(primary_key=True)
