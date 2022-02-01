@@ -190,10 +190,10 @@ MICROSOFT = {
 }
 
 # Settings for serving and uploading media into Azure Blob storage container
+AZURE_OVERWRITE_FILES = True # overwrite existing file with one being uploaded
 AZURE_ACCOUNT_NAME = os.environ['AZURE_ACCOUNT']
 AZURE_CONTAINER = os.environ['AZURE_CONTAINER']
 AZURE_CUSTOM_DOMAIN = os.environ['AZURE_DOMAIN']
-# AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 
 if DEBUG:
     STATIC_URL = '/static/'
@@ -201,7 +201,7 @@ if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'repository/') # 'data' is my media folder
 else:
-    #Configurations for serving static assets (CSS, JavaScript, Images)
+    # Configurations for serving static assets (CSS, JavaScript, Images)
     STATIC_LOCATION='static' #This works well as the static location
     STATICFILES_STORAGE  = 'aho_datacapturetool.azurestorage.AzureStaticStorage'
     STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/{STATIC_LOCATION}/'
