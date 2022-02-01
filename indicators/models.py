@@ -524,6 +524,11 @@ class NHOCustomizationIcons(TranslatableModel):
     def __str__(self):
         return self.name #display the data source name
 
+def delete_handler(sender, instance, **kwargs):
+    qs = NHOCustomFactsindicator.objects.order_by('date_created') #order by date
+    if qs.count() > 10:
+        qs[0].delete() #remove the oldest element
+
 
 class NHOCustomFactsindicator(models.Model):
     PRIORITY = (
@@ -547,7 +552,7 @@ class NHOCustomFactsindicator(models.Model):
         null=False, verbose_name = _('Data Source'))
     measuremethod = models.ForeignKey(StgMeasuremethod, models.PROTECT,
         blank=True,null=True, verbose_name = _('Measure Type'))
-    icon = models.ForeignKey('NHOCustomizationIcons',models.PROTECT,blank=False,
+    icon = models.ForeignKey(NHOCustomizationIcons,models.PROTECT,blank=False,
         null=False, verbose_name = _('Font Icon'))
     value_received = models.DecimalField(_('Value'),max_digits=20,
         decimal_places=2,blank=False,null=True)
@@ -571,11 +576,11 @@ class NHOCustomFactsindicator(models.Model):
     def __str__(self):
          return str(self.indicator)
 
-    def save(self, *args, **kwargs):
-        if NHOCustomFactsindicator.objects.count() == 2:
-            objects[0].delete()
-        super(NHOCustomFactsindicator, self).save(*args, **kwargs)
-
+    # def save(self, *args, **kwargs):
+    #     if NHOCustomFactsindicator.objects.count() == 10:
+    #         NHOCustomFactsindicator.objects[0].delete()
+    #     super(NHOCustomFactsindicator, self).save(*args, **kwargs)
+post_save.connect(delete_handler, sender=NHOCustomFactsindicator)
 
 class StgNarrative_Type(TranslatableModel):
     type_id = models.AutoField(primary_key=True)
