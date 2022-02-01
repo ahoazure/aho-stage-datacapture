@@ -526,7 +526,7 @@ class NHOCustomizationIcons(TranslatableModel):
 
 def delete_handler(sender, instance, **kwargs):
     qs = NHOCustomFactsindicator.objects.order_by('date_created') #order by date
-    if qs.count() > 10:
+    if qs.count() > 2:
         qs[0].delete() #remove the oldest element
 
 
