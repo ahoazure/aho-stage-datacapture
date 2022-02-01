@@ -278,8 +278,8 @@ class FactDataIndicator(models.Model):
                 'Data Entry Problem! Both numeric and string values cannot\
                  be empty. Please supply data to both or either!')})
 
-        # if FactDataIndicator.objects.filter(priority=self.priority).count()>=10:
-        #     raise ValidationError('Priority cannot exceed 10!')
+        if FactDataIndicator.objects.filter(priority=self.priority).count()>=10:
+            raise ValidationError('Priority cannot exceed 10!')
 
     """
     The purpose of this method is to concatenate the date that are entered as
@@ -495,6 +495,36 @@ class aho_factsindicator_archive(models.Model):
     def __str__(self):
          return str(self.indicator)
 
+
+class NHOCustomizationIcons(TranslatableModel):
+    icon_id = models.AutoField(primary_key=True)
+    unicode = models.CharField(unique=True, max_length=5, blank=False,
+        null=False)
+    code = models.CharField(unique=True, max_length=50, blank=True,null=True)
+    version = models.CharField(_("Icon Version"),max_length=15,blank=True,
+        null=True,default='v5.15',)
+    translations = TranslatedFields(
+        name = models.CharField(_("Title"),max_length=230, blank=False,
+            null=False,),
+        shortname = models.CharField(_('Short Name'),max_length=50,blank=True,
+            null=True),
+        description = models.TextField(_('Description'),blank=True,null=True)
+    )
+    date_created = models.DateTimeField(_('Date Created'),blank=True,null=True,
+        auto_now_add=True)
+    date_lastupdated = models.DateTimeField(_('Date Modified'),blank=True,
+        null=True,auto_now=True)
+    class Meta:
+        managed = True
+        db_table = 'stg_fontawesome_icons'
+        verbose_name = _('Custom Icon')
+        verbose_name_plural = _('Custom Icons')
+        ordering = ('translations__name',)
+
+    def __str__(self):
+        return self.name #display the data source name
+
+
 class NHOCustomFactsindicator(models.Model):
     PRIORITY = (
         (1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'),(6,'6'),(7,'7'),(8,'8'),
@@ -517,8 +547,10 @@ class NHOCustomFactsindicator(models.Model):
         null=False, verbose_name = _('Data Source'))
     measuremethod = models.ForeignKey(StgMeasuremethod, models.PROTECT,
         blank=True,null=True, verbose_name = _('Measure Type'))
+    icon = models.ForeignKey('NHOCustomizationIcons',models.PROTECT,blank=False,
+        null=False, verbose_name = _('Font Icon'))
     value_received = models.DecimalField(_('Value'),max_digits=20,
-        decimal_places=3,blank=False,null=True)
+        decimal_places=2,blank=False,null=True)
     period = models.CharField(_('Period'),max_length=25,blank=True,null=False)
     priority = models.SmallIntegerField(_('Priority Level'),choices=PRIORITY,
         blank=False,null=False,)
@@ -530,10 +562,10 @@ class NHOCustomFactsindicator(models.Model):
     class Meta:
         managed = True
         db_table = 'fact_priority_indicators'
-        verbose_name = _('Indicators Customization')
         unique_together = ('indicator','location','categoryoption','datasource',
         'period',)
-        verbose_name_plural = _('Indicators Customization')
+        verbose_name = _('Set Priority')
+        verbose_name_plural = _('Set Priorities')
         ordering = ('indicator__translations__name',)
 
     def __str__(self):

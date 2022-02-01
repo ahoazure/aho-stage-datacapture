@@ -18,7 +18,7 @@ from django.forms.models import ModelChoiceField, ModelChoiceIterator
 from .models import (StgIndicatorReference,StgIndicator,StgIndicatorDomain,
     FactDataIndicator,IndicatorProxy,AhoDoamain_Lookup,aho_factsindicator_archive,
     StgNarrative_Type,StgAnalyticsNarrative,StgIndicatorNarrative,
-    NHOCustomizationProxy,NHOCustomFactsindicator)
+    NHOCustomizationProxy,NHOCustomFactsindicator,NHOCustomizationIcons)
 from django.forms import TextInput,Textarea # customize textarea row and column size
 from commoninfo.admin import (OverideImportExport,OverideExport,OverideImport,)
 from .resources import (IndicatorFactsResourceExport,IndicatorFactsResourceImport,
@@ -577,7 +577,7 @@ class IndicatorProxyAdmin(TranslatableAdmin):
         formset.save()
 
     fieldsets = (
-        ('INDICATOR DETAILS', {
+        ('Indicator Details', {
                 'fields':('name','afrocode','reference',)
             }),
         )
@@ -909,6 +909,36 @@ class AhoDoamain_LookupAdmin(OverideExport,ExportActionModelAdmin):
         ('domain_name', DropdownFilter,),
     )
     ordering = ('indicator_name',)
+
+
+@admin.register(NHOCustomizationIcons)
+class NHOIndicatorIconsAdmin(TranslatableAdmin):
+    from django.db import models
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size':'100'})},
+        models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100})},
+    }
+    def get_queryset(self, request):
+        language = request.LANGUAGE_CODE
+        qs = super().get_queryset(request).filter(
+            translations__language_code=language).order_by(
+            'translations__name').distinct()
+        return qs
+
+
+    fieldsets = (
+        ('Font-Awesome Icon Attributes', {
+                'fields': ('unicode','code','name','shortname',)
+            }),
+            ('Description', {
+                'fields': ('version','description',),
+            }),
+        )
+    list_display=['name','code','unicode','description','version']
+    list_display_links = ('name','code','unicode',)
+    search_fields = ('code','unicode','translations__name','version')
+    list_per_page = 30 #limit records displayed on admin site to 15
+    exclude = ('date_created','date_lastupdated',)
 
 
 @admin.register(NHOCustomFactsindicator)

@@ -68,20 +68,25 @@ class StgCustomNationalObservatory(models.Model):
     custom_footer = models.CharField(_('Custom Footer'),max_length=1000,
         blank=True, null=True,)
     announcement = models.TextField(_('Announcements'),blank=True,null=True)
-    coat_arms = models.ImageField(_('Coat of Arms'),
-        upload_to='production/images/',blank=True,)
+    coat_arms = models.ImageField(_('Coat of Arms'),blank=True,null=True,
+        upload_to='production/images/',)
     address = models.CharField(_('Physical Address'),max_length=500,blank=True,
         null=True)  # Field name made lowercase.
     email = models.EmailField(_('Email'),unique=True,max_length=250,
         blank=True,null=True)  # Field name made lowercase.
-    phone_code = models.CharField(_('Phone Code'), max_length=5, blank=True,
-        help_text=_("Specific country code for the phone number such as +242 is \
-        automatically retrieved from database of AFRO member countries"))
-    phone_part = models.CharField(_('Phone Number'),validators=[number_regex],
-        max_length=15, blank=True) # validators should be a list
-    phone_number = models.CharField(_('Telephone'),validators=[phone_regex],
-        max_length=15, null=True,blank=True) # validators should be a list
-    url = models.URLField(_('Web (URL)'),blank=True, null=True,max_length=2083)
+    phone_code = models.CharField(_('Country Code'), max_length=5, blank=True,
+        help_text=_("The dialing code for a specific country e.g. +254 is \
+        automatically assigned and combine with phone number as prefix."))
+    phone_part = models.CharField(_('Telephone Line'),validators=[number_regex],
+        max_length=15, blank=True,help_text=_("Phone number must be numeric \
+            value consisting of local area code without (0) prefix and the \
+            specific line number.  For example: 788888888"))
+    phone_number = models.CharField(_('Telephone Number'),validators=[phone_regex],
+        max_length=15, null=True,blank=True,help_text=_("Phone number is the \
+            combination of country code and telephone line, e.g.254788888888")
+
+        )
+    url = models.URLField(_('Web Address (URL)'),blank=True, null=True,max_length=2083)
     date_created = models.DateTimeField(_('Date Created'),blank=True, null=True,
         auto_now_add=True)
     date_lastupdated = models.DateTimeField(_('Date Modified'),blank=True,
