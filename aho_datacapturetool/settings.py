@@ -245,7 +245,7 @@ USE_L10N = True
 USE_TZ = True
 
 #display the AHO logo on the login screen and admin page
-ADMIN_LOGO = 'dashboard_logo.png'
+ADMIN_LOGO = 'dashboard.PNG'
 LOGIN_REDIRECT_URL = 'admin:index' # load admin interface upon successful login
 LOGOUT_REDIRECT_URL='/'
 
