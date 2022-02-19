@@ -66,7 +66,6 @@ DATA_WIZARD = {
     'PERMISSION': 'rest_framework.permissions.IsAdminUser',
 }
 
-
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -160,7 +159,6 @@ DATABASES = {
 # custom user authentication and Password validation settings
 AUTH_USER_MODEL = 'authentication.CustomUser'
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -175,7 +173,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 """
  OpenID Connect: Dictionary for MICROSOFT Azure AD authentication credentials.
