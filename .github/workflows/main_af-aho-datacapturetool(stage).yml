@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'af-aho-datacapturetool'
           slot-name: 'stage'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B8340D0FD0C54C2A97156402CB1841C2 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C21114D444444D6C958BCA8761374271 }}
