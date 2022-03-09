@@ -82,7 +82,7 @@ class StgCustomNationalObservatory(models.Model):
             value consisting of local area code without (0) prefix and the \
             specific line number.  For example: 788888888"))
     phone_number = models.CharField(_('Telephone Number'),validators=[phone_regex],
-        max_length=15, null=True,blank=True,help_text=_("Phone number is the \
+        max_length=20, null=True,blank=True,help_text=_("Phone number is the \
             combination of country code and telephone line, e.g.254788888888")
 
         )
@@ -116,6 +116,9 @@ class StgCustomNationalObservatory(models.Model):
         if StgCustomNationalObservatory.objects.filter(name=self.name).count() and not \
             self.observatory_id and not self.location:
             raise ValidationError({'name':_('NHO  with the same name exists')})
+        
+        # if len(self.phone_number) >15:
+        #     raise ValidationError({'phone_number':_('Phone number provided is too long')})
 
     def save(self, *args, **kwargs):
         self.phone_number = self.get_phone()
