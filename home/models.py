@@ -64,7 +64,7 @@ class StgCustomNationalObservatory(TranslatableModel): # Convert to translatable
 
     # Translatable customization fields for en. fr and pt as requested by Serge
     translations = TranslatedFields(any_language=True,
-        name = models.CharField(_('Title'),max_length=500,blank=False,
+        name = models.CharField(_('Observatory Name'),max_length=500,blank=False,
             null=False),
         custom_header = models.CharField(_('Custom Header'),max_length=1000,
             blank=True, null=True,),
@@ -117,12 +117,13 @@ class StgCustomNationalObservatory(TranslatableModel): # Convert to translatable
         return phone_number
 
     def clean(self):
-        if StgCustomNationalObservatory.objects.filter(name=self.name).count() and not \
-            self.observatory_id and not self.location:
-            raise ValidationError({'name':_('NHO  with the same name exists')})
+        if StgCustomNationalObservatory.objects.filter(
+            translations__name=self.name).count() and not self.observatory_id \
+            and not self.location:
+            raise ValidationError({'translations__name':_('NHO  with the same name exists')})
 
-        # if len(self.phone_number) >15:
-        #     raise ValidationError({'phone_number':_('Phone number provided is too long')})
+        if len(self.phone_part) >12:
+            raise ValidationError({'phone_part':_('Phone number provided is too long')})
 
     def save(self, *args, **kwargs):
         self.phone_number = self.get_phone()

@@ -91,11 +91,10 @@ class NHOCustomizationAdmin(TranslatableAdmin, OverideExport):
     #resource_class = DataTypeExport
     list_display=['name','location','custom_header','phone_number','url','coat_arms',]
     list_display_links = ('name', 'location','url')
-    search_fields = ('name', 'location','url') #display search field
+    search_fields = ('translations__name', 'translations__location','url') #display search field
     list_per_page = 30 #limit records displayed on admin site to 15
     exclude = ('date_created','date_lastupdated','code',)
     readonly_fields = ('phone_code','phone_number',)
-
 
 
 
