@@ -553,7 +553,7 @@ class NHOCustomFactsindicator(models.Model):
     measuremethod = models.ForeignKey(StgMeasuremethod, models.PROTECT,
         blank=True,null=True, verbose_name = _('Measure Type'))
     icon = models.ForeignKey(NHOCustomizationIcons,models.PROTECT,blank=False,
-        null=False, verbose_name = _('Font Icon'))
+        null=False, default=1, verbose_name = _('Font Icon'))
     value_received = models.DecimalField(_('Value'),max_digits=20,
         decimal_places=2,blank=False,null=True)
     period = models.CharField(_('Period'),max_length=25,blank=True,null=False)

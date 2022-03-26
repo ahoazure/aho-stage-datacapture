@@ -16,8 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 # SECRET_KEY = 'jz&%c@07o%z_mo&qs2t@-io)vm5ul_0j*kwm@#&m0m4nf7j5a^'
-
-DEBUG = False
+DEBUG = True # This debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
@@ -193,7 +192,7 @@ AZURE_ACCOUNT_NAME = os.environ['AZURE_ACCOUNT']
 AZURE_CONTAINER = os.environ['AZURE_CONTAINER']
 AZURE_CUSTOM_DOMAIN = os.environ['AZURE_DOMAIN']
 
-if DEBUG:
+if DEBUG: # If debug is True, store uploaded files in the application directory
     STATIC_URL = '/static/'
     STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR + STATIC_URL)
     MEDIA_URL = '/media/'

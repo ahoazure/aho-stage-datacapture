@@ -37,7 +37,7 @@ class periodtypeAdmin(OverideExport):
 
 
 @admin.register(StgCustomNationalObservatory)
-class NHOCustomizationAdmin(OverideExport):
+class NHOCustomizationAdmin(TranslatableAdmin, OverideExport):
     from django.db import models
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size':'80'})},
@@ -95,6 +95,7 @@ class NHOCustomizationAdmin(OverideExport):
     list_per_page = 30 #limit records displayed on admin site to 15
     exclude = ('date_created','date_lastupdated','code',)
     readonly_fields = ('phone_code','phone_number',)
+
 
 
 

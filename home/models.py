@@ -47,7 +47,7 @@ class StgPeriodType(models.Model):
         super(StgPeriodType, self).save(*args, **kwargs)
 
 
-class StgCustomNationalObservatory(models.Model):
+class StgCustomNationalObservatory(TranslatableModel): # Convert to translatable model
     number_regex = RegexValidator(
         regex=r'^[0-9]{8,15}$', message="Format:'999999999' min 8, maximum 15.")
     phone_regex = RegexValidator(
@@ -61,17 +61,22 @@ class StgCustomNationalObservatory(models.Model):
 		verbose_name = 'Admin User (Email)',)
     location = models.ForeignKey(StgLocationCodes, models.PROTECT,
         verbose_name = _('Country'),)
-    name = models.CharField(_('Title'),max_length=500,blank=False,
-        null=False)
-    custom_header = models.CharField(_('Custom Header'),max_length=1000,
-        blank=True, null=True,)
-    custom_footer = models.CharField(_('Custom Footer'),max_length=1000,
-        blank=True, null=True,)
-    announcement = models.TextField(_('Announcements'),blank=True,null=True)
-    coat_arms = models.ImageField(_('Coat of Arms'),blank=True,null=True,
-        upload_to='production/images/',)
-    address = models.CharField(_('Physical Address'),max_length=500,blank=True,
-        null=True)  # Field name made lowercase.
+
+    # Translatable customization fields for en. fr and pt as requested by Serge
+    translations = TranslatedFields(any_language=True,
+        name = models.CharField(_('Title'),max_length=500,blank=False,
+            null=False),
+        custom_header = models.CharField(_('Custom Header'),max_length=1000,
+            blank=True, null=True,),
+        custom_footer = models.CharField(_('Custom Footer'),max_length=1000,
+            blank=True, null=True,),
+        announcement = models.TextField(_('Announcements'),blank=True,null=True),
+        coat_arms = models.ImageField(_('Coat of Arms'),blank=True,null=True,
+            upload_to='production/images/',),
+        address = models.CharField(_('Physical Address'),max_length=500,
+            blank=True,null=True)
+    ) # end of traslatable fieldset moved to a new table
+
     email = models.EmailField(_('Email'),unique=True,max_length=250,
         blank=True,null=True)  # Field name made lowercase.
     phone_code = models.CharField(_('Country Code'), max_length=5, blank=True,
@@ -84,8 +89,7 @@ class StgCustomNationalObservatory(models.Model):
     phone_number = models.CharField(_('Telephone Number'),validators=[phone_regex],
         max_length=20, null=True,blank=True,help_text=_("Phone number is the \
             combination of country code and telephone line, e.g.254788888888")
-
-        )
+    )
     url = models.URLField(_('Web Address (URL)'),blank=True, null=True,max_length=2083)
     date_created = models.DateTimeField(_('Date Created'),blank=True, null=True,
         auto_now_add=True)
@@ -97,7 +101,7 @@ class StgCustomNationalObservatory(models.Model):
         db_table = 'stg_national_observatory'
         verbose_name = _('Customize Observatory')
         verbose_name_plural = _('   Customize Observatory')
-        ordering = ('name',)
+        # ordering = ('name',)
 
     def __str__(self):
         return self.name #display the data element name
@@ -116,7 +120,7 @@ class StgCustomNationalObservatory(models.Model):
         if StgCustomNationalObservatory.objects.filter(name=self.name).count() and not \
             self.observatory_id and not self.location:
             raise ValidationError({'name':_('NHO  with the same name exists')})
-        
+
         # if len(self.phone_number) >15:
         #     raise ValidationError({'phone_number':_('Phone number provided is too long')})
 
@@ -125,9 +129,8 @@ class StgCustomNationalObservatory(models.Model):
         super(StgCustomNationalObservatory, self).save(*args, **kwargs)
 
 
-
 class StgCategoryParent(TranslatableModel):
-    """This model has stgcategory data"""
+    """This model has category data"""
     category_id = models.AutoField(_('Category Name'),primary_key=True,)
     uuid = uuid = models.CharField(_('Unique ID'),unique=True,
         max_length=36, blank=False,null=False,default=uuid.uuid4,editable=False,)

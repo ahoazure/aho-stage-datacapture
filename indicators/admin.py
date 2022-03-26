@@ -32,6 +32,7 @@ from home.models import ( StgDatasource,StgCategoryoption,StgMeasuremethod)
 from .filters import TranslatedFieldFilter #Danile solution to duplicate filters
 
 from commoninfo.wizard import DataWizardFactIndicatorSerializer
+from django.db.models import Case, When
 
 #These 3 functions are used to register global actions performed on the data.
 def transition_to_pending (modeladmin, request, queryset):
@@ -453,6 +454,7 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         ('period',DropdownFilter),
         ('categoryoption', TranslatedFieldFilter,),
         ('comment',DropdownFilter),
+        ('priority',DropdownFilter), #added on 26-03-2022 as requested by Serge
     )
 
 
@@ -948,18 +950,25 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
         user = request.user.id
         user_location = request.user.location.location_id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        qs = super().get_queryset(request).filter(
-            indicator__translations__language_code=language).order_by(
-            'indicator__translations__name').filter(
-            location__translations__language_code=language).order_by(
-            'location__translations__name').filter(
-            categoryoption__translations__language_code=language).order_by(
-            'categoryoption__translations__name').filter(
-            datasource__translations__language_code=language).order_by(
-            'datasource__translations__name').filter(
-            measuremethod__translations__language_code=language).order_by(
-            'measuremethod__translations__name')
+        db_locations = StgLocation.objects.only('locationlevel',).select_related(
+            'parent','locationlevel','wb_income','special').order_by(
+            'location_id')
+        qs = super().get_queryset(request).select_related(
+            'indicator','location','categoryoption','datasource',
+            'measuremethod','user',).filter(
+            indicator__translations__language_code=language).filter(
+            location__translations__language_code=language).filter(
+            categoryoption__translations__language_code=language).filter(
+            datasource__translations__language_code=language).filter(
+            measuremethod__translations__language_code=language).distinct()
+        qs = qs.order_by('indicator', 'location').distinct()
+        # qs = super(NHOCustomizationAdmin, self).get_queryset(request)
+        # pk_list = qs.order_by('indicator').values_list('fact', flat=True)
+        # pk_list_cleaned = []
+        # [pk_list_cleaned.append(x) for x in pk_list if x not in pk_list_cleaned]
+        # # preserved_order = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list_cleaned)])
+        # qs_cleaned = NHOCustomFactsindicator.objects.filter(fact__in=pk_list_cleaned).distinct()
+        # # import pdb; pdb.set_trace()
 
         if request.user.is_superuser:
             qs
