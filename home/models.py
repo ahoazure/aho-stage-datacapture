@@ -64,8 +64,10 @@ class StgCustomNationalObservatory(TranslatableModel): # Convert to translatable
 
     # Translatable customization fields for en. fr and pt as requested by Serge
     translations = TranslatedFields(any_language=True,
-        name = models.CharField(_('Observatory Name'),max_length=500,blank=False,
+        name = models.CharField(_('Observatory Title'),max_length=500,blank=False,
             null=False),
+        shortname = models.CharField(_('Short Name'),max_length=100, blank=True,
+            null=True),
         custom_header = models.CharField(_('Custom Header'),max_length=1000,
             blank=True, null=True,),
         custom_footer = models.CharField(_('Custom Footer'),max_length=1000,
@@ -99,8 +101,8 @@ class StgCustomNationalObservatory(TranslatableModel): # Convert to translatable
     class Meta:
         managed = True
         db_table = 'stg_national_observatory'
-        verbose_name = _('Customize Observatory')
-        verbose_name_plural = _('   Customize Observatory')
+        verbose_name = _('National Observatory')
+        verbose_name_plural = _('   National Observatory')
         # ordering = ('name',)
 
     def __str__(self):

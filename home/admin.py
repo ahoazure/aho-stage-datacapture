@@ -76,7 +76,7 @@ class NHOCustomizationAdmin(TranslatableAdmin, OverideExport):
 
     fieldsets = (
         ('Header Details', {
-                'fields': ('name','location','custom_header','coat_arms',)
+                'fields': ('name','shortname','location','custom_header','coat_arms',)
             }),
             ('Contact Details', {
                 'fields': ('address','email','phone_code','phone_part','url',),
@@ -89,7 +89,7 @@ class NHOCustomizationAdmin(TranslatableAdmin, OverideExport):
             }),
         )
     #resource_class = DataTypeExport
-    list_display=['name','location','custom_header','phone_number','url','coat_arms',]
+    list_display=['name','shortname','location','phone_number','url','coat_arms',]
     list_display_links = ('name', 'location','url')
     search_fields = ('translations__name', 'translations__location','url') #display search field
     list_per_page = 30 #limit records displayed on admin site to 15
