@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django import forms
 from django.conf import settings # allow import of projects settings at the root
-from django.forms import BaseInlineFormSet
+from django.utils.translation import gettext_lazy as _
+from django.forms import BaseInlineFormSet,ValidationError
 from parler.admin import (TranslatableAdmin,TranslatableStackedInline,
     TranslatableInlineModelAdmin)
 import data_wizard # Solution to data import madness that had refused to go
@@ -254,9 +255,19 @@ class IndicatorProxyForm(forms.ModelForm):
         end_year_field = 'end_period'
         end_period = cleaned_data.get(end_year_field)
 
+        priority_field = 'priority'
+        priority = cleaned_data.get(priority_field)
 
+        # This validation construct was added on 10/04/2022 to limit priority
+        # indicators to a maximum of 10 per country...courtesy of Bertha of AFRO
+        countfacts=NHOCustomFactsindicator.objects.filter(
+            priority=priority).count()
+        countlocations=NHOCustomFactsindicator.objects.filter(
+            location=location).count()
+        if countfacts and countlocations >=10:
+            raise ValidationError(_('Sorry. '+str(location).capitalize()+' \
+                  cannot have more than 10 priorities'))
 
-        # This construct modified on 26/03/2020 to allow new record entry
         if indicator and location and categoryoption and datasource and \
             start_period and end_period:
             if FactDataIndicator.objects.filter(indicator=indicator,
@@ -275,10 +286,10 @@ class IndicatorProxyForm(forms.ModelForm):
                 cleaned_data.pop(start_year_field)
                 cleaned_data.pop(end_year_field)
 
-                if end_period < start_period:
-                    raise ValidationError({'start_period':_(
-                        'Sorry! Ending year cannot be lower than the start year. \
-                        Please make corrections')})
+                # if end_period < start_period:
+                #     raise ValidationError({'start_period':_(
+                #         'Sorry! Ending year cannot be lower than the start year. \
+                #         Please make corrections')})
         return cleaned_data
 
 
@@ -984,12 +995,18 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
             qs=qs.filter(user=request.user)
         return qs
 
+    #Format date created to disply only the day, month and year
+    def date_created (obj):
+        return obj.date_created.strftime("%d-%b-%Y")
+    date_created.admin_order_field = 'date_created'
+    date_created.short_description = 'Date Created'
+
     # This method removes the add button because no data entry is needed
     def has_add_permission(self, request):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        return True
 
     def change_view(self, request, object_id, extra_context=None):
         ''' Customize add/edit form '''
@@ -1000,7 +1017,7 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
             request,object_id,extra_context=extra_context)
 
     def save(self, *args, **kwargs):
-        if NHOCustomizationAdmin.objects.count() >= 10:
+        if NHOCustomizationAdmin.objects.count() >=10:
             objects[0].delete()
         super(NHOCustomizationAdmin, self).save(*args, **kwargs)
 
@@ -1009,10 +1026,11 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
             obj.user = request.user # set user from request during the first save.
         super().save_model(request, obj, form, change)
 
+
     exclude = ('fact','user',)
 
     list_display=('indicator','location','categoryoption','datasource',
-    'value_received','period','priority')
+    'value_received','period','priority',date_created)
     list_select_related = ('fact','indicator','location','categoryoption',
         'datasource','measuremethod','user')
     search_fields = ('indicator__translations__name','location__translations__name',

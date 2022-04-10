@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings
 from django.utils import timezone
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save,post_save
 import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models.fields import DecimalField
@@ -212,8 +212,8 @@ class FactDataIndicator(models.Model):
         blank=False,validators=[MinValueValidator(1900),max_value_current_year],
         default=current_year(),
         help_text=_("This marks the start of reporting period"))
-    end_period=models.PositiveIntegerField(_('Ending Period'),null=False,blank=False,
-        validators=[MinValueValidator(1900),max_value_current_year],
+    end_period=models.PositiveIntegerField(_('Ending Period'),null=False,
+        blank=False,validators=[MinValueValidator(1900),max_value_current_year],
         default=current_year(),
         help_text=_("This marks the end of reporting. The value must be current \
             year or greater than the start year"))
@@ -278,9 +278,6 @@ class FactDataIndicator(models.Model):
                 'Data Entry Problem! Both numeric and string values cannot\
                  be empty. Please supply data to both or either!')})
 
-        if FactDataIndicator.objects.filter(priority=self.priority).count()>=10:
-            raise ValidationError('Priority cannot exceed 10!')
-
     """
     The purpose of this method is to concatenate the date that are entered as
     start_period and end_period and save the concatenated value as a string in
@@ -301,7 +298,6 @@ class FactDataIndicator(models.Model):
     def save(self, *args, **kwargs):
         self.period = self.get_period()
         super(FactDataIndicator, self).save(*args, **kwargs)
-
 
 
 # These proxy classes are used to register menu in the admin for tabular entry
@@ -333,9 +329,8 @@ class IndicatorProxy(StgIndicator):
                 for perm in _get_all_permissions(opts, ctype):
                     searched_perms.append((ctype, perm))
 
-        # Find all the Permissions that have a content_type for a model we're
-        # looking for.We don't need to check for codenames since we already
-        # have a list of the ones we're going to create.
+        # Find all the Permissions that have content_type for the target model
+        # We don't need to check for codenames; we have list of ones to crerate
         all_perms = set(Permission.objects.filter(
             content_type__in=ctypes,
         ).values_list(
@@ -388,7 +383,6 @@ class NHOCustomizationProxy(StgLocation):
                 ctypes.add(ctype)
                 for perm in _get_all_permissions(opts, ctype):
                     searched_perms.append((ctype, perm))
-
         all_perms = set(Permission.objects.filter(
             content_type__in=ctypes,
         ).values_list(
@@ -524,6 +518,8 @@ class NHOCustomizationIcons(TranslatableModel):
     def __str__(self):
         return self.name #display the data source name
 
+# This handler is called by pre_save signal to reduce the number of priority
+# indicators in fact_priority_indicators table in case the event is turned off!
 def delete_handler(sender, instance, **kwargs):
     qs = NHOCustomFactsindicator.objects.order_by('date_created') #order by date
     if qs.count() > 10:
@@ -533,9 +529,8 @@ def delete_handler(sender, instance, **kwargs):
 class NHOCustomFactsindicator(models.Model):
     PRIORITY = (
         (1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'),(6,'6'),(7,'7'),(8,'8'),
-        (9,'9'),(10,'10'),(11,'11'),(12,'12'),
+        (9,'9'),(10,'10'),
     )
-
     fact = models.OneToOneField(FactDataIndicator,on_delete=models.PROTECT,
             primary_key=True,)
     uuid = models.CharField(_('Unique ID'),unique=True,max_length=36, blank=False,
@@ -575,7 +570,7 @@ class NHOCustomFactsindicator(models.Model):
 
     def __str__(self):
          return str(self.indicator)
-post_save.connect(delete_handler,sender=NHOCustomFactsindicator)
+pre_save.connect(delete_handler,sender=NHOCustomFactsindicator) #delete oldest
 
 
 class StgNarrative_Type(TranslatableModel):
@@ -605,7 +600,6 @@ class StgNarrative_Type(TranslatableModel):
 
     def __str__(self):
         return self.name #display the knowledge product category name
-
 
     # The filter function need to be modified to work with django parler as follows:
     def clean(self): # Don't allow end_period to be greater than the start_period.
