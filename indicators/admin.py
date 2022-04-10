@@ -264,7 +264,7 @@ class IndicatorProxyForm(forms.ModelForm):
             priority=priority).count()
         countlocations=NHOCustomFactsindicator.objects.filter(
             location=location).count()
-        if countfacts and countlocations >10:
+        if countfacts and countlocations >6:
             raise ValidationError(_('Sorry. '+str(location).capitalize()+' \
                   cannot have more than 10 priorities'))
 
@@ -1021,12 +1021,12 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-    exclude = ('fact','user',)
+    exclude = ('user',)
 
     list_display=('indicator','location','categoryoption','datasource',
     'value_received','period','priority',date_created)
-    list_select_related = ('fact','indicator','location','categoryoption',
-        'datasource','measuremethod','user')
+    list_select_related = ('indicator','location','categoryoption','datasource',
+        'measuremethod','user')
     search_fields = ('indicator__translations__name','location__translations__name',
         'period') #display search field
     list_per_page = 100 #limit records displayed on admin site to 50
