@@ -286,10 +286,10 @@ class IndicatorProxyForm(forms.ModelForm):
                 cleaned_data.pop(start_year_field)
                 cleaned_data.pop(end_year_field)
 
-                # if end_period < start_period:
-                #     raise ValidationError({'start_period':_(
-                #         'Sorry! Ending year cannot be lower than the start year. \
-                #         Please make corrections')})
+                if end_period < start_period:
+                    raise ValidationError({'start_period':_(
+                        'Sorry! Ending year cannot be lower than the start year. \
+                        Please make corrections')})
         return cleaned_data
 
 
@@ -997,7 +997,9 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
 
     #Format date created to disply only the day, month and year
     def date_created (obj):
-        return obj.date_created.strftime("%d-%b-%Y")
+        if obj.date_created is not None:
+            return obj.date_created.strftime("%d-%b-%Y")
+        pass
     date_created.admin_order_field = 'date_created'
     date_created.short_description = 'Date Created'
 
