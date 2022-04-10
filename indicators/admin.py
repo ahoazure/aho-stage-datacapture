@@ -264,7 +264,7 @@ class IndicatorProxyForm(forms.ModelForm):
             priority=priority).count()
         countlocations=NHOCustomFactsindicator.objects.filter(
             location=location).count()
-        if countfacts and countlocations >=10:
+        if countfacts and countlocations >10:
             raise ValidationError(_('Sorry. '+str(location).capitalize()+' \
                   cannot have more than 10 priorities'))
 
@@ -973,14 +973,6 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
             datasource__translations__language_code=language).filter(
             measuremethod__translations__language_code=language).distinct()
         qs = qs.order_by('indicator', 'location').distinct()
-        # qs = super(NHOCustomizationAdmin, self).get_queryset(request)
-        # pk_list = qs.order_by('indicator').values_list('fact', flat=True)
-        # pk_list_cleaned = []
-        # [pk_list_cleaned.append(x) for x in pk_list if x not in pk_list_cleaned]
-        # # preserved_order = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list_cleaned)])
-        # qs_cleaned = NHOCustomFactsindicator.objects.filter(fact__in=pk_list_cleaned).distinct()
-        # # import pdb; pdb.set_trace()
-
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries

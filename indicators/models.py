@@ -531,8 +531,7 @@ class NHOCustomFactsindicator(models.Model):
         (1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'),(6,'6'),(7,'7'),(8,'8'),
         (9,'9'),(10,'10'),
     )
-    fact = models.OneToOneField(FactDataIndicator,on_delete=models.PROTECT,
-            primary_key=True,)
+    fact = models.AutoField(primary_key=True)
     uuid = models.CharField(_('Unique ID'),unique=True,max_length=36, blank=False,
         null=False,default=uuid.uuid4,editable=False)
     user = models.ForeignKey(CustomUser, models.PROTECT,blank=False,

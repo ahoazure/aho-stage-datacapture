@@ -1,5 +1,5 @@
 from .settings import *
-DEBUG = True # Swich off debug for security reasons
+DEBUG = False # Swich off debug for security reasons
 # Configure production domain names
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net',
     'af-aho-datacapturetool-stage.azurewebsites.net',
