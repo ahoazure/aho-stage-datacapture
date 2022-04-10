@@ -1026,12 +1026,13 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
     list_display=('indicator','location','categoryoption','datasource',
     'value_received','period','priority',date_created)
     list_select_related = ('indicator','location','categoryoption','datasource',
-        'measuremethod','user')
+        'measuremethod','user','icon',)
     search_fields = ('indicator__translations__name','location__translations__name',
         'period') #display search field
     list_per_page = 100 #limit records displayed on admin site to 50
     list_filter = (
         ('location', TranslatedFieldFilter,),
         ('indicator', TranslatedFieldFilter,),
+        ('datasource', TranslatedFieldFilter,),
         ('categoryoption', TranslatedFieldFilter,),
     )
