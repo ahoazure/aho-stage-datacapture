@@ -90,7 +90,8 @@ def get_app_list(context, order=True):
     'Elements':7,
     'Regions':8,
     'Data_Wizard':9,
-    'Authentication':10
+    'Authentication':10,
+    'Data_Quality':11,
     }
     # Create the list to be sorted using the ordering dict.
     app_list = list(app_dict.values())
