@@ -134,7 +134,6 @@ class Facts_DataFilterAdmin(OverideExport,ImportExportActionModelAdmin):
 
    
 
-
 @admin.register(Facts_DataFrame)
 class Facts_DataFrameAdmin(OverideExport):
     change_list_template = 'admin/data_quality/change_list.html' # add buttons for validations
@@ -153,16 +152,16 @@ class Facts_DataFrameAdmin(OverideExport):
         language = request.LANGUAGE_CODE 
         db_locations = StgLocation.objects.get(
             location_id=location) #filter by logged user loaction
-        start_period =Facts_DataFilter.objects.values_list(
-            'start_period', flat=True).get(pk=1)
-        end_period =Facts_DataFilter.objects.values_list(
-            'end_period', flat=True).get(pk=1)
-
-        # Filter the view by start date and end date
-        qs = Facts_DataFrame.objects.filter( 
-            start_period__gte=start_period,end_period__lte=end_period
-        ).order_by('indicator_name').distinct()
-
+        try:
+            start_period =Facts_DataFilter.objects.values_list(
+                'start_period', flat=True).get(pk=1)
+            end_period =Facts_DataFilter.objects.values_list(
+                'end_period', flat=True).get(pk=1)
+            qs = Facts_DataFrame.objects.filter( 
+                start_period__gte=start_period,end_period__lte=end_period).order_by(
+                'indicator_name').distinct()
+        except Facts_DataFilter.DoesNotExist as e:
+            pass
         if request.user.is_superuser:
             qs=qs # show all records if logged in as super user
         elif user in groups: # return records on if the user belongs to the group
@@ -170,7 +169,6 @@ class Facts_DataFrameAdmin(OverideExport):
         else: # return records belonging to logged user only
             qs=qs.filter(user=user)      
         return qs # must return filter queryset to be displayed on admin interface
-
 
     def has_add_permission(self, request):
         return False
@@ -207,6 +205,7 @@ class Facts_DataFrameAdmin(OverideExport):
         ('period',DropdownFilter),
         ('categoryoption', DropdownFilter,),
     )
+
 
 data_wizard.register(MeasureTypes_Validator)
 @admin.register(MeasureTypes_Validator)
