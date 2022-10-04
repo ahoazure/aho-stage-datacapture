@@ -237,7 +237,10 @@ class MeasuredAdmin(TranslatableAdmin,OverideExport):
 class FileSourceAdmin(ImportActionModelAdmin):
     # menu_title = _("Import File... ")
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        language = request.LANGUAGE_CODE
+        qs = super().get_queryset(request).filter(
+            location__translations__language_code=language).order_by(
+            'location__translations__name').distinct() # filter locations by session language
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.email
@@ -293,7 +296,10 @@ class FileSourceAdmin(ImportActionModelAdmin):
 class URLSourceAdmin(ImportActionModelAdmin):
     # menu_title = _("Import URL...")
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        language = request.LANGUAGE_CODE
+        qs = super().get_queryset(request).filter(
+            location__translations__language_code=language).order_by(
+            'location__translations__name').distinct() # filter locations by session language
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.email
