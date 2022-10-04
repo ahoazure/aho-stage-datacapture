@@ -308,7 +308,7 @@ class FileSource(Filesources):
 
     class Meta:
         managed = True
-        db_table = 'filesource'
+        # db_table = 'filesource'
         verbose_name = _('File')
         verbose_name_plural = _('Import File...')
         ordering = ('location',)
@@ -346,7 +346,7 @@ class URLSource(URLsources):
 
     class Meta:
         managed = True
-        db_table = 'urlsource'
+        # db_table = 'urlsource'
         verbose_name = _('URL')
         verbose_name_plural = _('Import URL...')
         ordering = ('location',)
