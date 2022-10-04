@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _ #For translating imported
 from regions.models import StgLocation
 from data_wizard.admin import ImportActionModelAdmin
 from django.forms import TextInput,Textarea #for customizing textarea row and column size
-from .models import FileSources,URLSources #customize import sourece
+from .models import FileSource,URLSource #customize import sourece
 
 from commoninfo.admin import OverideImportExport, OverideExport
 from .models import (StgCategoryParent,StgCategoryoption,StgMeasuremethod,
@@ -232,8 +232,10 @@ class MeasuredAdmin(TranslatableAdmin,OverideExport):
 # The following two admin classes are used to customize the Data_Wizard page.
 # The classes overrides admin.py in site-packages/data_wizard/sources/
 # ------------------------------------------------------------------------------
+
+@admin.register(FileSource)
 class FileSourceAdmin(ImportActionModelAdmin):
-    menu_title = _("Import File... ")
+    # menu_title = _("Import File... ")
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         # Get a query of groups the user belongs and flatten it to list object
@@ -285,13 +287,11 @@ class FileSourceAdmin(ImportActionModelAdmin):
             }),
         )
     list_display=('name','location','url','date',)
-admin.site.register(FileSources, FileSourceAdmin)
 
 
-# This class admin class is used to customize change page for the URL data source
+@admin.register(URLSource)
 class URLSourceAdmin(ImportActionModelAdmin):
-    menu_title = _("Import URL...")
-
+    # menu_title = _("Import URL...")
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         # Get a query of groups the user belongs and flatten it to list object
@@ -343,4 +343,3 @@ class URLSourceAdmin(ImportActionModelAdmin):
             }),
         )
     list_display=('name','location','url','date',)
-admin.site.register(URLSources,URLSourceAdmin)

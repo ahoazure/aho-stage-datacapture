@@ -7,7 +7,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import (RegexValidator,MinValueValidator,
     MaxValueValidator)
 from aho_datacapturetool.settings import *
-from data_wizard.sources.models import FileSource,URLSource
+from data_wizard.sources.models import (
+        FileSource as Filesources,URLSource as URLsources
+    )
 from regions.models import StgLocation,StgLocationCodes
 from authentication.models import CustomUser
 
@@ -297,13 +299,20 @@ class StgMeasuremethod(TranslatableModel):
 These model classes inherits from data_wizard sources package.The purpose of
 inheriting the models is to add location field to the sources database tables
 """
-class FileSources(FileSource):
+class FileSource(Filesources):
     location = models.ForeignKey(StgLocation, models.PROTECT,blank=False,
         verbose_name = _('Location Name'),)
     user = models.ForeignKey(CustomUser, models.PROTECT,
         verbose_name='User Name (Email)') # request helper field
     url = models.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        managed = True
+        db_table = 'filesource'
+        verbose_name = _('File')
+        verbose_name_plural = _('Import File...')
+        ordering = ('location',)
+    
     def __str__(self):
         return self.name or self.file.name
 
@@ -324,16 +333,24 @@ class FileSources(FileSource):
     """
     def save(self, *args, **kwargs):
         self.url = self.get_fileurl()
-        super(FileSources, self).save(*args, **kwargs)
+        super(FileSource, self).save(*args, **kwargs)
 
 
-class URLSources(URLSource):
+class URLSource(URLsources):
     location = models.ForeignKey(StgLocation, models.PROTECT,blank=False,
         verbose_name = _('Location Name'),)
     user = models.ForeignKey(CustomUser, models.PROTECT,
         verbose_name='User Name (Email)') # request helper field
-    file = models.ForeignKey(FileSources, on_delete=models.CASCADE,
+    file = models.ForeignKey(FileSource, on_delete=models.CASCADE,
                         related_name="link")
+
+    class Meta:
+        managed = True
+        db_table = 'urlsource'
+        verbose_name = _('URL')
+        verbose_name_plural = _('Import URL...')
+        ordering = ('location',)
+
 
     def __str__(self):
         return self.name or self.url
@@ -345,4 +362,4 @@ class URLSources(URLSource):
 
     def save(self, *args, **kwargs):
         self.url = self.get_url()
-        return super(URLSources, self).save(*args, **kwargs)
+        return super(URLSource, self).save(*args, **kwargs)
