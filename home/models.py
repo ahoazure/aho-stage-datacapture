@@ -312,14 +312,10 @@ class FileSource(Filesources):
         verbose_name = _('File')
         verbose_name_plural = _('Import File...')
         ordering = ('location',)
-    
-    def __str__(self):
-        return self.name or self.file.name
 
     """
     This method appends the relative filename path to Azure blob url before save
     """
-
     def get_fileurl(self):
         base_url=f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
         file_name = self.file.name
@@ -334,6 +330,9 @@ class FileSource(Filesources):
     def save(self, *args, **kwargs):
         self.url = self.get_fileurl()
         super(FileSource, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name or self.file.name
 
 
 class URLSource(URLsources):
@@ -351,10 +350,6 @@ class URLSource(URLsources):
         verbose_name_plural = _('Import URL...')
         ordering = ('location',)
 
-
-    def __str__(self):
-        return self.name or self.url
-
     def get_url(self):
         # if self.url is None or self.url =='':
         return self.file.url
@@ -363,3 +358,6 @@ class URLSource(URLsources):
     def save(self, *args, **kwargs):
         self.url = self.get_url()
         return super(URLSource, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name or self.url
