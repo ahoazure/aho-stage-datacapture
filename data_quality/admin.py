@@ -233,11 +233,12 @@ class MeasureTypeAdmin(OverideExport):
             measure_type__translations__language_code=language).order_by(
             'measure_type___translations__name').distinct()
         
-        # import pdb; pdb.set_trace()
         if request.user.is_superuser:
             qs
-        elif user in groups and location_level<2: # return records on if the user belongs to the group
-            qs=qs.filter(location=db_locations) # return records for logged in country
+        
+        # elif user in groups and location_level<2: # return records on if the user belongs to the group
+        #     qs=qs.filter(location=db_locations) # return records for logged in country
+        
         else: # return records belonging to logged user only
             qs=qs.filter(user=user)            
         return qs
@@ -295,8 +296,10 @@ class DatasourceAdmin(OverideExport):
         # import pdb; pdb.set_trace()
         if request.user.is_superuser:
             qs
-        elif user in groups and location_level<2: # return records on if the user belongs to the group
-            qs=qs.filter(location=db_locations) # return records for logged in country
+        
+        # elif user in groups and location_level<2: # return records on if the user belongs to the group
+        #     qs=qs.filter(location=db_locations) # return records for logged in country
+        
         else: # return records belonging to logged user only
             qs=qs.filter(user=user)            
         return qs
@@ -351,8 +354,10 @@ class categoryOptionAdmin(OverideExport):
         # import pdb; pdb.set_trace()
         if request.user.is_superuser:
             qs
-        elif user in groups and location_level<2: # return records on if the user belongs to the group
-            qs=qs.filter(location=db_locations) # return records for logged in country
+        
+        # elif user in groups and location_level<2: # return records on if the user belongs to the group
+        #     qs=qs.filter(location=db_locations) # return records for logged in country
+        
         else: # return records belonging to logged user only
             qs=qs.filter(user=user)            
         return qs
