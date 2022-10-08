@@ -308,7 +308,6 @@ class FileSource(Filesources):
 
     class Meta:
         managed = True
-        # db_table = 'filesource'
         verbose_name = _('File')
         verbose_name_plural = _('Import File...')
         ordering = ('location',)
@@ -319,9 +318,9 @@ class FileSource(Filesources):
     def get_fileurl(self):
         base_url=f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
         file_name = self.file.name
-        # if self.url is None or self.url =='':
+        if self.url is None or self.url =='':
+            return (base_url+'datawizard/'+file_name)
         return (base_url+'datawizard/'+file_name)
-        # return self.file.url
 
     """
     This method overrides the save method to store the derived field into database.
@@ -345,15 +344,14 @@ class URLSource(URLsources):
 
     class Meta:
         managed = True
-        # db_table = 'urlsource'
         verbose_name = _('URL')
         verbose_name_plural = _('Import URL...')
         ordering = ('location',)
 
     def get_url(self):
-        # if self.url is None or self.url =='':
+        if self.url is None or self.url =='':
+            return self.file.url
         return self.file.url
-        # return self.url
 
     def save(self, *args, **kwargs):
         self.url = self.get_url()
