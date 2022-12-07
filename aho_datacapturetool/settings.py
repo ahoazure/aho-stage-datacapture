@@ -195,26 +195,18 @@ AZURE_ACCOUNT_NAME = os.environ['AZURE_ACCOUNT']
 AZURE_CONTAINER = os.environ['AZURE_CONTAINER']
 AZURE_CUSTOM_DOMAIN = os.environ['AZURE_DOMAIN']
 
-if DEBUG: # If debug is True, store uploaded files in the application directory
-    STATIC_URL = '/static/'
-    STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR + STATIC_URL)
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'repository/') # 'data' is my media folder
-else:
-    # Configurations for serving static assets (CSS, JavaScript, Images)
-    STATIC_LOCATION='static' #This works well as the static location
-    STATICFILES_STORAGE  = 'aho_datacapturetool.azurestorage.AzureStaticStorage'
-    STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/{STATIC_LOCATION}/'
-    # Configurations for serving and uploading files into Azure Blob storage
-    DEFAULT_FILE_STORAGE = 'aho_datacapturetool.azurestorage.AzureMediaStorage'
-    AZURE_BLOB_MAX_MEMORY_SIZE = os.environ['BLOB_MAX_MEMORY_SIZE']
+# Configurations for serving static assets (CSS, JavaScript, Images)
+STATIC_LOCATION='static' #This works well as the static location
+STATICFILES_STORAGE  = 'aho_datacapturetool.azurestorage.AzureStaticStorage'
+STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/{STATIC_LOCATION}/'
+# Configurations for serving and uploading files into Azure Blob storage
+DEFAULT_FILE_STORAGE = 'aho_datacapturetool.azurestorage.AzureMediaStorage'
+AZURE_BLOB_MAX_MEMORY_SIZE = os.environ['BLOB_MAX_MEMORY_SIZE']
 
-    MEDIA_LOCATION='media' #This works well as the storage location
-    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
-
+MEDIA_LOCATION='media' #This works well as the storage location
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 # LOCALE_PATHS is for admin interface language translations (en, fr and pt)
-LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale/'), #
-)
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale/'),)
 
 # Internationalization
 LANGUAGE_CODE ='en'
