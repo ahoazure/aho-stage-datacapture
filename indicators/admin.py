@@ -264,7 +264,7 @@ class IndicatorProxyForm(forms.ModelForm):
             priority=priority).count()
         countlocations=NHOCustomFactsindicator.objects.filter(
             location=location).count()
-        if countfacts and countlocations >10: # the count must be greater than 10 not 6 corrected on 21/12/2022
+        if countfacts and countlocations >11: # the count must be greater than 10 not 6 corrected on 21/12/2022
             raise ValidationError(_('Sorry. '+str(location).capitalize()+' \
                   cannot have more than 10 priorities'))
 
