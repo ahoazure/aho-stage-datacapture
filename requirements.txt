@@ -3,7 +3,8 @@ django-import-export
 djangorestframework
 djangorestframework-simplejwt
 django-admin-list-filter-dropdown==1.0.3 # to be replaced by line 6
-django-admin-autocomplete-filter<=0.7.1 # to replace line django-rest-swagger
+django-admin-autocomplete-filter<=0.7.1 # to replace line 
+django-rest-swagger==2.2.0
 django-parler
 django-parler-rest
 django-modeladmin-reorder
