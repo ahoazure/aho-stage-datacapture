@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'django_admin_listfilter_dropdown',
     'crispy_forms',
+
+    # added django autocomplete filter02-02-2023
+    'admin_auto_filters',
 ]
 
 SESSION_COOKIE_SECURE = True

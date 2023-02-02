@@ -34,6 +34,15 @@ from .filters import TranslatedFieldFilter #Danile solution to duplicate filters
 
 from commoninfo.wizard import DataWizardFactIndicatorSerializer
 from django.db.models import Case, When
+from django.urls import path
+
+from commoninfo.admin_filters import  (
+    LocationFilter,IndicatorsFilter,DatasourceFilter,
+    CategoryOptionFilter) # added 1/2/2023
+from regions.views import LocationSearchView
+from indicators.views import IndicatorSearchView
+from home.views import CategoryOptionSearchView,DataourceSearchView
+
 
 #These 3 functions are used to register global actions performed on the data.
 def transition_to_pending (modeladmin, request, queryset):
@@ -316,13 +325,23 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         db_locations = StgLocation.objects.only('locationlevel',).select_related(
             'parent','locationlevel','wb_income','special').order_by(
             'location_id')
-        qs = super().get_queryset(request).select_related(
-            'indicator','location','categoryoption','datasource',
-            'measuremethod','user',).filter(
-            indicator__translations__language_code=language).order_by(
-            'indicator__translations__name').filter(
-            location__translations__language_code=language).order_by(
-            'location__translations__name').distinct()
+
+        qs = super().get_queryset(request)
+        
+        qs = qs.select_related('location','indicator','categoryoption', 
+                'datasource','measuremethod','user').prefetch_related(
+                'location__translations','indicator__translations',
+                'categoryoption__translations','datasource__translations',
+                'measuremethod__translations').only(
+                'location','indicator','categoryoption','datasource',
+                'measuremethod','user','value_received','period','comment',
+                'date_created','user__id','location__location_id',
+                'indicator__indicator_id','categoryoption__categoryoption_id',
+                'datasource__datasource_id','measuremethod__measuremethod_id',
+                'priority','string_value','indicator__afrocode','min_value',
+                'numerator_value','denominator_value','max_value',
+                'target_value','start_period','end_period',)
+
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
@@ -345,51 +364,59 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
     AFRO-DataAdmins, he/she can enter data for all the AFRO member countries
     otherwise, can only enter data for his/her country.=== modified 02/02/2021
     """
+    
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         email = request.user.email
         user_location = request.user.location.location_id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
+        
         if db_field.name == "location":
             if request.user.is_superuser:
-                kwargs["queryset"] = StgLocation.objects.only(
-                    'locationlevel',).order_by('location_id')
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2).order_by(
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master','locationlevel__master').filter(
+                    locationlevel__locationlevel_id__gte=1,
+                    locationlevel__locationlevel_id__lte=2).order_by(
                 'location_id')
             else:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                location_id=request.user.location_id).translated(
-                language_code=language)
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').filter(
+                    location_id=request.user.location_id).translated(
+                    language_code=language)
 
         if db_field.name == "indicator":
-                kwargs["queryset"] = StgIndicator.objects.filter(
-                translations__language_code=language).distinct()
+            kwargs["queryset"] = StgIndicator.objects.select_related('reference',).prefetch_related(
+                'translations__master',).filter(
+                translations__language_code=language)
 
-        if db_field.name == "user":
-                kwargs["queryset"] = CustomUser.objects.filter(
-                email=email)
-        # Restricted permission to data source implememnted on 20/03/2020
+        if db_field.name == "categoryoption":
+            kwargs["queryset"] = StgCategoryoption.objects.select_related(
+                'category').prefetch_related('translations__master').filter(
+                translations__language_code=language)
+
         if db_field.name == "datasource":
-            if request.user.is_superuser:
-                kwargs["queryset"] = StgDatasource.objects.filter(
-                translations__language_code=language).distinct()
-            elif user in groups:
-                kwargs["queryset"] = StgDatasource.objects.filter(
-                translations__language_code=language).distinct()
-            else:
-                kwargs["queryset"] = StgDatasource.objects.filter(
-                    pk__gte=2).filter(
-                    translations__language_code=language).distinct()
+            kwargs["queryset"] = StgDatasource.objects.prefetch_related(
+                'translations__master').filter(translations__language_code=language)
 
         if db_field.name == "measuremethod":
-                kwargs["queryset"] = StgMeasuremethod.objects.filter(
-                translations__language_code=language).distinct()
+            kwargs["queryset"] = StgMeasuremethod.objects.prefetch_related(
+                'translations__master').filter(translations__language_code=language)
+
+        if db_field.name == "user":
+            kwargs["queryset"] = CustomUser.objects.select_related(
+                'location').prefetch_related('role',
+                'location__translations__master').get(id=user)
         return super().formfield_for_foreignkey(db_field, request,**kwargs)
+
+
 
     # #This method gets afrocode from  indicator model for use in list_display
     def get_afrocode(obj):
@@ -432,13 +459,13 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
     readonly_fields = ('indicator', 'location', 'start_period',)
     fieldsets = ( # used to create frameset sections on the data entry form
         ('Indicator Details', {
-                'fields': ('indicator','location', 'categoryoption','datasource',
-                'measuremethod','priority',)
+                'fields': ('indicator','location', 'categoryoption',
+                'datasource','measuremethod','priority',)
             }),
             ('Reporting Period & Data Values', {
                 'fields': ('start_period','end_period','value_received',
-                'numerator_value','denominator_value','min_value','max_value',
-                'target_value','string_value'),
+                'numerator_value','denominator_value','min_value',
+                'max_value','target_value','string_value'),
             }),
         )
     # The list display includes a callable get_afrocode that returns indicator code
@@ -446,12 +473,17 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         'value_received','string_value','datasource','get_comment_display',
         'priority',date_created,)
 
+    search_fields = ('indicator__translations__name','location__translations__name',
+        'period','indicator__afrocode','comment','priority') #display search field
+   
+    list_filter = [LocationFilter,IndicatorsFilter, # optimal filter refactored 01/02/2023
+        DatasourceFilter,CategoryOptionFilter]
+
     list_select_related = ('indicator','location','categoryoption','datasource',
         'measuremethod','user',)
 
     list_display_links = ('location',get_afrocode, 'indicator',)
-    search_fields = ('indicator__translations__name','location__translations__name',
-        'period','indicator__afrocode') #display search field
+
     list_per_page = 50 #limit records displayed on admin site to 30
     #This field needed for controlled approval of resource before ETL process
     readonly_fields=('comment',)
@@ -459,14 +491,6 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
     actions = ExportActionModelAdmin.actions + [transition_to_pending,
         transition_to_approved,transition_to_rejected,]
 
-    list_filter = (
-        ('location',TranslatedFieldFilter,),
-        ('indicator', TranslatedFieldFilter,),
-        ('period',DropdownFilter),
-        ('categoryoption', TranslatedFieldFilter,),
-        ('comment',DropdownFilter),
-        ('priority',DropdownFilter), #added on 26-03-2022 as requested by Serge
-    )
 
 
 class LimitModelFormset(BaseInlineFormSet):
@@ -641,32 +665,62 @@ class IndicatorFactArchiveAdmin(OverideExport):
     AFRO-DataAdmins, he/she can enter data for all the AFRO member countries
     otherwise, can only enter data for his/her country.===modified 02/02/2021
     """
+
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        show_full_result_count = False # added 28-01-2023
+
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
+        language = request.LANGUAGE_CODE # get the en, fr or pt from the request
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().select_related(
             'parent','locationlevel','wb_income','special').order_by(
-            'location_id')
-        facts_archive=aho_factsindicator_archive.objects.only(
-            'indicator','location','categoryoption','datasource',
-            'value_received','period','comment',)
-        # Returns data for all the locations to the lowest location level
+            'location_id').distinct()
+           
+        # import pdb; pdb.set_trace()
+
+        qs = super().get_queryset(request)
+        
+        qs = qs.select_related('location','indicator','categoryoption', 
+                'datasource','measuremethod','user').prefetch_related(
+                'location__translations','indicator__translations',
+                'categoryoption__translations','datasource__translations',
+                'measuremethod__translations').only(
+                'location','indicator','categoryoption','datasource',
+                'measuremethod','user','value_received','period','comment',
+                'date_created','user__id','location__location_id',
+                'indicator__indicator_id','categoryoption__categoryoption_id',
+                'datasource__datasource_id','measuremethod__measuremethod_id',
+                )
+
         if request.user.is_superuser:
             return qs
         # returns data for AFRO and member countries
         elif user in groups and user_location==1:
             qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
+				locationlevel__locationlevel_id__gte=1,
                 locationlevel__locationlevel_id__lte=2)
         # return data based on the location of the user logged/request location
         elif user in groups and user_location>1:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
-        return qs
+            return qs
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('location_search/', self.admin_site.admin_view(
+                LocationSearchView.as_view(model_admin=self)),name='location_search'),
+            path('indicator_search/', self.admin_site.admin_view(
+                IndicatorSearchView.as_view(model_admin=self)),name='indicator_search'),
+            path('categories_search/', self.admin_site.admin_view(
+                CategoryOptionSearchView.as_view(model_admin=self)),name='categories_search'),
+            path('source_search/', self.admin_site.admin_view(
+                DataourceSearchView.as_view(model_admin=self)), name='source_search'),
+        ]
+        return custom_urls + urls
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
         groups = list(request.user.groups.values_list('user', flat=True))
@@ -674,32 +728,48 @@ class IndicatorFactArchiveAdmin(OverideExport):
         email = request.user.email
         user_location = request.user.location.location_id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
+        
         if db_field.name == "location":
             if request.user.is_superuser:
-                kwargs["queryset"] = StgLocation.objects.all().order_by(
-                'location_id')
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2).order_by(
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master','locationlevel__master').filter(
+                    locationlevel__locationlevel_id__gte=1,
+                    locationlevel__locationlevel_id__lte=2).order_by(
                 'location_id')
             else:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                location_id=request.user.location_id).translated(
-                language_code=language)
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').filter(
+                    location_id=request.user.location_id).translated(
+                    language_code=language)
 
         if db_field.name == "indicator":
-                kwargs["queryset"] = StgIndicator.objects.filter(
-                translations__language_code=language).distinct()
+            kwargs["queryset"] = StgIndicator.objects.select_related('reference',).prefetch_related(
+                'translations__master',).filter(
+                translations__language_code=language)
+
+        if db_field.name == "categoryoption":
+            kwargs["queryset"] = StgCategoryoption.objects.prefetch_related(
+                'translations__master').filter(translations__language_code=language)
+
+        if db_field.name == "datasource":
+            kwargs["queryset"] = StgDatasource.objects.prefetch_related(
+                'translations__master').filter(translations__language_code=language)
 
         if db_field.name == "measuremethod":
-                kwargs["queryset"] = StgMeasuremethod.objects.filter(
-                translations__language_code=language).distinct()
+            kwargs["queryset"] = StgMeasuremethod.objects.prefetch_related(
+                'translations__master').filter(translations__language_code=language)
 
         if db_field.name == "user":
-                kwargs["queryset"] = CustomUser.objects.filter(
-                    email=email)
+            kwargs["queryset"] = CustomUser.objects.select_related(
+                'location').prefetch_related('role',
+                'location__translations__master').get(id=user)
         return super().formfield_for_foreignkey(db_field, request,**kwargs)
 
 
@@ -710,22 +780,21 @@ class IndicatorFactArchiveAdmin(OverideExport):
         super().save_model(request, obj, form, change)
 
     exclude = ('user',)
-    resource_class = AchivedIndicatorResourceExport
+    # resource_class = AchivedIndicatorResourceExport
     actions = ExportActionModelAdmin.actions
     list_display=('indicator','location','categoryoption','datasource',
-    'value_received','period','comment',date_created,)
-    list_select_related = ('indicator','location','categoryoption','datasource',
-        'measuremethod')
-    search_fields = ('indicator__translations__name','location__translations__name',
-        'period') #display search field
-    list_per_page = 100 #limit records displayed on admin site to 50
-    list_filter = (
-        ('location', TranslatedFieldFilter,),
-        ('indicator', TranslatedFieldFilter,),
-        ('categoryoption', TranslatedFieldFilter,),
-        ('comment',DropdownFilter),
-    )
+        'value_received','period','comment',date_created,)
+    list_select_related = True
 
+    
+    search_fields = ('indicator__translations__name','location__translations__name',
+        'period','comment',) #display search field
+    list_per_page = 100 #limit records displayed on admin site to 50
+      
+    list_filter = [LocationFilter,IndicatorsFilter, DatasourceFilter,# this is the optimal solution to filter
+            CategoryOptionFilter]
+ 
+ 
 
 @admin.register(StgNarrative_Type)
 class NarrativeTypeAdmin(TranslatableAdmin,OverideExport):
