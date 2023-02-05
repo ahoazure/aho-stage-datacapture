@@ -8,7 +8,7 @@ db.sqlite3
 
 # comment out line below to push data migrations
 # **/migrations/
-
+**/__pycache__/
 # Uploads to be ignored
 # repository/**
 
