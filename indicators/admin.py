@@ -71,10 +71,11 @@ class GroupedModelChoiceIterator(ModelChoiceIterator):
                 ]
             for choice in self.field.choice_cache:
                 yield choice
-        else:
+        else: # I refactored this code on 01/02/2023 to optimize query that reduced it from 579 to just 26 queries
             for group, choices in groupby(self.queryset.select_related( # select related replaced .all()
                 'category').prefetch_related('category__translations',
-                'translations'),
+                'translations__master').order_by(
+                'category__translations__name','translations__name'),
 	        key=lambda row: getattr(row, self.field.group_by_field)):
                     yield (self.field.group_label(group),
                         [self.choice(ch) for ch in choices])
@@ -342,7 +343,14 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
                 'datasource__datasource_id','measuremethod__measuremethod_id',
                 'priority','string_value','indicator__afrocode','min_value',
                 'numerator_value','denominator_value','max_value',
-                'target_value','start_period','end_period',)
+                'target_value','start_period','end_period',).filter(
+                    indicator__translations__language_code=language,
+                    location__translations__language_code=language,
+                    categoryoption__translations__language_code=language,
+                    datasource__translations__language_code=language,   
+                    measuremethod__translations__language_code=language,            
+                )
+        
 
         if request.user.is_superuser:
             qs
@@ -735,7 +743,9 @@ class IndicatorFactArchiveAdmin(OverideExport):
             if request.user.is_superuser:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').order_by('location_id')
+                    'translations__master').order_by(
+                    'locationlevel','translations__name').filter(
+                        translations__language_code=language)
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
@@ -743,30 +753,40 @@ class IndicatorFactArchiveAdmin(OverideExport):
                     'translations__master','locationlevel__master').filter(
                     locationlevel__locationlevel_id__gte=1,
                     locationlevel__locationlevel_id__lte=2).order_by(
-                'location_id')
+                    'locationlevel','translations__name').filter(
+                        translations__language_code=language)
             else:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
                     'translations__master').filter(
-                    location_id=request.user.location_id).translated(
-                    language_code=language)
+                    location_id=request.user.location_id).filter(
+                        translations__language_code=language).order_by(
+                    'locationlevel','translations__name')
 
         if db_field.name == "indicator":
-            kwargs["queryset"] = StgIndicator.objects.select_related('reference',).prefetch_related(
+            kwargs["queryset"] = StgIndicator.objects.select_related(
+                'reference',).prefetch_related(
                 'translations__master',).filter(
-                translations__language_code=language)
+                translations__language_code=language).order_by(
+                'translations__name')
 
         if db_field.name == "categoryoption":
-            kwargs["queryset"] = StgCategoryoption.objects.prefetch_related(
-                'translations__master').filter(translations__language_code=language)
+            kwargs["queryset"] = StgCategoryoption.objects.select_related(
+                'category').prefetch_related('translations__master').filter(
+                translations__language_code=language).order_by(
+                'category__translation__name','translations__name')
 
         if db_field.name == "datasource":
             kwargs["queryset"] = StgDatasource.objects.prefetch_related(
-                'translations__master').filter(translations__language_code=language)
+                'translations__master').filter(
+                translations__language_code=language).order_by(
+                'translations__name')
 
         if db_field.name == "measuremethod":
             kwargs["queryset"] = StgMeasuremethod.objects.prefetch_related(
-                'translations__master').filter(translations__language_code=language)
+                'translations__master').filter(
+                translations__language_code=language).order_by(
+                'translations__name')
 
         if db_field.name == "user":
             kwargs["queryset"] = CustomUser.objects.select_related(

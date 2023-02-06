@@ -7,18 +7,24 @@ from import_export.formats import base_formats
 from .models import (StgProductDomain,StgKnowledgeProduct,StgResourceType,
     StgResourceCategory,StgKnowledgeResourceTagging)
 from commoninfo.admin import OverideImportExport,OverideExport
+
+from commoninfo.admin_filters import (LocationFilter,KnowledgeResourceFilter)
+from aho_datacapturetool.settings import *
 from regions.models import StgLocation
-from django_admin_listfilter_dropdown.filters import (
-    DropdownFilter, RelatedDropdownFilter, ChoiceDropdownFilter,
-    RelatedOnlyDropdownFilter) #custom
+from regions.views import LocationSearchView
+from .views import KnowledgeResourceSearchView
+from django.urls import path
+
 from .resources import (StgKnowledgeProductResourceExport,
     StgKnowledgeProductResourceImport,ProductDomainResourceExport,
     ProductTypeResourceExport,ProductCategoryResourceExport,)
 from import_export.admin import (ImportExportModelAdmin, ExportMixin,
     ExportActionModelAdmin)
+
 from authentication.models import CustomUser, CustomGroup
 from .filters import TranslatedFieldFilter #Danile solution to duplicate filters
 from .serializers import StgKnowledgeProductSerializer
+
 
 #Methods used to register global actions performed on data. See actions listbox
 def transition_to_pending (modeladmin, request, queryset):
@@ -79,7 +85,9 @@ class ResourceCategoryAdmin(TranslatableAdmin,OverideExport):
 
     def get_queryset(self, request):
         language = request.LANGUAGE_CODE
-        qs = super().get_queryset(request).filter(
+        qs = super().get_queryset(request).select_related(
+                    'type').prefetch_related(
+            'translations__master','type__translations').filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
         groups = list(request.user.groups.values_list('user', flat=True))
@@ -122,6 +130,18 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100})},
     }
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('location_search/', self.admin_site.admin_view(
+                LocationSearchView.as_view(model_admin=self)),
+                    name='location_search'),
+            path('products_search/', self.admin_site.admin_view(
+                KnowledgeResourceSearchView.as_view(model_admin=self)),
+                    name='products_search'),
+            
+        ]
+        return custom_urls + urls
     """
     Serge requested that the form for data input be restricted to user's location.
     Thus, this function is for filtering location to display country level.
@@ -132,11 +152,14 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
     """
     def get_queryset(self, request):
         language = request.LANGUAGE_CODE
-        qs = super().get_queryset(request).filter(
-            translations__language_code=language).order_by(
+        qs = super().get_queryset(request).select_related(
+            'user','type','location','categorization').prefetch_related(
+            'translations','type__translations','location__translations').filter(
+                translations__language_code=language).order_by(
             'translations__title').filter(
-            location__translations__language_code=language).order_by(
+                location__translations__language_code=language).order_by(
             'location__translations__name').distinct()
+
 
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
@@ -175,30 +198,38 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
 
         if db_field.name == "location":
             if request.user.is_superuser:
-                kwargs["queryset"] = StgLocation.objects.all().order_by(
-                'location_id')
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2).order_by(
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master','locationlevel__master').filter(
+                    locationlevel__locationlevel_id__gte=1,
+                    locationlevel__locationlevel_id__lte=2).order_by(
                 'location_id')
             else:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                location_id=request.user.location_id).translated(
-                language_code=language)
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').filter(
+                    location_id=request.user.location_id).translated(
+                    language_code=language)
 
         if db_field.name == "type":
-                kwargs["queryset"] = StgResourceType.objects.filter(
-                translations__language_code=language).distinct()
+                kwargs["queryset"] = StgResourceType.objects.prefetch_related(
+                'translations__master').filter(
+                translations__language_code=language)
 
         if db_field.name == "categorization":
-                kwargs["queryset"] = StgResourceCategory.objects.filter(
+                kwargs["queryset"] = StgResourceCategory.objects.select_related(
+                    'type').prefetch_related('translations__master').filter(
                 translations__language_code=language).distinct()
 
         if db_field.name == "user":
-                kwargs["queryset"] = CustomUser.objects.filter(
-                email=email)
+            kwargs["queryset"] = CustomUser.objects.select_related(
+                'location').prefetch_related('role',
+                'location__translations__master').filter(email=email)
         return super().formfield_for_foreignkey(db_field, request,**kwargs)
 
     # display clickable URL for the external resource link
@@ -215,7 +246,7 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
     # display clickable URL for the nternal (azure blob) resource link
     def file_url(self, resource):
         if resource.internal_url:
-            base_url = 'files.aho.afro.who.int/afahobckpcontainer/'
+            base_url = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'           
             filename = resource.internal_url.name
             link=base_url+filename         
             return format_html(
@@ -324,11 +355,9 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
     actions = ExportActionModelAdmin.actions + [transition_to_pending,
         transition_to_approved,transition_to_rejected]
     exclude = ('date_created','date_lastupdated','code','comment')
-    list_filter = (
-        ('location',TranslatedFieldFilter),
-        ('type',TranslatedFieldFilter),
-        ('comment',DropdownFilter),
-    )
+   
+    list_filter = [LocationFilter,KnowledgeResourceFilter,] # optimal solution to admin filter refactored 01/02/2023  
+
 
 
 @admin.register(StgProductDomain)

@@ -18,11 +18,18 @@ from .resources import (HealthWorkforceResourceExport,HealthCadreResourceExport,
     TrainingInstitutionResourceExport,HealthWorkforceProductResourceExport,)
 from facilities.models import (StgHealthFacility,)
 from regions.models import StgLocation
-from home.models import StgDatasource
+from home.models import StgDatasource,StgCategoryoption,StgMeasuremethod
 from authentication.models import CustomUser, CustomGroup
 from .filters import TranslatedFieldFilter #Danile solution to duplicate filters
 
 from commoninfo.wizard import DataWizardWorkforceFactsSerializer
+from django.urls import path
+
+from commoninfo.admin_filters import  (LocationFilter,DatasourceFilter,
+    CategoryOptionFilter,HealthCadreFilter) # added 1/2/2023
+from regions.views import LocationSearchView
+from . views import HealthCadreSearchView
+from home.views import CategoryOptionSearchView,DataourceSearchView
 
 
 #Methods used to register global actions performed on data. See actions listbox
@@ -474,6 +481,19 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
         models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100})},
     }
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('location_search/', self.admin_site.admin_view(
+                LocationSearchView.as_view(model_admin=self)),name='location_search'),
+            path('cadre_search/', self.admin_site.admin_view(
+                HealthCadreSearchView.as_view(model_admin=self)),name='cadre_search'),
+            path('categories_search/', self.admin_site.admin_view(
+                CategoryOptionSearchView.as_view(model_admin=self)),name='categories_search'),
+            path('source_search/', self.admin_site.admin_view(
+                DataourceSearchView.as_view(model_admin=self)), name='source_search'),
+        ]
+        return custom_urls + urls
 
     def get_export_resource_class(self):
         return HealthWorkforceResourceExport
@@ -510,7 +530,29 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
+        db_locations = StgLocation.objects.only('locationlevel',).select_related(
+            'parent','locationlevel','wb_income','special').order_by(
+            'location_id')
+        
+
+        qs = super().get_queryset(request)
+        
+        qs = qs.select_related('location','cadre','categoryoption', 
+            'datasource','measuremethod','user').prefetch_related(
+            'location__translations','cadre__translations',
+            'categoryoption__translations','datasource__translations',
+            'measuremethod__translations').only(
+            'location','cadre','categoryoption','datasource',
+            'measuremethod','user','value','period','status',
+            'date_created','user__id','location__location_id',
+            'cadre__cadre_id','categoryoption__categoryoption_id',
+            'datasource__datasource_id','measuremethod__measuremethod_id',
+            'start_year','end_year',).filter(
+                cadre__translations__language_code=language).order_by(
+            'cadre__translations__name').filter(
+                location__translations__language_code=language).order_by(
+            'location__translations__name').distinct()
+
         # Returns data for all the locations to the lowest location level
         if request.user.is_superuser:
             qs
@@ -540,34 +582,62 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
         email = request.user.email
         language = request.LANGUAGE_CODE
         user_location = request.user.location.location_id
+        
         if db_field.name == "location":
             if request.user.is_superuser:
-                kwargs["queryset"] = StgLocation.objects.all().order_by(
-                'location_id')
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').order_by(
+                    'locationlevel','translations__name').filter(
+                        translations__language_code=language)
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2).order_by(
-                'location_id')
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master','locationlevel__master').filter(
+                        locationlevel__locationlevel_id__gte=1,
+                        locationlevel__locationlevel_id__lte=2).order_by(
+                    'locationlevel','translations__name').filter(
+                        translations__language_code=language)
             else:
-                kwargs["queryset"] = StgLocation.objects.filter(
-                location_id=request.user.location_id).translated(
-                language_code=language)
+                kwargs["queryset"] = StgLocation.objects.select_related(
+                    'parent','locationlevel','wb_income','special').prefetch_related(
+                    'translations__master').filter(
+                    location_id=request.user.location_id).translated(
+                    language_code=language).order_by(
+                    'locationlevel','translations__name').filter(
+                    translations__language_code=language)
+
+        if db_field.name == "cadre":
+            kwargs["queryset"] = StgHealthCadre.objects.select_related(
+                'parent',).prefetch_related(
+                'translations__master',).filter(
+                    translations__language_code=language).order_by(
+                'translations__name')
+
+        if db_field.name == "categoryoption":
+            kwargs["queryset"] = StgCategoryoption.objects.select_related(
+                'category').prefetch_related('translations__master').filter(
+                translations__language_code=language).order_by(
+                'translations__name')
+
+        if db_field.name == "datasource":
+            kwargs["queryset"] = StgDatasource.objects.prefetch_related(
+                'translations__master').filter(
+                translations__language_code=language).order_by(
+                'translations__name')
+        
+
+        if db_field.name == "measuremethod":
+            kwargs["queryset"] = StgMeasuremethod.objects.prefetch_related(
+                'translations__master').filter(
+                translations__language_code=language).order_by(
+                'translations__name')
 
         if db_field.name == "user":
-                kwargs["queryset"] = CustomUser.objects.filter(
-                    email=email)
-        # Restricted permission to data source implememnted on 20/03/2020
-        if db_field.name == "datasource":
-            if request.user.is_superuser:
-                kwargs["queryset"] = StgDatasource.objects.all().order_by(
-                'datasource_id')
-            elif user in groups:
-                kwargs["queryset"] = StgDatasource.objects.all().order_by(
-                'datasource_id')
-            else:
-                kwargs["queryset"] = StgDatasource.objects.filter(pk__gte=2)
+            kwargs["queryset"] = CustomUser.objects.select_related(
+                'location').prefetch_related('role',
+                'location__translations__master').get(id=user)
         return super().formfield_for_foreignkey(db_field, request,**kwargs)
 
     """
@@ -633,13 +703,17 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
     actions = ExportActionModelAdmin.actions + [transition_to_pending,
         transition_to_approved,transition_to_rejected,]
 
-    list_filter = (
-        ('cadre',TranslatedFieldFilter),
-        ('location', TranslatedFieldFilter,),
-        ('period',DropdownFilter),
-        ('status',DropdownFilter),
-        ('categoryoption', TranslatedFieldFilter,),
-    )
+
+    list_filter = [LocationFilter, DatasourceFilter,HealthCadreFilter,
+                   CategoryOptionFilter]
+ 
+    # list_filter = (
+    #     ('cadre',TranslatedFieldFilter),
+    #     ('location', TranslatedFieldFilter,),
+    #     ('period',DropdownFilter),
+    #     ('status',DropdownFilter),
+    #     ('categoryoption', TranslatedFieldFilter,),
+    # )
 
 
 @admin.register(StgRecurringEvent)

@@ -31,3 +31,19 @@ class CategoryOptionFilter(AutocompleteFilter):
     
     def get_autocomplete_url(self, request, model_admin):
         return reverse('admin:categories_search')
+    
+
+class KnowledgeResourceFilter(AutocompleteFilter):
+    title = 'Knowledge Resource Types' # display title eg By Country or Region Name
+    field_name = 'type' # name of the foreign key field from child model
+    
+    def get_autocomplete_url(self, request, model_admin):
+        return reverse('admin:products_search')
+    
+
+class HealthCadreFilter(AutocompleteFilter):
+    title = 'Type of Occupation' # display title eg By Country or Region Name
+    field_name = 'cadre' # name of the foreign key field from child model
+    
+    def get_autocomplete_url(self, request, model_admin):
+        return reverse('admin:cadre_search')
