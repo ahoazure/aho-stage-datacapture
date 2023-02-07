@@ -1,13 +1,23 @@
-from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 import data_wizard
+from django.conf import settings # allow import of projects settings at the root
+
+from rest_framework.serializers import (HyperlinkedModelSerializer,
+    ModelSerializer, ReadOnlyField, DecimalField,PrimaryKeyRelatedField,
+    )
 
 from facilities.models import StgHealthFacility
 from indicators.models import FactDataIndicator
-from health_workforce.models import StgHealthWorkforceFacts
+from health_workforce.models import StgHealthWorkforceFacts,StgHealthCadre
 from health_services.models import HealthServices_DataIndicators
 from elements.models import FactDataElement
 from authentication.models import CustomUser # for filtering logged in instances
+
+from indicators.models import (StgIndicator, FactDataIndicator,)
+from home.models import StgCategoryoption, StgDatasource,StgMeasuremethod # added 07/02/2023
+from regions.models import StgLocation
+from authentication.models import CustomUser # for filtering logged in instances
+
 
 
 """
@@ -15,8 +25,8 @@ This custom srializer class creates facility instance based on the logged user.
 To make this posssible, the user foreign key must made read-only.This behaviour
 successfuly was implemented on 27/09/2021 after 2 weeks of struggling.
 """
-class DataWizardFacilitySerializer(serializers.ModelSerializer):
-    location_name = serializers.ReadOnlyField(source='location.location.name')
+class DataWizardFacilitySerializer(ModelSerializer):
+    # location_name = ReadOnlyField(source='location.location.name')
 
     """
     Fetch id of logged user supplied via data_wizard run contect.This issue
@@ -38,9 +48,9 @@ class DataWizardFacilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = StgHealthFacility
         read_only_fields = ('user',) # Disable user get from logged user instance
-        fields = ('uuid','code','type','location','location_name','owner','name',
-                    'shortname','admin_location', 'description','latitude',
-                    'longitude','altitude','geosource','url','status','user')
+        fields = ('uuid','code','type','location','owner','name','shortname',
+                  'admin_location', 'description','latitude',
+                  'longitude','altitude','geosource','url','status','user')
 
         data_wizard = {
         'header_row': 0,
@@ -50,7 +60,7 @@ class DataWizardFacilitySerializer(serializers.ModelSerializer):
     }
 
 
-class RoundedDecimalField(serializers.DecimalField):
+class RoundedDecimalField(DecimalField):
     def validate_precision(self, value):
         return value
 
@@ -58,14 +68,43 @@ class RoundedDecimalField(serializers.DecimalField):
 Custom serializer class for importing indicator data using django-data-wizard.
 We override decimal field to ignore decimal places and required validation rule
 """
-class DataWizardFactIndicatorSerializer(serializers.ModelSerializer):
-    location_name = serializers.ReadOnlyField(source='location.name')
+class DataWizardFactIndicatorSerializer(ModelSerializer): # to replace hardcoded lenguage selection later
+    language = settings.LANGUAGE_CODE # to replace default lenguage with session later  
+    
+    indicator = PrimaryKeyRelatedField(
+        label='Indicator Name', queryset=StgIndicator.objects.select_related(
+        'reference').prefetch_related('translations__master').filter(
+                translations__language_code=language), required=True)
+    
+    location = PrimaryKeyRelatedField(
+        label='Location Name', queryset=StgLocation.objects.select_related(
+            'locationlevel','parent','wb_income','special').prefetch_related(
+            'wb_income__translations','translations__master').order_by(
+            'locationlevel','translations__name').filter(
+                translations__language_code=language), required=True)
+    
+    categoryoption = PrimaryKeyRelatedField(
+        label='Disaggregation Options', queryset=StgCategoryoption.objects.select_related(
+        'category').prefetch_related(
+        'translations__master').filter(translations__language_code=language),
+          required=False)
+    
+    datasource = PrimaryKeyRelatedField(
+        label='Data Source', queryset=StgDatasource.objects.prefetch_related(
+        'translations__master').order_by('translations__name').filter(
+                translations__language_code=language), required=True)
+    
+    measuremethod = PrimaryKeyRelatedField(
+        label='Measure Type', queryset=StgMeasuremethod.objects.prefetch_related(
+        'translations__master').order_by('translations__name').filter(
+                translations__language_code=language),required=True)
+    
     numerator_value = RoundedDecimalField(
         max_digits=20,decimal_places=3,required=False,allow_null=True)
     denominator_value = RoundedDecimalField(
         max_digits=20, decimal_places=3,required=False,allow_null=True)
     value_received = RoundedDecimalField(
-        max_digits=20, decimal_places=3,required=False,allow_null=True)# changed to false
+        max_digits=20, decimal_places=3,required=True,allow_null=False)
     min_value = RoundedDecimalField(
         max_digits=20,decimal_places=3,required=False,allow_null=True)
     max_value = RoundedDecimalField(
@@ -73,8 +112,9 @@ class DataWizardFactIndicatorSerializer(serializers.ModelSerializer):
     target_value = RoundedDecimalField(
         max_digits=20, decimal_places=3,required=False,allow_null=True)
 
+    
     """
-    Fetch id of logged user supplied via data_wizard run contect.This issue
+    Fetch id of logged user supplied via data_wizard run context.This issue
     was resolved after 3 weeks of intense efforts until I read Dejmail issue
     posted on https://githubmemory.com/repo/wq/django-data-wizard/issues/32
     """
@@ -93,10 +133,10 @@ class DataWizardFactIndicatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = FactDataIndicator
         fields = [
-            'uuid','fact_id','indicator', 'location','location_name','categoryoption',
-            'datasource','measuremethod','numerator_value','denominator_value',
-            'value_received','min_value','max_value','target_value','string_value',
-            'start_period','end_period','period',]
+            'indicator','location','categoryoption','datasource','measuremethod',
+            'numerator_value','denominator_value','value_received','min_value',
+            'max_value','target_value','string_value','start_period','end_period',
+            'period',]
 
         data_wizard = {
             'header_row': 0,
@@ -110,11 +150,37 @@ This custom srializer class that creates that health workforce instance based on
 logged user.To make this posssible, the user foreign key must made read-only.
 This behaviour was successfuly was implemented on 28/09/2021.
 """
-class DataWizardWorkforceFactsSerializer(serializers.ModelSerializer):
-    location_name = serializers.ReadOnlyField(source='location.name')
-
+class DataWizardWorkforceFactsSerializer(ModelSerializer):
+    cadre = PrimaryKeyRelatedField(
+        label='Occupation Type', queryset=StgHealthCadre.objects.select_related(
+        'parent').prefetch_related('translations__master').filter(
+                translations__language_code='en'), required=True)
+    
+    location = PrimaryKeyRelatedField(
+        label='Location Name', queryset=StgLocation.objects.select_related(
+            'locationlevel','parent','wb_income','special').prefetch_related(
+            'wb_income__translations','translations__master').order_by(
+            'locationlevel','translations__name').filter(
+                translations__language_code='en'), required=True)
+    
+    categoryoption = PrimaryKeyRelatedField(
+        label='Disaggregation Options', queryset=StgCategoryoption.objects.select_related(
+        'category').prefetch_related(
+        'translations__master').filter(translations__language_code='en'),
+          required=False)
+    
+    datasource = PrimaryKeyRelatedField(
+        label='Data Source', queryset=StgDatasource.objects.prefetch_related(
+        'translations__master').order_by('translations__name').filter(
+                translations__language_code='en'), required=True)
+    
+    measuremethod = PrimaryKeyRelatedField(
+        label='Measure Type', queryset=StgMeasuremethod.objects.prefetch_related(
+        'translations__master').order_by('translations__name').filter(
+                translations__language_code='en'),required=True)
+    
     """
-    Fetch id of logged user supplied via data_wizard run contect.This issue
+    Fetch id of logged user supplied via data_wizard run context.This issue
     was resolved after 3 weeks of intense efforts until I read Dejmail issue
     posted on https://githubmemory.com/repo/wq/django-data-wizard/issues/32
     """
@@ -134,9 +200,8 @@ class DataWizardWorkforceFactsSerializer(serializers.ModelSerializer):
     class Meta:
         model = StgHealthWorkforceFacts
 
-        fields = ('uuid','cadre','location','location_name','categoryoption',
-                    'datasource','measuremethod','value', 'start_year',
-                    'end_year','period','status',)
+        fields = ('cadre','location','categoryoption','datasource','measuremethod',
+                  'value', 'start_year','end_year','period','status',)
 
         data_wizard = {
         'header_row': 0,
@@ -150,8 +215,8 @@ Custom serializer class for importing data elements using django-data-wizard.We
 override decimal field to ignore decimal places and required validation rule.
 """
 # Force import wizard to ignore the decimal places and required validation to allow null
-class DataWizardElementSerializer(serializers.ModelSerializer,):
-    location_name = serializers.ReadOnlyField(source='location.name')
+class DataWizardElementSerializer(ModelSerializer,):
+    location_name = ReadOnlyField(source='location.name')
     value = RoundedDecimalField(
         max_digits=20, decimal_places=3,required=True,allow_null=False)
     target_value = RoundedDecimalField(
@@ -189,8 +254,8 @@ class DataWizardElementSerializer(serializers.ModelSerializer,):
 
 
 # Force import wizard to ignore the decimal places and required validation to allow null
-class DataWizardHealthServicesFactSerializer(serializers.ModelSerializer):
-    location_name = serializers.ReadOnlyField(source='location.name')
+class DataWizardHealthServicesFactSerializer(ModelSerializer):
+    location_name = ReadOnlyField(source='location.name')
     numerator_value = RoundedDecimalField(
         max_digits=20,decimal_places=3,required=False,allow_null=True)
     denominator_value = RoundedDecimalField(
