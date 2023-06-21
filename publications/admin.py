@@ -205,7 +205,7 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master','locationlevel__master').filter(
+                    'translations__master',).filter(
                     locationlevel__locationlevel_id__gte=1,
                     locationlevel__locationlevel_id__lte=2).order_by(
                 'location_id')
