@@ -200,19 +200,27 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
             if request.user.is_superuser:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').order_by('location_id')
+                    'translations__master',
+                     # was throwing error due to locationlevel__master bad lookup
+                     # the error was corrected on 19/07/2023 at 22:25 UTC+3
+                     # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master',).filter(
+                    'translations__master',
+                     # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     locationlevel__locationlevel_id__gte=1,
                     locationlevel__locationlevel_id__lte=2).order_by(
                 'location_id')
             else:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').filter(
+                    'translations__master',
+                     # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     location_id=request.user.location_id).translated(
                     language_code=language)
 
@@ -342,10 +350,15 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
     date_created.admin_order_field = 'date_created'
     date_created.short_description = 'Date Created'
 
+    # use a more descriptive approval status column name
+    def get_status(self, obj):
+        return obj.get_comment_display()
+    get_status.short_description = 'Status'
+
 
     # To display the choice field values use the helper method get_foo_display
     list_display=['title','code',get_type,'author','year_published',get_location,
-        'file_url','show_external_url','get_comment_display',date_created]
+        'file_url','show_external_url','get_status',date_created]
     list_select_related = ('user','type','categorization','location',)
     list_display_links = ['code','title',]
     readonly_fields = ('comment',)

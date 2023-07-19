@@ -259,17 +259,23 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
             if request.user.is_superuser:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').order_by(
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').order_by(
                     'locationlevel','translations__name').filter(
                         translations__language_code=language)
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master','locationlevel__master').filter(
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     locationlevel__locationlevel_id__gte=1,
                     locationlevel__locationlevel_id__lte=2).order_by(
-                    'locationlevel','translations__name').filter(
+                    'locationlevel','translations__name',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                         translations__language_code=language)
             else:
                 kwargs["queryset"] = StgLocation.objects.select_related(
@@ -349,6 +355,11 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
     date_created.admin_order_field = 'date_created'
     date_created.short_description = 'Date Created'
 
+    # use a more descriptive approval status column name
+    def get_status(self, obj):
+        return obj.get_comment_display()
+    get_status.short_description = 'Status'
+
     """
     Overrride model_save method to grab id of the logged in user. The save_model
     method is given HttpRequest (request), model instance (obj), ModelForm
@@ -377,7 +388,7 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
     resource_class = HSCFactsResourceExport
     # The list display includes a callable get_afrocode that returns indicator code
     list_display=('indicator','location', get_afrocode,start_date,'categoryoption',
-        'value_received','datasource','get_comment_display',date_created,)
+        'value_received','datasource','get_status',date_created,)
 
     list_select_related = ('indicator','location','categoryoption','datasource',
         'measuremethod',)

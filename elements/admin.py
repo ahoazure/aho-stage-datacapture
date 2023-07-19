@@ -309,6 +309,11 @@ class DataElementFactAdmin(ExportActionModelAdmin,OverideExport):
     date_created.admin_order_field = 'date_created'
     date_created.short_description = 'Date Created'
 
+    # use a more descriptive approval status column name
+    def get_status(self, obj):
+        return obj.get_comment_display()
+    get_status.short_description = 'Status'
+    
     actions = ExportActionModelAdmin.actions + [transition_to_pending,
         transition_to_approved, transition_to_rejected]
 
@@ -333,7 +338,7 @@ class DataElementFactAdmin(ExportActionModelAdmin,OverideExport):
         )
     # Display includes a callable get_afrocode that returns data element code
     list_display=['dataelement','location',get_afrocode,'categoryoption','period',
-        'value','datasource','get_comment_display',date_created,]
+        'value','datasource','get_status',date_created,]
     list_select_related = ('dataelement','location','categoryoption','datasource',
         'valuetype',)
     list_display_links = ('dataelement','location', get_afrocode,) #For making the code and name clickable

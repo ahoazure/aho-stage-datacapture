@@ -386,19 +386,25 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
             if request.user.is_superuser:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').order_by('location_id')
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').order_by('location_id')
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master','locationlevel__master').filter(
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     locationlevel__locationlevel_id__gte=1,
                     locationlevel__locationlevel_id__lte=2).order_by(
                 'location_id')
             else:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').filter(
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     location_id=request.user.location_id).translated(
                     language_code=language)
 
@@ -456,6 +462,12 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
     date_created.admin_order_field = 'date_created'
     date_created.short_description = 'Date Created'
 
+    # use a more descriptive approval status column name
+    def get_status(self, obj):
+        return obj.get_comment_display()
+    get_status.short_description = 'Status'
+
+
     """
     Overrride model_save method to grab id of the logged in user. The save_model
     method is given HttpRequest (request), model instance (obj), ModelForm
@@ -479,9 +491,9 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
             }),
         )
     # The list display includes a callable get_afrocode that returns indicator code
-    list_display=('indicator','location', get_afrocode,'period','categoryoption',
-        'value_received','string_value','datasource','get_comment_display',
-        'priority',date_created,)
+    list_display=('indicator','location', get_afrocode,'period',
+                  'categoryoption','value_received','string_value',
+                  'datasource','get_status','priority',date_created,)
 
     search_fields = ('indicator__translations__name','location__translations__name',
         'period','indicator__afrocode','comment','priority') #display search field
@@ -750,7 +762,9 @@ class IndicatorFactArchiveAdmin(OverideExport):
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master','locationlevel__master').filter(
+                    'translations__master',
+                     # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     locationlevel__locationlevel_id__gte=1,
                     locationlevel__locationlevel_id__lte=2).order_by(
                     'locationlevel','translations__name').filter(

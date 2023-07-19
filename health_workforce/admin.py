@@ -587,14 +587,18 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
             if request.user.is_superuser:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').order_by(
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').order_by(
                     'locationlevel','translations__name').filter(
                         translations__language_code=language)
                 # Looks up for the location level upto the country level
             elif user in groups and user_location==1:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master','locationlevel__master').filter(
+                    'translations__master',
+                     # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                         locationlevel__locationlevel_id__gte=1,
                         locationlevel__locationlevel_id__lte=2).order_by(
                     'locationlevel','translations__name').filter(
@@ -602,7 +606,9 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
             else:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
-                    'translations__master').filter(
+                    'translations__master',
+                    # Multi-level location lookup to address N+1 query problem
+                    'locationlevel__locationlevel_id__master').filter(
                     location_id=request.user.location_id).translated(
                     language_code=language).order_by(
                     'locationlevel','translations__name').filter(
@@ -706,14 +712,6 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
 
     list_filter = [LocationFilter, DatasourceFilter,HealthCadreFilter,
                    CategoryOptionFilter]
- 
-    # list_filter = (
-    #     ('cadre',TranslatedFieldFilter),
-    #     ('location', TranslatedFieldFilter,),
-    #     ('period',DropdownFilter),
-    #     ('status',DropdownFilter),
-    #     ('categoryoption', TranslatedFieldFilter,),
-    # )
 
 
 @admin.register(StgRecurringEvent)
