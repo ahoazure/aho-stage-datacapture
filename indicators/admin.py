@@ -321,15 +321,13 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
     If a user is not assigned to a group, he/she can only own data - 01/02/2021
     """
     def get_queryset(self, request):
+        qs = super().get_queryset(request)
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
-        db_locations = StgLocation.objects.only('locationlevel',).select_related(
-            'parent','locationlevel','wb_income','special').order_by(
-            'location_id')
-
-        qs = super().get_queryset(request)
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid)
         
         qs = qs.select_related('location','indicator','categoryoption', 
                 'datasource','measuremethod','user').prefetch_related(
@@ -355,12 +353,10 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
@@ -690,20 +686,16 @@ class IndicatorFactArchiveAdmin(OverideExport):
 
     def get_queryset(self, request):
         show_full_result_count = False # added 28-01-2023
+        qs = super().get_queryset(request)
 
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
         user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().select_related(
-            'parent','locationlevel','wb_income','special').order_by(
-            'location_id').distinct()
-           
-        # import pdb; pdb.set_trace()
-
-        qs = super().get_queryset(request)
-        
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid)
+                   
         qs = qs.select_related('location','indicator','categoryoption', 
                 'datasource','measuremethod','user').prefetch_related(
                 'location__translations','indicator__translations',
@@ -717,19 +709,18 @@ class IndicatorFactArchiveAdmin(OverideExport):
                 )
 
         if request.user.is_superuser:
-            return qs
+            qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
-            return qs
+        return qs
 
+ 
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
@@ -869,23 +860,27 @@ class AnalyticsNarrativeAdmin(OverideExport):
         language = request.LANGUAGE_CODE
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid)
+
         qs = super().get_queryset(request).filter(
             domain__translations__language_code=language).order_by(
             'domain__translations__name').filter(
             location__translations__language_code=language).order_by(
             'location__translations__name').filter(
                 narrative_type__translations__language_code=language).distinct()
+        
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
-        return qs
+        else: # return own data if not member of a group
+            qs=qs.filter(user=request.user).distinct()
+        return qs        
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
         groups = list(request.user.groups.values_list('user', flat=True))
@@ -940,22 +935,27 @@ class IndicatorNarrativeAdmin(OverideExport):
         language = request.LANGUAGE_CODE
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid)
+        
         qs = super().get_queryset(request).filter(
             indicator__translations__language_code=language).order_by(
             'indicator__translations__name').filter(
             location__translations__language_code=language).order_by(
             'location__translations__name').distinct()
+        
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
-        return qs
+        else: # return own data if not member of a group
+            qs=qs.filter(user=request.user).distinct()
+        return qs        
+
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
         groups = list(request.user.groups.values_list('user', flat=True))

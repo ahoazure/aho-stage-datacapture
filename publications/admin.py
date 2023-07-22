@@ -10,7 +10,7 @@ from commoninfo.admin import OverideImportExport,OverideExport
 
 from commoninfo.admin_filters import (LocationFilter,KnowledgeResourceFilter)
 from aho_datacapturetool.settings import *
-from regions.models import StgLocation
+from regions.models import StgLocation,StgLocationLevel
 from regions.views import LocationSearchView
 from .views import KnowledgeResourceSearchView
 from django.urls import path
@@ -53,16 +53,6 @@ class ResourceTypeAdmin(TranslatableAdmin,OverideExport):
         qs = super().get_queryset(request).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        groups = list(request.user.groups.values_list('user',flat=True))
-        user = request.user.id
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        if request.user.is_superuser:
-            return qs
-        elif user in groups:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
         return qs
 
     def get_export_resource_class(self):
@@ -90,16 +80,6 @@ class ResourceCategoryAdmin(TranslatableAdmin,OverideExport):
             'translations__master','type__translations').filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.id
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        if request.user.is_superuser:
-            return qs
-        elif user in groups:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
         return qs
 
     def get_export_resource_class(self):
@@ -166,20 +146,21 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
         user = request.user.id
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
+
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid) 
+
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
-            qs=qs.filter(location=user_location) #to be reconsidered for privacy
-        return qs
+            qs=qs.filter(user=request.user).distinct()
+        return qs 
 
     """
     Serge requested that the form for input be restricted to user's location.
@@ -386,16 +367,6 @@ class ProductDomainAdmin(TranslatableAdmin,OverideExport):
         qs = super().get_queryset(request).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.id
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        if request.user.is_superuser:
-            return qs
-        elif user in groups:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
         return qs
 
     def get_export_resource_class(self):
@@ -448,18 +419,22 @@ class ResourceTaggingAdmin(OverideExport):
         groups = list(request.user.groups.values_list('user',flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
+        # db_locations = StgLocation.objects.all().order_by('location_id')
+
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid) 
+
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
+        # return data based on the location of the user logged/request location
+        elif user in groups and user_location>1 and user_level:
+            qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
-            qs=qs.filter(location=user_location) #to be reconsidered for privacy
-        return qs
+            qs=qs.filter(user=request.user).distinct()
+        return qs 
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
         groups = list(request.user.groups.values_list('user', flat=True))

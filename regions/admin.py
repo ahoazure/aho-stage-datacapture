@@ -150,16 +150,6 @@ class LocationAdmin(TranslatableAdmin,OverideExport):
             'translations_name').distinct().filter(
             locationlevel__translations__language_code=language).order_by(
             'locationlevel__translations__name').distinct()
-        # Get a query of groups the user belongs and flatten it to list object
-        if request.user.is_superuser:
-            qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
-        else: # return own data if not member of a group
-            qs=qs.filter(location_id=user_location)
         return qs
 
     """
@@ -231,23 +221,10 @@ class LocationCodesAdmin(admin.ModelAdmin):
     If a user is not assigned to a group, he/she can only own data - 01/02/2021
     """
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        # Get a query of groups the user belongs and flatten it to list object
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.id
-        user_location = request.user.location.location_id
-        db_locations = StgLocationCodes.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
-        if request.user.is_superuser:
-            qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                location__locationlevel__locationlevel_id__gt=2,
-                location__locationlevel__locationlevel_id__lte=3)
-        # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
-            qs=qs.filter(location=user_location).distinct()
+        language = request.LANGUAGE_CODE
+        qs = super().get_queryset(request).filter(
+            location__translations__language_code=language).order_by(
+            'location__translations__name').distinct()
         return qs
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
@@ -270,10 +247,6 @@ class LocationCodesAdmin(admin.ModelAdmin):
                 kwargs["queryset"] = StgLocation.objects.filter(
                 location_id=request.user.location_id).translated(
                 language_code=language)
-
-        if db_field.name == "user":
-                kwargs["queryset"] = CustomUser.objects.filter(
-                    email=request.user)
         return super().formfield_for_foreignkey(db_field, request,**kwargs)
 
 

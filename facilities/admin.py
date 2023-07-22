@@ -19,7 +19,8 @@ from commoninfo.admin import OverideImportExport,OverideExport,OverideImport
 from .resources import (StgFacilityResourceExport,FacilityTypeResourceExport,
     FacilityServiceDomainResourceExport,StgFacilityServiceAvailabilityExport,
     StgFacilityServiceCapacityExport,StgFacilityServiceReadinessExport,)
-from regions.models import StgLocation,StgLocationCodes
+from regions.models import (StgLocation,StgLocationCodes,
+                            StgLocationLevel,)
 from django_admin_listfilter_dropdown.filters import (
     DropdownFilter, RelatedDropdownFilter, ChoiceDropdownFilter,
     RelatedOnlyDropdownFilter) #custom
@@ -65,19 +66,6 @@ class FacilityTypeAdmin(TranslatableAdmin,OverideExport):
         qs = super().get_queryset(request).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        # Get a query of groups the user belongs and flatten it to list object
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.id
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
-        if request.user.is_superuser:
-            qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
         return qs
 
     def get_export_resource_class(self):
@@ -118,16 +106,23 @@ class FacilityOwnership (TranslatableAdmin):
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
+
         # Returns data for all the locations to the lowest location level
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid) 
+
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
-        return qs
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
+        # return data based on the location of the user logged/request location
+        elif user in groups and user_location>1 and user_level:
+            qs=qs.filter(location=user_location)
+        else: # return own data if not member of a group
+            qs=qs.filter(user=request.user).distinct()
+        return qs 
+    
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
         qs = super().get_queryset(request)
@@ -429,20 +424,17 @@ class FacilityAdmin(ImportExportModelAdmin,ImportExportActionModelAdmin):
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().select_related(
-                        'parent','locationlevel','wb_income','special').order_by(
-                        'location_id')
-        # Returns data for all the locations to the lowest location level
+        user_location = request.user.location.location_id   
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid)
+
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location<=2:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gt=2,
-                locationlevel__locationlevel_id__lte=3)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
@@ -592,20 +584,28 @@ class FacilityServiceAvailabilityAdmin(ExportActionModelAdmin,OverideExport):
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
 
-        # Returns data for all the locations to the lowest location level
+
+    def get_queryset(self, request):
+        language = request.LANGUAGE_CODE
+        qs = super().get_queryset(request).order_by(
+            'name').distinct()
+        groups = list(request.user.groups.values_list('user', flat=True))
+        user = request.user.id
+        user_location = request.user.location.location_id
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid) 
+
         if request.user.is_superuser:
-            return qs
+            qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
-        return qs
+        return qs 
 
     """
     Serge requested that the form for data input be restricted to user's country.
@@ -735,20 +735,21 @@ class FacilityServiceProvisionAdmin(ExportActionModelAdmin,OverideExport):
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
 
-        # Returns data for all the locations to the lowest location level
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid) 
+
         if request.user.is_superuser:
-            return qs
+            qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
-        return qs
+        return qs 
+
 
     """
     Serge requested that the form for data input be restricted to use country.
@@ -830,20 +831,21 @@ class FacilityServiceReadinessAdmin(ExportActionModelAdmin,OverideExport):
         user = request.user.id
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
+
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid) 
+
         if request.user.is_superuser:
-            return qs
+            qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
-        return qs
+        return qs 
 
     """
     Serge requested that the form for data input be restricted to user's country.
@@ -940,22 +942,8 @@ class FacilityServiceProvisionUnitsAdmin (TranslatableAdmin):
         qs = super().get_queryset(request).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.username
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
-        if request.user.is_superuser:
-            return qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
-        # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
-            qs=qs.filter(username=user)
         return qs
+    
     fieldsets = (
         ('Unit of Service provision', {
                 'fields':('name','shortname','description','domain',)
@@ -993,22 +981,8 @@ class FacilityServiceInterventionAdmin(TranslatableAdmin):
         qs = super().get_queryset(request).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.username
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
-        if request.user.is_superuser:
-            return qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
-        # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
-            qs=qs.filter(username=user)
         return qs
+    
     fieldsets = (
         ('Service Interventions Details', {
                 'fields':('name','shortname','description','domain',)
@@ -1045,22 +1019,8 @@ class FacilityServiceAreasAdmin(TranslatableAdmin):
         qs = super().get_queryset(request).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        groups = list(request.user.groups.values_list('user', flat=True))
-        user = request.user.username
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.all().order_by('location_id')
-        # Returns data for all the locations to the lowest location level
-        if request.user.is_superuser:
-            return qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-                locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
-        # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
-            qs=qs.filter(username=user)
         return qs
+    
     fieldsets = (
         ('Service Domain Areas', {
                 'fields':('name','shortname','description','intervention',)

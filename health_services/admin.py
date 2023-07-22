@@ -203,16 +203,14 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
     If a user is not assigned to a group, he/she can only own data - 01/02/2021
     """
     def get_queryset(self, request):
+        qs = super().get_queryset(request)
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
-        db_locations = StgLocation.objects.all().select_related(
-            'parent','locationlevel','wb_income','special').order_by(
-            'location_id').distinct()
 
-        
-        qs = super().get_queryset(request)
+        user_uuid = request.user.location.locationlevel.uuid
+        user_level= StgLocationLevel.objects.get(uuid=user_uuid)       
         
         qs = qs.select_related('location','indicator','categoryoption', 
             'datasource','measuremethod','user').prefetch_related(
@@ -229,16 +227,14 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
+        elif user in groups and user_location==1 and user_level:
+            qs=qs.filter(location__gte=user_location) # return data for all locations
         # return data based on the location of the user logged/request location
-        elif user in groups and user_location>1:
+        elif user in groups and user_location>1 and user_level:
             qs=qs.filter(location=user_location)
         else: # return own data if not member of a group
             qs=qs.filter(user=request.user).distinct()
-        return qs
+        return qs 
 
     """
     Serge requested that the form for data input be restricted to user's country.
@@ -272,11 +268,9 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
                     # Multi-level location lookup to address N+1 query problem
                     'locationlevel__locationlevel_id__master').filter(
                     locationlevel__locationlevel_id__gte=1,
-                    locationlevel__locationlevel_id__lte=2).order_by(
-                    'locationlevel','translations__name',
-                    # Multi-level location lookup to address N+1 query problem
-                    'locationlevel__locationlevel_id__master').filter(
-                        translations__language_code=language)
+                    locationlevel__locationlevel_id__lte=2).filter(
+                        translations__language_code=language).order_by(
+                        'locationlevel','translations__name')
             else:
                 kwargs["queryset"] = StgLocation.objects.select_related(
                     'parent','locationlevel','wb_income','special').prefetch_related(
@@ -408,7 +402,6 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
         transition_to_approved,transition_to_rejected,]
 
 
-
 class LimitModelFormset(BaseInlineFormSet):
     ''' Base Inline formset to limit inline Model records'''
     def __init__(self, *args, **kwargs):
@@ -487,13 +480,6 @@ class HealthServicesProxyAdmin(TranslatableAdmin):
         qs = super().get_queryset(request).filter(reference=5).filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-        if request.user.is_superuser:
-            qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
         return qs
 
     #This method removes the add button on the admin interface
@@ -562,22 +548,9 @@ class HealthServicesIndicatorsAdmin(TranslatableAdmin,OverideExport):
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.username
         language = request.LANGUAGE_CODE # get the en, fr or pt from the request
-        user_location = request.user.location.location_id
-        db_locations = StgLocation.objects.only('locationlevel',).order_by(
-            'location_id')
-        db_user=list(CustomUser.objects.values_list('username', flat=True))
-
         qs = super().get_queryset(request).filter(reference__code='GIR0005').filter(
             translations__language_code=language).order_by(
             'translations__name').distinct()
-
-        if request.user.is_superuser:
-            qs
-        # returns data for AFRO and member countries
-        elif user in groups and user_location==1:
-            qs_admin=db_locations.filter(
-				locationlevel__locationlevel_id__gte=1,
-                locationlevel__locationlevel_id__lte=2)
         return qs
 
     def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
