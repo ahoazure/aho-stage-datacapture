@@ -120,7 +120,7 @@ class UserAdmin (UserAdmin):
     add_fieldsets = (
         ('Contacts and Password', {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('email','location', 'password1', 'password2')}
         ),
     )
     list_select_related = ('location',)

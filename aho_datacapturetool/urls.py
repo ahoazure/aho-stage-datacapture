@@ -18,6 +18,9 @@ from rest_framework.documentation import (
     include_docs_urls, get_schemajs_view)
 from rest_framework_swagger.views import get_swagger_view
 
+from rest_framework.authtoken.views import obtain_auth_token
+
+
 admin.autodiscover() # Autoloads the custom login page instead of auth.admin view
 admin.site.login = login_required(admin.site.login)
 
@@ -83,6 +86,7 @@ urlpatterns += i18n_patterns ( # must be python immutable list () and not []
     path('api-auth/', include('rest_framework.urls')), # For browsable REST API
     path('api/docs/', include_docs_urls(title='iAHO-DCT',public=False)),
     path('api/schema/', get_schemajs_view(title='iAHO-DCT', public=False)),
+    path('api/auth-token/', obtain_auth_token),# added 23/08/2023 to generate tokens
 
     # Route that allows display of uploaded files when Debug=False in settings.py
     re_path(r'^media/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),

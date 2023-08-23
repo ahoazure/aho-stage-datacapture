@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'data_wizard',
     'rest_framework', # register Django REST framework
     'rest_framework_swagger',
+    'rest_framework.authtoken', # added 22/08/2023
     'django_admin_listfilter_dropdown',
     'crispy_forms',
 
@@ -111,6 +112,30 @@ REST_FRAMEWORK = {
     'TIME_FORMAT': 'iso-8601',
 }
 
+#Swagger rest authntication added 22/08/2023 to allow session-based login
+SWAGGER_SETTINGS = {
+    'SHOW_REQUEST_HEADERS': True,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+        'basic': {
+            'type': 'basic'
+        }
+    },
+    'USE_SESSION_AUTH': True,
+    'LOGIN_URL':'rest_framework:login', # display rest login page
+    'LOGOUT_URL':'rest_framework:logout', # display logout button
+    'JSON_EDITOR': True,
+    'SUPPORTED_SUBMIT_METHODS': [
+        'get',
+        'post',
+        'patch',
+        'put',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
