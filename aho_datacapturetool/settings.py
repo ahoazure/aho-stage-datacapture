@@ -16,7 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 
-DEBUG = False # Debug must be set to False in production for security purposes
+DEBUG = True # Debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
@@ -90,6 +90,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication', # added 23/08/2023
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
