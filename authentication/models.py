@@ -111,32 +111,27 @@ class CustomGroup(Group):
 # This model class maps to a database View that looks up the django_admin logs,
 # location, customuser and group hence reason its managed meta is False
 class AhodctUserLogs(models.Model):
-    username = models.CharField(_('Username'),blank=False, null=False,
-        max_length=150)
-    email = models.EmailField(unique=True,blank=False, null=False)
     first_name = models.CharField(max_length=30, blank=True,
         verbose_name=_("First Name"))
     last_name= models.CharField(max_length=150, blank=True,
         verbose_name=_("Last Name"))
-    location_translation = models.CharField(max_length=230, blank=True,
+    email = models.EmailField(unique=True,blank=False, null=False)
+    location_name = models.CharField(max_length=230, blank=True,
         verbose_name=_("Location "))
-    app_label = models.CharField(max_length=150, blank=True,
-        verbose_name=_("Menu Executed"))
     record_name= models.CharField(max_length=200, blank=True,
         default=_("Affected Record"))
     action= models.CharField(max_length=9, blank=True,
         default=_("Action Taken"))
     action_time=models.DateTimeField(blank=True,
-        verbose_name = _('Action Timestamp'))
+        verbose_name = _('Action Timestamp'))    
     last_login = models.DateTimeField(blank=True,
-        verbose_name = _('Last Login Timestamp'))
+        verbose_name = _('Last Login Date'))
 
     class Meta:
         managed = False
         db_table = 'dct_users_log'
         verbose_name = _('View Users Log')
         verbose_name_plural = _(' View User Logs')
-        ordering = ('username', )
 
     def __str__(self):
         return self.first_name

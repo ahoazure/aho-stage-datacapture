@@ -1,5 +1,5 @@
 from .settings import *
-DEBUG = False # Swich off debug for security reasons
+DEBUG = True # Swich off debug for security reasons
 # Configure production domain names
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net',
     'af-aho-datacapturetool-stage.azurewebsites.net',
@@ -44,6 +44,7 @@ DATABASES = {
         'PASSWORD': os.environ['DBPASS'],
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'init_command': 'SET storage_engine=INNODB;',
             'ssl': {'ca': '/home/site/cert/BaltimoreTrustDigiCertifcateCombo.pem'} # Replaced with new combo certificate 03/05/2023
             },
     }

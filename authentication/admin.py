@@ -230,18 +230,17 @@ class AhoDCT_LogsAdmin(admin.ModelAdmin):
         return super(AhoDCT_LogsAdmin, self).changeform_view(
             request, object_id, extra_context=extra_context)
 
-    list_display=['username','email','first_name', 'last_name',
-        'location_translation','app_label','record_name','action','action_time',
+    list_display=['first_name', 'last_name','email',
+        'location_name','record_name','action','action_time',
         'last_login',]
-    readonly_fields = ('username','email','first_name', 'last_name',
-        'location_translation','app_label','record_name','action','action_time',
+    readonly_fields = ('first_name', 'last_name','email',
+        'location_name','record_name','action','action_time',
         'last_login',)
-    search_fields = ('username','email','first_name', 'last_name',
-        'location_translation','app_label','record_name','action',)
+    search_fields = ('first_name', 'last_name','email',
+        'location_name','record_name','action',)
     list_filter = (
         ('record_name', DropdownFilter,),
-        ('app_label', DropdownFilter,),
-        ('location_translation', DropdownFilter,),
+        ('location_name', DropdownFilter,),
         ('action', DropdownFilter),
     )
     ordering = ('-action_time',)
