@@ -16,7 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 
-DEBUG = False # Debug must be set to False in production for security purposes
+DEBUG = True # Debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
@@ -54,6 +54,9 @@ INSTALLED_APPS = [
 
     # added django autocomplete filter02-02-2023
     'admin_auto_filters',
+
+    # New module for UHC clock indicators
+    'uhc_clock.apps.UhcClockConfig',
 ]
 
 SESSION_COOKIE_SECURE = True
@@ -181,7 +184,8 @@ DATABASES = {
         'USER': os.environ['DBUSER'],
         'PASSWORD': os.environ['DBPASS'],
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'sql_mode': 'traditional',
             'init_command': 'SET storage_engine=INNODB;',
             'ssl': {'ca': '/site/cert/BaltimoreTrustDigiCertifcateCombo.pem'} # Replaced with new combo certificate 03/05/2023
             },
