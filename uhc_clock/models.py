@@ -67,18 +67,18 @@ class StgUHClockIndicatorsGroup(TranslatableModel):
 
 class StgUHClockIndicators(models.Model):
     CATEGORIES = (
-        ('1',_('Input')),
-        ('2',_('Process')),      
-        ('3',_('Output')),
-        ('4',_('Outcomes')),
-        ('5',_('Impact')),
+        ('input',_('Input')),
+        ('process',_('Process')),      
+        ('output',_('Output')),
+        ('outcome',_('Outcomes')),
+        ('impact',_('Impact')),
     )
     indicator = models.OneToOneField(StgIndicator, models.PROTECT, 
         blank=False, null=False,verbose_name = _('Indicator Name'))
     group = models.ForeignKey(StgUHClockIndicatorsGroup, models.PROTECT, 
         blank=False, null=False,verbose_name = _('Indicator Group'))
     Indicator_type =models.CharField(_('Indicator Type'),choices=CATEGORIES,
-        max_length=5,default=CATEGORIES[0][0])
+        max_length=50,default=CATEGORIES[0][0])
     description = models.TextField(_('Description'),blank=True,null=True,)
 
     class Meta:
