@@ -1352,7 +1352,7 @@ msgstr "Accueil"
 #: .\health_services\templates\admin\health_services\healthservices_dataindicators\change_form.html:21
 #, python-format
 msgid "Add %(name)s"
-msgstr "Ajout"
+msgstr "Ajout %(name)s"
 
 #: .\health_services\templates\admin\health_services\healthservices_dataindicators\change_form.html:43
 #: .\templates\registration\password_change_form.html:21
