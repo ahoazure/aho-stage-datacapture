@@ -299,7 +299,7 @@ class Mutiple_MeasureTypes(models.Model): # this is equivalent to inventory_stat
     class Meta:
         managed = True
         db_table = 'dqa_multiple_indicators_checker'
-        verbose_name = _('Multiple Multiple Type')
+        verbose_name = _('Multiple Measure Type')
         unique_together = ('indicator_name', 'location', 'categoryoption',
             'datasource','period',)  
         verbose_name_plural = _('Multiple Measures')

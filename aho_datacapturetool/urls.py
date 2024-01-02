@@ -21,7 +21,7 @@ from rest_framework_swagger.views import get_swagger_view
 from rest_framework.authtoken.views import obtain_auth_token
 
 
-admin.autodiscover() # Autoloads the custom login page instead of auth.admin view
+# admin.autodiscover() # Autoloads the custom login page instead of auth.admin view
 admin.site.login = login_required(admin.site.login)
 
 admin.site.site_header="DCT Admin"

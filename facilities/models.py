@@ -328,7 +328,7 @@ class StgFacilityServiceIntervention(TranslatableModel):
     class Meta:
         managed = True
         db_table = 'stg_facility_service_intervention'
-        verbose_name = _('Facility Servce Intervention')
+        verbose_name = _('Facility Service Intervention')
         verbose_name_plural = _(' Service Interventions')
         ordering = ('translations__name',)
 
@@ -412,7 +412,7 @@ class FacilityServiceAvailability(models.Model):
         'date_assessed',)
         db_table = 'stg_facility_services_availability'
         verbose_name = _('Service Availability')
-        verbose_name_plural = _('   Services Avilability')
+        verbose_name_plural = _('   Services Availability')
         ordering = ('domain',)
 
     def __str__(self):

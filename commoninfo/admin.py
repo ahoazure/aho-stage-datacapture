@@ -27,6 +27,9 @@ def get_app_list(context, order=True):
     admin_site = get_admin_site(context)
     request = context['request']
 
+    # import pdb; pdb.set_trace()
+
+
     app_dict = {}
     for model, model_admin in admin_site._registry.items():
         app_label = model._meta.app_label
@@ -38,8 +41,8 @@ def get_app_list(context, order=True):
         if has_module_perms:
             perms = model_admin.get_model_perms(request)
 
-            # Check whether user has any perm for this module.
-            # If so, add the module to the model_list.
+            # Check whether user has any perm for this model.
+            # If so, add the model to the model_dict.
             if True in perms.values():
                 info = (app_label, model._meta.model_name)
                 model_dict = {
@@ -66,7 +69,23 @@ def get_app_list(context, order=True):
                     try:
                         name = apps.get_app_config(app_label).verbose_name
                     except NameError:
-                        name = app_label.title()
+                        if app_label.title().upper() == 'UHC_CLOCK':
+                            name =_("UHC CLOCK") # rename the horizontal menu; added on 02/01/2024
+                        elif app_label.title().upper() == 'AUTHTOKEN':
+                            name =_("API TOKENS") # rename the horizontal menu; added on 02/01/2024
+                        elif app_label.title().upper() == 'HEALTH_WORKFORCE':
+                            name =_("HEALTH WORKFORCE") # rename the horizontal menu; added on 02/01/2024
+                        elif app_label.title().upper() == 'HEALTH_SERVICES':
+                            name =_("HEALTH SERVICES") # rename the horizontal menu; added on 02/01/2024
+                        elif app_label.title().upper() == 'ELEMENTS':
+                            name =_("DATA ELEMENTS") # rename the horizontal menu; added on 02/01/2024
+                        elif app_label.title().upper() == 'DATA_WIZARD':
+                            name =_("DATA WIZARD") # rename the horizontal menu; added on 02/01/2024
+                        elif app_label.title().upper() == 'DATA_QUALITY':
+                            name =_("DATA QUALITY") # rename the horizontal menu; added on 02/01/2024
+                        else:
+                             name = _(app_label.title().upper()) # convert default app label to uppercase
+                    
                     app_dict[app_label] = {
                         'name': name,
                         'app_label': app_label,
@@ -85,46 +104,36 @@ def get_app_list(context, order=True):
     'Indicators':2,
     'Publications':3,
     'Facilities':4,
-    'Health_Workforce':5,
-    'Health_Services':6,
-    'Elements':7,
+    'Health Workforce':5, # Health_Workforce
+    'Health Services':6, # Health_Services
+    'Data Elements':7, # Elements
     'Regions':8,
-    'Data_Wizard':9,
-    'Data_Quality':10,
-    'Authtoken':11,
+    'Data Wizard':9, # Data_Wizard
+    'Data Quality':10, # Data_Quality
+    'api tokens':11, # Authtoken
     'Authentication':12,
-    'UHC_Clock':13,
-
+    'UHC Clock':13,
     }
 
-    # ordering =  {k.upper(): v for k, v in ordering.items()}
-     
-    # print(ordering)
-
-
-    
+    ordering =  {k.upper(): v for k, v in ordering.items()}
+         
     # Create the list to be sorted using the ordering dict.
     app_list = list(app_dict.values())
     
-    # The ordering dict has been added here to effect the custom ordering
+    # import pdb; pdb.set_trace()
+
+    
     if order:
-        ordering =  {k.upper(): v for k, v in ordering.items()}
-
-        app_list.sort(key=lambda x: ordering[x['name'].upper()])
-        # The following lines rename the horizontal menus manually
-        app_list[4]['name'] =_('Health Workforce') # renamed menu 
-        app_list[5]['name'] =_('Health Services') # renamed menu
-        app_list[6]['name'] =_('Data Elements') # renamed menu
-        app_list[8]['name'] =_('Import Wizard') # renamed menu
-        app_list[9]['name'] =_('Data Quality') # renamed menu
-        app_list[10]['name'] =_('Login Tokens') # renamed menu
-        app_list[12]['name'] =_('UHC Clock') # renamed menu
-
+        app_list.sort(key=lambda x: ordering[x['name']])
         # Sort the models alphabetically within each app.
         for app in app_list:
             app['models'].sort(key=lambda x: x['name'])
+    
+    # import pdb; pdb.set_trace()
+
     return app_list
-#apply monkey patching here to see how things work
+  
+# apply custom menu converted to uppercase
 custom_admin_menu.get_app_list = get_app_list
 
 

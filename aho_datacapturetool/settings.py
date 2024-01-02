@@ -16,7 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 
-DEBUG = False # Debug must be set to False in production for security purposes
+DEBUG = True # Debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'facilities',
     'health_workforce',
     'health_services',
-    'data_quality', # for data quality validations
+    'data_quality.apps.DataQualityConfig', # for data quality validations
     'data_wizard',
     'rest_framework', # register Django REST framework
     'rest_framework_swagger',
@@ -327,5 +327,9 @@ ADMIN_REORDER = (
     {'app': 'regions', 'models': ('regions.StgLocation','regions.StgLocationLevel',
     'regions.StgEconomicZones','regions.StgWorldbankIncomegroups',
     'regions.StgSpecialcategorization')},
+
+    {'app': 'data_quality', 'models': ('data_quality.Facts_DataFilter','data_quality.Facts_DataFrame',
+    'data_quality.MeasureTypes_Validator','data_quality.DataSource_Validator',
+    'data_quality.CategoryOptions_Validator','data_quality.Similarity_Index','data_quality.Mutiple_MeasureTypes',)},
 
 )
