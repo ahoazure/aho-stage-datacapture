@@ -235,7 +235,6 @@ class MeasuredAdmin(TranslatableAdmin,OverideExport):
 
 @admin.register(FileSource)
 class FileSourceAdmin(ImportActionModelAdmin):
-    # menu_title = _("Import File... ")
     def get_queryset(self, request):
         language = request.LANGUAGE_CODE
         qs = super().get_queryset(request).filter(
@@ -294,7 +293,6 @@ class FileSourceAdmin(ImportActionModelAdmin):
 
 @admin.register(URLSource)
 class URLSourceAdmin(ImportActionModelAdmin):
-    # menu_title = _("Import URL...")
     def get_queryset(self, request):
         language = request.LANGUAGE_CODE
         qs = super().get_queryset(request).filter(

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 17:52+0300\n"
+"POT-Creation-Date: 2024-01-02 20:19+0300\n"
 "PO-Revision-Date: 2020-10-25 19:35+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -990,8 +990,9 @@ msgstr "Código telefónico"
 msgid ""
 "Specific country code for the phone number such as +242 is         "
 "automatically retrieved from database of AFRO member countries"
-msgstr "O código de país específico para o número de telefone, como +242,"
-" é recuperado automaticamente da base de dados dos países membros da OMS"
+msgstr ""
+"O código de país específico para o número de telefone, como +242, é "
+"recuperado automaticamente da base de dados dos países membros da OMS"
 
 #: .\facilities\models.py:196 .\health_workforce\models.py:164
 msgid "Phone Number"
@@ -1777,8 +1778,10 @@ msgid ""
 "without (0) prefix and the             specific line number.  For example: "
 "788888888"
 msgstr ""
-"O número de telefone deve ser um valor numérico constituído pelo indicativo"
-"local sem o prefixo (0) e pelo número de linha específico.  Por exemplo: 788888888"
+"O número de telefone deve ser um valor numérico constituído pelo "
+"indicativolocal sem o prefixo (0) e pelo número de linha específico.  Por "
+"exemplo: 788888888"
+
 #: .\home\models.py:93
 #, fuzzy
 #| msgid "Phone Number"
@@ -1792,6 +1795,7 @@ msgid ""
 msgstr ""
 "O número de telefone é a combinação do código do país e da linha telefónica,"
 "por exemplo, 254788888888"
+
 #: .\home\models.py:106
 msgid "National Observatory"
 msgstr ""
@@ -1925,17 +1929,17 @@ msgstr "Arquivo"
 #, fuzzy
 #| msgid "Import Data File... "
 msgid "Import File..."
-msgstr "Ficheiro de importação"
+msgstr "Importar ficheiro..."
 
 #: .\home\models.py:347
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: .\home\models.py:348
 #, fuzzy
 #| msgid "Import via URL..."
 msgid "Import URL..."
-msgstr "Importação via URL"
+msgstr "Importar URL..."
 
 #: .\home\templates\login.html:10
 msgid "Login with Microsoft Azure"
