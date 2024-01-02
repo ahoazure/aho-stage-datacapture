@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('is_staff') is not True:
             raise ValueError(_('New user must be DCT admin staff.'))
         if extra_fields.get('is_active') is not True:
-            raise ValueError(_('New user account must be actived.'))
+            raise ValueError(_('New user account must be activated.'))
 
         if not email:
             raise ValueError(_('Valid Email must be set'))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 11:21+0300\n"
+"POT-Creation-Date: 2024-01-02 17:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgid "New user must be DCT admin staff."
 msgstr ""
 
 #: .\authentication\models.py:27
-msgid "New user account must be actived."
+msgid "New user account must be activated."
 msgstr ""
 
 #: .\authentication\models.py:30
@@ -184,31 +184,55 @@ msgstr ""
 msgid " View User Logs"
 msgstr ""
 
-#: .\commoninfo\admin.py:73
+#: .\commoninfo\admin.py:74
+msgid "HOME"
+msgstr ""
+
+#: .\commoninfo\admin.py:76
+msgid "INDICATORS"
+msgstr ""
+
+#: .\commoninfo\admin.py:78
+msgid "PUBLICATIONS"
+msgstr ""
+
+#: .\commoninfo\admin.py:80
+msgid "FACILITIES"
+msgstr ""
+
+#: .\commoninfo\admin.py:82
+msgid "REGIONS"
+msgstr ""
+
+#: .\commoninfo\admin.py:84
+msgid "AUTHENTICATION"
+msgstr ""
+
+#: .\commoninfo\admin.py:87
 msgid "UHC CLOCK"
 msgstr ""
 
-#: .\commoninfo\admin.py:75
+#: .\commoninfo\admin.py:89
 msgid "API TOKENS"
 msgstr ""
 
-#: .\commoninfo\admin.py:77
+#: .\commoninfo\admin.py:91
 msgid "HEALTH WORKFORCE"
 msgstr ""
 
-#: .\commoninfo\admin.py:79
+#: .\commoninfo\admin.py:93
 msgid "HEALTH SERVICES"
 msgstr ""
 
-#: .\commoninfo\admin.py:81
+#: .\commoninfo\admin.py:95
 msgid "DATA ELEMENTS"
 msgstr ""
 
-#: .\commoninfo\admin.py:83
+#: .\commoninfo\admin.py:97
 msgid "DATA WIZARD"
 msgstr ""
 
-#: .\commoninfo\admin.py:85
+#: .\commoninfo\admin.py:99
 msgid "DATA QUALITY"
 msgstr ""
 
@@ -463,7 +487,7 @@ msgid " Check Sources"
 msgstr ""
 
 #: .\data_quality\models.py:430
-msgid "Check Measutype"
+msgid "Check Measure"
 msgstr ""
 
 #: .\data_quality\models.py:431

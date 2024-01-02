@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 11:21+0300\n"
+"POT-Creation-Date: 2024-01-02 17:52+0300\n"
 "PO-Revision-Date: 2020-10-25 19:30+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,22 +40,25 @@ msgstr "Emplacement des parents"
 #: .\authentication\models.py:25
 msgid "New user must be DCT admin staff."
 msgstr ""
+"Le nouvel utilisateur doit être un membre du personnel administratif de l'DCT"
 
 #: .\authentication\models.py:27
-msgid "New user account must be actived."
-msgstr ""
+#, fuzzy
+#| msgid "New user must be DCT admin staff."
+msgid "New user account must be activated."
+msgstr "Le nouveau compte utilisateur doit être activé"
 
 #: .\authentication\models.py:30
 msgid "Valid Email must be set"
-msgstr ""
+msgstr "L'adresse électronique valide doit être définie"
 
 #: .\authentication\models.py:46
 msgid "Superuser must have is_staff=True."
-msgstr ""
+msgstr "Le superutilisateur doit avoir is_staff=True."
 
 #: .\authentication\models.py:48
 msgid "Superuser must have is_superuser=True."
-msgstr ""
+msgstr "Le superutilisateur doit avoir is_staff=True."
 
 #: .\authentication\models.py:59
 msgid "title"
@@ -201,31 +204,55 @@ msgstr "Voir le site"
 msgid " View User Logs"
 msgstr "Journaux des utilisateurs"
 
-#: .\commoninfo\admin.py:73
+#: .\commoninfo\admin.py:74
+msgid "HOME"
+msgstr "ACCUEIL"
+
+#: .\commoninfo\admin.py:76
+msgid "INDICATORS"
+msgstr "INDICATEURS"
+
+#: .\commoninfo\admin.py:78
+msgid "PUBLICATIONS"
+msgstr "PUBLICATIONS"
+
+#: .\commoninfo\admin.py:80
+msgid "FACILITIES"
+msgstr "ÉTABLISSEMENTS"
+
+#: .\commoninfo\admin.py:82
+msgid "REGIONS"
+msgstr "RÉGIONS"
+
+#: .\commoninfo\admin.py:84
+msgid "AUTHENTICATION"
+msgstr "AUTHENTIFICATION"
+
+#: .\commoninfo\admin.py:87
 msgid "UHC CLOCK"
 msgstr "HORLOGE DE L'UHC"
 
-#: .\commoninfo\admin.py:75
+#: .\commoninfo\admin.py:89
 msgid "API TOKENS"
 msgstr "TOKENS D'API"
 
-#: .\commoninfo\admin.py:77
+#: .\commoninfo\admin.py:91
 msgid "HEALTH WORKFORCE"
 msgstr "PERSONNEL DE SANTÉ"
 
-#: .\commoninfo\admin.py:79
+#: .\commoninfo\admin.py:93
 msgid "HEALTH SERVICES"
 msgstr "SERVICES DE SANTÉ"
 
-#: .\commoninfo\admin.py:81
+#: .\commoninfo\admin.py:95
 msgid "DATA ELEMENTS"
 msgstr "ÉLÉMENTS DE DONNÉES"
 
-#: .\commoninfo\admin.py:83
+#: .\commoninfo\admin.py:97
 msgid "DATA WIZARD"
 msgstr "IMPORT DE DONNÉES"
 
-#: .\commoninfo\admin.py:85
+#: .\commoninfo\admin.py:99
 msgid "DATA QUALITY"
 msgstr "QUALITÉ DES DONNÉES"
 
@@ -540,7 +567,7 @@ msgstr "Ressources"
 #: .\data_quality\models.py:430
 #, fuzzy
 #| msgid " Measure Types"
-msgid "Check Measutype"
+msgid "Check Measure"
 msgstr "Types de mesures"
 
 #: .\data_quality\models.py:431
@@ -1737,7 +1764,9 @@ msgstr "Code du groupe"
 msgid ""
 "The dialing code for a specific country e.g. +254 is         automatically "
 "assigned and combine with phone number as prefix."
-msgstr "L'indicatif d'un pays spécifique, par exemple +254, est automatiquement attribué et combiné au numéro de téléphone en tant que préfixe."
+msgstr ""
+"L'indicatif d'un pays spécifique, par exemple +254, est automatiquement "
+"attribué et combiné au numéro de téléphone en tant que préfixe."
 
 #: .\home\models.py:89
 msgid "Telephone Line"
@@ -1748,8 +1777,10 @@ msgid ""
 "Phone number must be numeric             value consisting of local area code "
 "without (0) prefix and the             specific line number.  For example: "
 "788888888"
-msgstr "Le numéro de téléphone doit être une valeur numérique composée de l'indicatif"
-"local sans le préfixe (0) et du numéro de ligne spécifique.  Par exemple : 788888888"
+msgstr ""
+"Le numéro de téléphone doit être une valeur numérique composée de "
+"l'indicatiflocal sans le préfixe (0) et du numéro de ligne spécifique.  Par "
+"exemple : 788888888"
 
 #: .\home\models.py:93
 #, fuzzy
@@ -1761,8 +1792,9 @@ msgstr "Numéro de téléphone"
 msgid ""
 "Phone number is the             combination of country code and telephone "
 "line, e.g.254788888888"
-msgstr "Le numéro de téléphone est la combinaison de l'indicatif du pays et de"
-"la ligne téléphonique, par exemple 254788888888."
+msgstr ""
+"Le numéro de téléphone est la combinaison de l'indicatif du pays et dela "
+"ligne téléphonique, par exemple 254788888888."
 
 #: .\home\models.py:106
 msgid "National Observatory"
@@ -2707,6 +2739,11 @@ msgstr "Sélection des pays"
 #: .\uhc_clock\models.py:217
 msgid "UHC Clock Country Selections"
 msgstr "Sélection du pays de l'horloge UHC"
+
+#, fuzzy
+#~| msgid " Measure Types"
+#~ msgid "Check Measutype"
+#~ msgstr "Types de mesures"
 
 #~ msgid "Roles Manager"
 #~ msgstr "Responsable des rôles"

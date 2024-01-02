@@ -427,7 +427,7 @@ class DqaInvalidMeasuretypeRemarks(models.Model):
         db_table = 'dqa_invalid_measuretype_remarks'
         unique_together = ('indicator_name', 'location', 'categoryoption',
             'datasource','period',)  
-        verbose_name = _('Check Measutype')
+        verbose_name = _('Check Measure')
         verbose_name_plural = _(' Check Measures')
         ordering = ('indicator_name',)
 
