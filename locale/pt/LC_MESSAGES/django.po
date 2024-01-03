@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 20:19+0300\n"
+"POT-Creation-Date: 2024-01-03 09:21+0300\n"
 "PO-Revision-Date: 2020-10-25 19:35+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1921,14 +1921,16 @@ msgstr ""
 msgid " Measure Types"
 msgstr "Tipos de Medidas"
 
-#: .\home\models.py:311 .\publications\models.py:146
-msgid "File"
-msgstr "Arquivo"
+#: .\home\models.py:311
+#, fuzzy
+#| msgid "Import Data File... "
+msgid "Import File"
+msgstr "Importar ficheiro..."
 
 #: .\home\models.py:312
 #, fuzzy
 #| msgid "Import Data File... "
-msgid "Import File..."
+msgid "Import via File.."
 msgstr "Importar ficheiro..."
 
 #: .\home\models.py:347
@@ -1938,7 +1940,7 @@ msgstr "URL"
 #: .\home\models.py:348
 #, fuzzy
 #| msgid "Import via URL..."
-msgid "Import URL..."
+msgid "Import via URL.."
 msgstr "Importar URL..."
 
 #: .\home\templates\login.html:10
@@ -2249,6 +2251,10 @@ msgstr "Ano de Publicação"
 #| msgid "This marks the start of reporting period"
 msgid "This marks year of publication"
 msgstr "Isto marca o início do período do relatório"
+
+#: .\publications\models.py:146
+msgid "File"
+msgstr "Arquivo"
 
 #: .\publications\models.py:149
 msgid "Cover Picture"

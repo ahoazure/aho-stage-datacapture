@@ -308,8 +308,8 @@ class FileSource(Filesources):
 
     class Meta:
         managed = True
-        verbose_name = _('File')
-        verbose_name_plural = _('Import File...')
+        verbose_name = _('Import File')
+        verbose_name_plural = _('Import via File..')
         ordering = ('location',)
 
     """
@@ -345,7 +345,7 @@ class URLSource(URLsources):
     class Meta:
         managed = True
         verbose_name = _('URL')
-        verbose_name_plural = _('Import URL...')
+        verbose_name_plural = _('Import via URL..')
         ordering = ('location',)
 
     def get_url(self):

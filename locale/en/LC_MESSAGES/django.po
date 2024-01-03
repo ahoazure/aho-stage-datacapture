@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 20:19+0300\n"
+"POT-Creation-Date: 2024-01-03 09:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1658,12 +1658,12 @@ msgstr ""
 msgid " Measure Types"
 msgstr ""
 
-#: .\home\models.py:311 .\publications\models.py:146
-msgid "File"
+#: .\home\models.py:311
+msgid "Import File"
 msgstr ""
 
 #: .\home\models.py:312
-msgid "Import File..."
+msgid "Import via File.."
 msgstr ""
 
 #: .\home\models.py:347
@@ -1671,7 +1671,7 @@ msgid "URL"
 msgstr ""
 
 #: .\home\models.py:348
-msgid "Import URL..."
+msgid "Import via URL.."
 msgstr ""
 
 #: .\home\templates\login.html:10
@@ -1939,6 +1939,10 @@ msgstr ""
 
 #: .\publications\models.py:145
 msgid "This marks year of publication"
+msgstr ""
+
+#: .\publications\models.py:146
+msgid "File"
 msgstr ""
 
 #: .\publications\models.py:149

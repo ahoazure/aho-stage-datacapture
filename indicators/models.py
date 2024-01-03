@@ -352,8 +352,8 @@ class IndicatorProxy(StgIndicator):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'Data Grid Form'
-        verbose_name_plural = '   Multi-records Grid'
+        verbose_name = _('Data Form')
+        verbose_name_plural = _('   Multi-records Grid')
 
     """
     This def clean (self) method was contributed by Daniel Mbugua to resolve
@@ -404,8 +404,8 @@ class NHOCustomizationProxy(StgLocation):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'Customization Form'
-        verbose_name_plural = '    Customization Form'
+        verbose_name = _('Customization Form')
+        verbose_name_plural = _('    Customization Form')
 
     def clean(self): #Appreciation to Daniel M.
         pass
