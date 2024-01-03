@@ -513,8 +513,8 @@ class FacilityServiceAvailabilityProxy(StgHealthFacility):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'Service Availability'
-        verbose_name_plural = '  Service Availability'
+        verbose_name = _('Service Availability')
+        verbose_name_plural = _('  Services Availability')
 
     """
     This def clean (self) method was contributed by Daniel Mbugua to resolve
@@ -528,8 +528,8 @@ class FacilityServiceProvisionProxy(StgHealthFacility):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'Service Capacity'
-        verbose_name_plural = '  Service Capacity'
+        verbose_name = _('Service Capacity')
+        verbose_name_plural = _('  Service Capacity')
 
     """
     This def clean (self) method was contributed by Daniel Mbugua to resolve
@@ -544,8 +544,8 @@ class FacilityServiceReadinesProxy(StgHealthFacility):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'Service Readiness'
-        verbose_name_plural = '  Service Readiness'
+        verbose_name = _('Service Readiness')
+        verbose_name_plural = _('  Service Readiness')
 
     """
     This def clean (self) method was contributed by Daniel Mbugua to resolve

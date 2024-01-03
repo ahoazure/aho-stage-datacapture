@@ -214,8 +214,8 @@ class HealthServicesIndicatorProxy(StgIndicator):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'Multi-Records Form'
-        verbose_name_plural = '   Multi-Records Form'
+        verbose_name = _('Multi-Records Form')
+        verbose_name_plural = _('   Multi-Records Form')
 
     def clean(self): #Appreciation to Daniel M.
         pass
@@ -262,8 +262,8 @@ class HealthServicesIndicators(StgIndicator):
     class Meta:
         proxy = True
         managed = False
-        verbose_name = 'HSC Indicator'
-        verbose_name_plural = ' HSC Indicators'
+        verbose_name = _('HSC Indicator')
+        verbose_name_plural = _(' HSC Indicators')
 
     def clean(self): #Appreciation to Daniel M.
         pass
