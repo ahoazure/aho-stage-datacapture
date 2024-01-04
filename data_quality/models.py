@@ -280,7 +280,7 @@ class Mutiple_MeasureTypes(models.Model): # this is equivalent to inventory_stat
         blank=True, null=True,editable=False)
     location = models.CharField(_('Country'),max_length=2000,
         blank=True, null=True,editable=False)
-    categoryoption = models.CharField(_('category Option'),max_length=2000,
+    categoryoption = models.CharField(_('Category Option'),max_length=2000,
         blank=True, null=True,editable=False)
     datasource = models.CharField(_('Data Source'),max_length=2000,
         blank=True, null=True,editable=False)
@@ -319,7 +319,7 @@ class MissingValuesRemarks(models.Model): # this is equivalent to inventory_stat
         blank=True, null=True)
     location = models.CharField(_('Country'),max_length=2000,
         blank=True, null=True,editable=False)
-    categoryoption = models.CharField(_('category Option'),max_length=2000,
+    categoryoption = models.CharField(_('Category Option'),max_length=2000,
         blank=True, null=True,editable=False)
     datasource = models.CharField(_('Data Source'),max_length=2000,
         blank=True, null=True,editable=False)

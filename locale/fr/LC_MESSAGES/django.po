@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 00:31+0300\n"
+"POT-Creation-Date: 2024-01-04 10:17+0300\n"
 "PO-Revision-Date: 2020-10-25 19:30+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -257,10 +257,8 @@ msgid "DATA QUALITY"
 msgstr "QUALITÉ DES DONNÉES"
 
 #: .\data_quality\apps.py:7
-#, fuzzy
-#| msgid "Data Value"
 msgid "Data Quality"
-msgstr "Valeur des données"
+msgstr "Qualité des données"
 
 #: .\data_quality\models.py:37 .\health_services\models.py:29
 #: .\health_workforce\models.py:253 .\indicators\models.py:28
@@ -291,14 +289,10 @@ msgid "Indicators"
 msgstr "Indicateurs"
 
 #: .\data_quality\models.py:55
-#, fuzzy
-#| msgid "Categorization"
 msgid "Category Options"
-msgstr "Catégorisation"
+msgstr "Options de catégorie"
 
 #: .\data_quality\models.py:58
-#, fuzzy
-#| msgid "Data Source"
 msgid "Data Sources"
 msgstr "Source de données"
 
@@ -337,18 +331,14 @@ msgstr ""
 
 #: .\data_quality\models.py:72
 msgid "Filter"
-msgstr ""
+msgstr "Filtre"
 
 #: .\data_quality\models.py:73
-#, fuzzy
-#| msgid "   Health Facilities"
 msgid "    Facts Filter"
-msgstr "Établissements de santé"
+msgstr "    Filtre des faits"
 
 #: .\data_quality\models.py:88 .\data_quality\models.py:124
 #: .\data_quality\models.py:169 .\data_quality\models.py:212
-#, fuzzy
-#| msgid "Indicator"
 msgid "Indicator ID"
 msgstr "Indicateur"
 
@@ -408,101 +398,75 @@ msgid "   Facts Dataset"
 msgstr "Ensemble de données"
 
 #: .\data_quality\models.py:131
-#, fuzzy
-#| msgid "Measure Type"
 msgid "Measure Type ID"
 msgstr "Type de mesure"
 
 #: .\data_quality\models.py:139
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Valid Measure Type"
 msgstr "Types de mesures"
 
 #: .\data_quality\models.py:140
-#, fuzzy
-#| msgid " Measure Types"
 msgid "  Measuretypes"
 msgstr "Types de mesures"
 
 #: .\data_quality\models.py:175
-#, fuzzy
-#| msgid "Data Source"
 msgid "Data SourceID"
 msgstr "Source de données"
 
 #: .\data_quality\models.py:184
-#, fuzzy
-#| msgid "Data Source"
 msgid "Valid Source"
-msgstr "Source de données"
+msgstr "Source valide"
 
 #: .\data_quality\models.py:185
-#, fuzzy
-#| msgid "    Data Sources"
 msgid "  Datasources"
 msgstr "Sources de données"
 
 #: .\data_quality\models.py:218
-#, fuzzy
-#| msgid "Disaggregation Option"
 msgid "Disaggregation ID"
 msgstr "Option de désagrégation"
 
 #: .\data_quality\models.py:227
-#, fuzzy
-#| msgid "Special Categorization"
 msgid "Valid Category Option"
-msgstr "Catégorisation spéciale"
+msgstr "Option de catégorie valide"
 
 #: .\data_quality\models.py:228
-#, fuzzy
-#| msgid "Categorization"
 msgid "  Categoryoptions"
-msgstr "Catégorisation"
+msgstr "Option de catégorie"
 
 #: .\data_quality\models.py:254
-#, fuzzy
-#| msgid "Indicator"
 msgid "Data Indicator"
 msgstr "Indicateur"
 
 #: .\data_quality\models.py:256
-#, fuzzy
-#| msgid "Indicator"
 msgid "Similar Indicator"
-msgstr "Indicateur"
+msgstr "Indicateur similaire"
 
 #: .\data_quality\models.py:258
 msgid "Similarity Score %"
-msgstr ""
+msgstr "Score de similarité %"
 
 #: .\data_quality\models.py:267
 msgid "Similarity Score"
-msgstr ""
+msgstr "Score de similarité"
 
 #: .\data_quality\models.py:268
 msgid "Similarity Scores"
-msgstr ""
+msgstr "Scores de similitude"
 
 #: .\data_quality\models.py:281 .\data_quality\models.py:320
 #: .\home\models.py:65 .\regions\models.py:222
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
-#: .\data_quality\models.py:283 .\data_quality\models.py:322
-#, fuzzy
-#| msgid "Categorization"
+#: .\data_quality\models.py:283
 msgid "category Option"
-msgstr "Catégorisation"
+msgstr "Options de catégorie"
 
 #: .\data_quality\models.py:289 .\data_quality\models.py:328
 msgid "Value Received"
 msgstr "Valeur reçue"
 
 #: .\data_quality\models.py:293 .\data_quality\models.py:332
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Number of Measure Types"
 msgstr "Types de mesures"
 
@@ -511,8 +475,6 @@ msgid "Remarks"
 msgstr "Observations"
 
 #: .\data_quality\models.py:302
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Multiple Measure Type"
 msgstr "Types de mesures"
 
@@ -520,17 +482,17 @@ msgstr "Types de mesures"
 msgid "Multiple Measures"
 msgstr "Mesures multiples"
 
+#: .\data_quality\models.py:322
+msgid "Category Option"
+msgstr "Options de catégorie"
+
 #: .\data_quality\models.py:343
-#, fuzzy
-#| msgid "String Value"
 msgid "Missing Value"
-msgstr "Valeur de la corde"
+msgstr "Valeur manquante"
 
 #: .\data_quality\models.py:344
-#, fuzzy
-#| msgid "String Value"
 msgid "Missing Values"
-msgstr "Valeur de la corde"
+msgstr "Valeurs manquantes"
 
 #: .\data_quality\models.py:360 .\data_quality\models.py:392
 #: .\data_quality\models.py:420 .\data_quality\models.py:447
@@ -541,38 +503,27 @@ msgid "Value"
 msgstr "Valeur"
 
 #: .\data_quality\models.py:370
-#, fuzzy
-#| msgid "Special Categorization"
 msgid "Check Categoryoption"
-msgstr "Catégorisation spéciale"
+msgstr "Vérifier l'option Catégorie"
 
 #: .\data_quality\models.py:371
-#, fuzzy
-#| msgid " Resource Categories"
 msgid " Check Categories"
-msgstr "Catégories de ressources"
+msgstr "Vérifier les catégories"
 
 #: .\data_quality\models.py:403
-#, fuzzy
-#| msgid "Data Source"
+
 msgid "Invalid Source"
-msgstr "Source de données"
+msgstr "Source non valide"
 
 #: .\data_quality\models.py:404
-#, fuzzy
-#| msgid "Resources"
 msgid " Check Sources"
-msgstr "Ressources"
+msgstr "Vérifier les sources"
 
 #: .\data_quality\models.py:430
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Check Measure"
-msgstr "Types de mesures"
+msgstr "Vérifier la mesure"
 
 #: .\data_quality\models.py:431
-#, fuzzy
-#| msgid " Measure Types"
 msgid " Check Measures"
 msgstr "Types de mesures"
 
@@ -580,13 +531,11 @@ msgstr "Types de mesures"
 #, fuzzy
 #| msgid "Period"
 msgid "Check Period"
-msgstr "Période"
+msgstr "Période de vérification"
 
 #: .\data_quality\models.py:458
-#, fuzzy
-#| msgid "Period"
 msgid " Check Periods"
-msgstr "Période"
+msgstr "Périodes de vérification"
 
 #: .\data_quality\models.py:485
 msgid "External Consistency"
@@ -613,8 +562,6 @@ msgid "Value Consistencies"
 msgstr "Cohérences des valeurs"
 
 #: .\data_quality\templates\data_quality\home.html:20
-#, fuzzy
-#| msgid "Home"
 msgid "Back Home"
 msgstr "Accueil"
 
@@ -1250,6 +1197,7 @@ msgstr "Enregistrement unique"
 #: .\health_services\models.py:94
 msgid "    Single-Record Form"
 msgstr "Formulaire d'enregistrement unique"
+
 #: .\health_services\models.py:217
 msgid "Multi-Records Form"
 msgstr "Formulaire d'enregistrement multiple"
