@@ -123,9 +123,9 @@ class StgUHCIndicatorTheme(TranslatableModel):
         StgUHClockIndicators,
         horizontal=True,
         blank=True,
-        verbose_name = 'indicators', 
         chained_field="group",
         chained_model_field="group",
+        verbose_name=_('Indicators'),
         limit_choices_to={"indicator__translations__language_code":language},
         ) # filter by language code. Discovered on 13/12/2023 after struggles 
     
@@ -157,7 +157,7 @@ class StgUHCIndicatorTheme(TranslatableModel):
 class Facts_UHC_DatabaseView (models.Model):
     fact_id = models.AutoField(primary_key=True)
     indicator_id = models.PositiveIntegerField(blank=True,
-        verbose_name='Indicator ID') 
+        verbose_name=_('Indicator ID')) 
     afrocode = models.CharField(_('Indicator Code'),max_length=10,
         blank=True, null=True)
     indicator = models.CharField(_('Indicator Name'),max_length=200,
@@ -172,9 +172,9 @@ class Facts_UHC_DatabaseView (models.Model):
     value_received = DecimalField(_('Numeric Value'),max_digits=20,
         decimal_places=3,blank=True,null=True)
     start_period = models.PositiveIntegerField(
-        blank=True,verbose_name='Start Year') 
+        blank=True,verbose_name=_('Start Year')) 
     end_period = models.PositiveIntegerField(
-        blank=True,verbose_name='End Year') 
+        blank=True,verbose_name=_('End Year')) 
     period = models.CharField(_('Period'),max_length=25,
         blank=True,null=False)
     uhclock_theme = models.CharField(_('UHC Clock Theme'),max_length=150,
@@ -207,6 +207,7 @@ class CountrySelectionUHCIndicators(models.Model):
         blank=True,
         chained_field="domain",
         chained_model_field="group",
+        verbose_name=_('Indicators'),
         limit_choices_to={"indicator__translations__language_code":language},
         ) # filter by language code. Discovered on 13/12/2023 after struggles  
         

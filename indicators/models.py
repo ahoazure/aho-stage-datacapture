@@ -220,7 +220,7 @@ class FactDataIndicator(models.Model):
     period = models.CharField(_('Period'),max_length=25,blank=True,null=False)
     comment = models.CharField(_('Status'),max_length=10, choices= STATUS_CHOICES,
         default=STATUS_CHOICES[0][0])  # Field name made lowercase.
-    priority = models.BooleanField(default=False,verbose_name='Dashboard Priority?')
+    priority = models.BooleanField(default=False,verbose_name=_('Dashboard Priority?'))
     date_created = models.DateTimeField(_('Date Created'),blank=True, null=True,
         auto_now_add=True)
     date_lastupdated = models.DateTimeField(_('Date Modified'),blank=True,
