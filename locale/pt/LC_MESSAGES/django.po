@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR <STEPHEN.NMBURU@GMAIL.COM>, 2020.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-03 09:21+0300\n"
+"POT-Creation-Date: 2024-01-04 10:48+0300\n"
 "PO-Revision-Date: 2020-10-25 19:35+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,8 +278,6 @@ msgid "Rejected"
 msgstr "Rejeitado"
 
 #: .\data_quality\models.py:49
-#, fuzzy
-#| msgid "Location"
 msgid "Locations"
 msgstr "País/local"
 
@@ -288,14 +286,10 @@ msgid "Indicators"
 msgstr "Indicadores"
 
 #: .\data_quality\models.py:55
-#, fuzzy
-#| msgid "Categorization"
 msgid "Category Options"
-msgstr "Categorização"
+msgstr "Opções de categoria"
 
 #: .\data_quality\models.py:58
-#, fuzzy
-#| msgid "Data Source"
 msgid "Data Sources"
 msgstr "Fontes de dados"
 
@@ -337,15 +331,11 @@ msgid "Filter"
 msgstr "Filtro"
 
 #: .\data_quality\models.py:73
-#, fuzzy
-#| msgid "   Health Facilities"
 msgid "    Facts Filter"
-msgstr "Filtro de factos"
+msgstr "    Filtro de factos"
 
 #: .\data_quality\models.py:88 .\data_quality\models.py:124
 #: .\data_quality\models.py:169 .\data_quality\models.py:212
-#, fuzzy
-#| msgid "Indicator"
 msgid "Indicator ID"
 msgstr "ID do indicador"
 
@@ -402,71 +392,51 @@ msgstr "Factos"
 
 #: .\data_quality\models.py:112
 msgid "   Facts Dataset"
-msgstr "Conjunto de dados"
+msgstr "   Conjunto de dados"
 
 #: .\data_quality\models.py:131
-#, fuzzy
-#| msgid "Measure Type"
 msgid "Measure Type ID"
 msgstr "Tipo de Medida"
 
 #: .\data_quality\models.py:139
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Valid Measure Type"
 msgstr "Tipo de medida válida"
 
 #: .\data_quality\models.py:140
-#, fuzzy
-#| msgid " Measure Types"
 msgid "  Measuretypes"
-msgstr "Tipos de Medidas"
+msgstr "  Tipos de Medidas"
 
 #: .\data_quality\models.py:175
-#, fuzzy
-#| msgid "Data Source"
 msgid "Data SourceID"
 msgstr "Fonte de Dados"
 
 #: .\data_quality\models.py:184
-#, fuzzy
-#| msgid "Data Source"
 msgid "Valid Source"
-msgstr "Fonte de Dados"
+msgstr "Fonte válida"
 
 #: .\data_quality\models.py:185
-#, fuzzy
-#| msgid "    Data Sources"
 msgid "  Datasources"
-msgstr "Fontes de Dados"
+msgstr "  Fontes de Dados"
 
 #: .\data_quality\models.py:218
 #, fuzzy
 #| msgid "Disaggregation Option"
 msgid "Disaggregation ID"
-msgstr "Opção de Desagregação"
+msgstr "ID de desagregação"
 
 #: .\data_quality\models.py:227
-#, fuzzy
-#| msgid "Special Categorization"
 msgid "Valid Category Option"
-msgstr "Categorização Especial"
+msgstr "Opção de categoria válida"
 
 #: .\data_quality\models.py:228
-#, fuzzy
-#| msgid "Categorization"
 msgid "  Categoryoptions"
-msgstr "Categorização"
+msgstr "  Opções de categoria"
 
 #: .\data_quality\models.py:254
-#, fuzzy
-#| msgid "Indicator"
 msgid "Data Indicator"
-msgstr "Indicador"
+msgstr " Indicador de dados"
 
 #: .\data_quality\models.py:256
-#, fuzzy
-#| msgid "Indicator"
 msgid "Similar Indicator"
 msgstr "Indicador semelhante"
 
@@ -488,28 +458,22 @@ msgid "Country"
 msgstr "País"
 
 #: .\data_quality\models.py:283 .\data_quality\models.py:322
-#, fuzzy
-#| msgid "Categorization"
-msgid "category Option"
-msgstr "Categorização"
+msgid "Category Option"
+msgstr "Opção de categoria"
 
 #: .\data_quality\models.py:289 .\data_quality\models.py:328
 msgid "Value Received"
 msgstr "Valor recebido"
 
 #: .\data_quality\models.py:293 .\data_quality\models.py:332
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Number of Measure Types"
-msgstr "Tipos de Medidas"
+msgstr "Número de tipos de medidas"
 
 #: .\data_quality\models.py:295 .\data_quality\models.py:334
 msgid "Remarks"
 msgstr "Comentários"
 
 #: .\data_quality\models.py:302
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Multiple Measure Type"
 msgstr "Tipo de medida múltipla"
 
@@ -518,14 +482,10 @@ msgid "Multiple Measures"
 msgstr "Medidas múltiplas"
 
 #: .\data_quality\models.py:343
-#, fuzzy
-#| msgid "String Value"
 msgid "Missing Value"
 msgstr "Valor em falta"
 
 #: .\data_quality\models.py:344
-#, fuzzy
-#| msgid "String Value"
 msgid "Missing Values"
 msgstr "Valores em falta"
 
@@ -538,52 +498,36 @@ msgid "Value"
 msgstr "Valor"
 
 #: .\data_quality\models.py:370
-#, fuzzy
-#| msgid "Special Categorization"
 msgid "Check Categoryoption"
 msgstr "Verificar categoriaopção"
 
 #: .\data_quality\models.py:371
-#, fuzzy
-#| msgid " Resource Categories"
 msgid " Check Categories"
-msgstr "Verificar categorias"
+msgstr " Verificar categorias"
 
 #: .\data_quality\models.py:403
-#, fuzzy
-#| msgid "Data Source"
 msgid "Invalid Source"
 msgstr "Fonte inválida"
 
 #: .\data_quality\models.py:404
-#, fuzzy
-#| msgid "Resources"
 msgid " Check Sources"
 msgstr "Verificar fontes"
 
 #: .\data_quality\models.py:430
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Check Measure"
 msgstr "Verificar medida"
 
 #: .\data_quality\models.py:431
-#, fuzzy
-#| msgid " Measure Types"
 msgid " Check Measures"
 msgstr "Verificar medidas"
 
 #: .\data_quality\models.py:457
-#, fuzzy
-#| msgid "Period"
 msgid "Check Period"
-msgstr "Período"
+msgstr "Verificar período"
 
 #: .\data_quality\models.py:458
-#, fuzzy
-#| msgid "Period"
 msgid " Check Periods"
-msgstr "Verificar período"
+msgstr "Verificar períodos"
 
 #: .\data_quality\models.py:485
 msgid "External Consistency"
@@ -838,8 +782,6 @@ msgid "Brief Description"
 msgstr "Descrição"
 
 #: .\facilities\models.py:42
-#, fuzzy
-#| msgid "  Facility Types"
 msgid " Facility Types"
 msgstr "Tipo de estabelecimento"
 
@@ -868,8 +810,6 @@ msgid "Facility Owner"
 msgstr "Proprietário da instalação de saúde"
 
 #: .\facilities\models.py:85
-#, fuzzy
-#| msgid " Facility Owners"
 msgid " Facility Ownerhip"
 msgstr "Proprietários de instalações de saúde"
 
@@ -892,42 +832,30 @@ msgid "Readiness"
 msgstr "Prontidão"
 
 #: .\facilities\models.py:115
-#, fuzzy
-#| msgid "Resource Category"
 msgid "Service Category"
 msgstr "Categoria de serviço"
 
 #: .\facilities\models.py:117
-#, fuzzy
-#| msgid "Category Name"
 msgid "Category Level"
 msgstr "Nível da categoria"
 
 #: .\facilities\models.py:120
-#, fuzzy
-#| msgid "Parent Location"
 msgid "Parent Domain"
 msgstr "Domínio principal"
 
 #: .\facilities\models.py:122
-#, fuzzy
-#| msgid "Level Name"
 msgid "Service Name"
 msgstr "Nome do serviço"
 
 #: .\facilities\models.py:125
-#, fuzzy
-#| msgid "Brief Description"
 msgid "Service Description"
-msgstr "Descrição"
+msgstr "Descrição do serviço"
 
 #: .\facilities\models.py:135 .\facilities\models.py:314
 msgid "Service Domain"
 msgstr "Domínio de Serviços"
 
 #: .\facilities\models.py:136
-#, fuzzy
-#| msgid "Service Domains"
 msgid " Service Domains"
 msgstr "Domínios de serviço"
 
@@ -945,10 +873,8 @@ msgid "Closed"
 msgstr "Fechado"
 
 #: .\facilities\models.py:175
-#, fuzzy
-#| msgid "Facility Code"
 msgid "Facility Country"
-msgstr "Código das instalações"
+msgstr "Instalação País"
 
 #: .\facilities\models.py:177
 #, fuzzy
@@ -1033,18 +959,15 @@ msgid "Health Facility"
 msgstr "Instalação de saúde"
 
 #: .\facilities\models.py:220
-#, fuzzy
-#| msgid "   Health Facilities"
 msgid "    Health Facilities"
-msgstr "Instalações de saúde"
+msgstr "    Instalações de saúde"
 
 #: .\facilities\models.py:256
 msgid "Facility  with the same name exists"
 msgstr "Existe uma instalação com o mesmo nome"
 
 #: .\facilities\models.py:272
-#, fuzzy
-#| msgid "Resource Category"
+
 msgid "Service Provision Category"
 msgstr "Categoria de prestação de serviços"
 
@@ -1098,14 +1021,10 @@ msgid "Provision Area"
 msgstr "Domínio de prestação"
 
 #: .\facilities\models.py:364
-#, fuzzy
-#| msgid "Service Domain"
 msgid "Service Area"
 msgstr "Domínio de Serviços"
 
 #: .\facilities\models.py:365
-#, fuzzy
-#| msgid "Service Domains"
 msgid " Service Areas"
 msgstr "Domínios de serviço"
 
@@ -1114,16 +1033,12 @@ msgid "Admin User (Email)"
 msgstr "Utilizador administrador"
 
 #: .\facilities\models.py:382
-#, fuzzy
-#| msgid "Service Domain"
 msgid "Service Area Domain"
 msgstr "Domínio de Serviços"
 
 #: .\facilities\models.py:390
-#, fuzzy
-#| msgid "Service Domains"
 msgid "Service provision Areas"
-msgstr "Domínios de serviço"
+msgstr "Prestação de serviços Áreas"
 
 #: .\facilities\models.py:391
 msgid "Service Provided last 3 Months?"
@@ -1138,8 +1053,6 @@ msgid "Staff Capacity Appropriate?"
 msgstr "Capacidade do pessoal adequada?"
 
 #: .\facilities\models.py:397
-#, fuzzy
-#| msgid "Infrastructure Name"
 msgid "Infrastructure Capacity Appropriate?"
 msgstr "Capacidade de infraestrutura adequada?"
 
@@ -1152,7 +1065,7 @@ msgstr "Suprimentos adequados?"
 msgid "Assessment Date"
 msgstr "Data de avaliação"
 
-#: .\facilities\models.py:414
+#: .\facilities\models.py:414 .\facilities\models.py:516
 msgid "Service Availability"
 msgstr "Disponibilidade do serviço"
 
@@ -1161,8 +1074,6 @@ msgid "   Services Availability"
 msgstr "   Disponibilidade de serviços"
 
 #: .\facilities\models.py:435
-#, fuzzy
-#| msgid "Service Domain"
 msgid "Service Capacity Domain"
 msgstr "Domínio da capacidade de serviço"
 
@@ -1175,8 +1086,6 @@ msgid "The input must be a zero or positive integer"
 msgstr "A entrada deve ser um zero ou um número inteiro positivo"
 
 #: .\facilities\models.py:442
-#, fuzzy
-#| msgid "Sub-national"
 msgid "Number Functional"
 msgstr "Número Funcional"
 
@@ -1193,8 +1102,6 @@ msgid "   Provision Capacities"
 msgstr "   Capacidades de aprovisionamento"
 
 #: .\facilities\models.py:478
-#, fuzzy
-#| msgid "Service Domain"
 msgid "Service Readiness Domain"
 msgstr "Domínio de prontidão do serviço"
 
@@ -1206,21 +1113,31 @@ msgstr "Número necessário"
 msgid "Number of units needed for adequacy"
 msgstr "Número de unidades necessárias para a adequação"
 
-#: .\facilities\models.py:500
-#, fuzzy
-#| msgid "Service Domains"
+#: .\facilities\models.py:500 .\facilities\models.py:547
 msgid "Service Readiness"
 msgstr "Prontidão de serviço"
 
 #: .\facilities\models.py:501
-#, fuzzy
-#| msgid "Service Domains"
 msgid "   Service Readiness"
 msgstr "Prontidão de serviço"
 
+#: .\facilities\models.py:517
+msgid "  Services Availability"
+msgstr "   Disponibilidade de serviços"
+
+#: .\facilities\models.py:531
+msgid "Service Capacity"
+msgstr "Capacidade de serviço"
+
+#: .\facilities\models.py:532
+msgid "  Service Capacity"
+msgstr "Capacidade de serviço"
+
+#: .\facilities\models.py:548
+msgid "  Service Readiness"
+msgstr "Prontidão de serviço"
+
 #: .\health_services\apps.py:6
-#, fuzzy
-#| msgid "Health Cadre"
 msgid "Health Services"
 msgstr "Serviços de saúde"
 
@@ -1235,8 +1152,6 @@ msgid "Denominator Value"
 msgstr "Valor Denominador"
 
 #: .\health_services\models.py:59
-#, fuzzy
-#| msgid "Data Value"
 msgid "Calculated Value"
 msgstr "Valor calculado"
 
@@ -1251,40 +1166,44 @@ msgid "Maximum Value"
 msgstr "Valor Máximo"
 
 #: .\health_services\models.py:69
-#, fuzzy
-#| msgid "String Value"
 msgid "Starting Date"
 msgstr "Data de início"
 
 #: .\health_services\models.py:70
-#, fuzzy
-#| msgid "Starting Period"
 msgid "Start of reporting Period"
 msgstr "Período inicial"
 
 #: .\health_services\models.py:71
-#, fuzzy
-#| msgid "Ending Year"
 msgid "Ending Date"
 msgstr "Ano de Fim"
 
 #: .\health_services\models.py:72
-#, fuzzy
-#| msgid "Ending Period"
 msgid "End of reporting Period"
 msgstr "Período de Fim"
 
 #: .\health_services\models.py:93
-#, fuzzy
-#| msgid "   Single-Record Form"
 msgid "Single Record"
-msgstr "Formulário de um registro"
+msgstr "Registo único"
 
 #: .\health_services\models.py:94
-#, fuzzy
-#| msgid "   Single-Record Form"
 msgid "    Single-Record Form"
 msgstr "Formulário de um registro"
+
+#: .\health_services\models.py:217
+msgid "Multi-Records Form"
+msgstr "Formulário de Multi-Registos"
+
+#: .\health_services\models.py:218
+msgid "   Multi-Records Form"
+msgstr "Formulário de Multi-Registos"
+
+#: .\health_services\models.py:265 .\health_services\models.py:332
+msgid "HSC Indicator"
+msgstr "Indicador"
+
+#: .\health_services\models.py:266
+msgid " HSC Indicators"
+msgstr "Indicadores"
 
 #: .\health_services\models.py:276 .\indicators\models.py:126
 #: .\publications\models.py:196 .\uhc_clock\models.py:99
@@ -1311,32 +1230,23 @@ msgid "Programme Name"
 msgstr "Nome do programa"
 
 #: .\health_services\models.py:293 .\health_services\models.py:336
-#, fuzzy
-#| msgid "Level Name"
+
 msgid "Level"
-msgstr "Nome do Nível"
+msgstr "Nível"
 
 #: .\health_services\models.py:296
-#, fuzzy
-#| msgid "Training Programme"
 msgid "Main Programme"
 msgstr "Programa principal"
 
 #: .\health_services\models.py:299
-#, fuzzy
-#| msgid "  Indicators"
 msgid "HSC Indicators"
 msgstr "Indicadores"
 
 #: .\health_services\models.py:308 .\health_services\models.py:335
-#, fuzzy
-#| msgid "Training Programme"
 msgid "HSC Programme"
 msgstr "Programa de Formação"
 
 #: .\health_services\models.py:309
-#, fuzzy
-#| msgid " Training Programmes"
 msgid " HSC Programmes"
 msgstr "Programas de Formação"
 
@@ -1346,20 +1256,12 @@ msgstr "Programas de Formação"
 msgid "Sorry! This Programme already exists"
 msgstr "Desculpe! Este tipo de narrativa existe"
 
-#: .\health_services\models.py:332
-#, fuzzy
-#| msgid "Indicator"
-msgid "HSC Indicator"
-msgstr "Indicador"
-
 #: .\health_services\models.py:334 .\indicators\models.py:87
 #: .\indicators\models.py:422 .\uhc_clock\models.py:161
 msgid "Indicator Code"
 msgstr "Código Indicador"
 
 #: .\health_services\models.py:341 .\health_services\models.py:342
-#, fuzzy
-#| msgid "Themes Lookup"
 msgid "Programs Lookup"
 msgstr "Programas Consultar"
 
@@ -1389,8 +1291,6 @@ msgid "Please correct the errors below."
 msgstr "Por favor, corrija os erros abaixo"
 
 #: .\health_workforce\apps.py:6 .\health_workforce\models.py:304
-#, fuzzy
-#| msgid "health_workforce"
 msgid "Health Workforce"
 msgstr "Pessoal da saúde"
 
@@ -1417,8 +1317,6 @@ msgid "Resource Category"
 msgstr "Categoria de Recursos"
 
 #: .\health_workforce\models.py:56
-#, fuzzy
-#| msgid " Resource Categories"
 msgid "Resource Categories"
 msgstr "Categorias de recursos"
 
@@ -1581,10 +1479,8 @@ msgid "Occupation/Cadre"
 msgstr "Ocupação/Quadro de saúde"
 
 #: .\health_workforce\models.py:305
-#, fuzzy
-#| msgid "    Healthworkforce Data"
 msgid "    Health Workforce"
-msgstr "Dados sobre o pessoal de saúde"
+msgstr "    Pessoal da saúde"
 
 #: .\health_workforce\models.py:318 .\indicators\models.py:255
 #, fuzzy
@@ -1723,8 +1619,6 @@ msgid "Period Type"
 msgstr "Tipo de período"
 
 #: .\home\models.py:36
-#, fuzzy
-#| msgid " Measure Types"
 msgid "   Period Types"
 msgstr "   Tipos de períodos"
 
@@ -1922,26 +1816,21 @@ msgid " Measure Types"
 msgstr "Tipos de Medidas"
 
 #: .\home\models.py:311
-#, fuzzy
-#| msgid "Import Data File... "
 msgid "Import File"
 msgstr "Importar ficheiro..."
 
 #: .\home\models.py:312
-#, fuzzy
-#| msgid "Import Data File... "
 msgid "Import via File.."
-msgstr "Importar ficheiro..."
+msgstr " Importar via ficheiro.."
 
 #: .\home\models.py:347
 msgid "URL"
 msgstr "URL"
 
 #: .\home\models.py:348
-#, fuzzy
-#| msgid "Import via URL..."
+
 msgid "Import via URL.."
-msgstr "Importar URL..."
+msgstr "Importar via URL.."
 
 #: .\home\templates\login.html:10
 msgid "Login with Microsoft Azure"
@@ -2091,6 +1980,26 @@ msgstr ""
 "Problema de Introdução de Dados!Tanto os valores numéricos como os de cordel "
 "não podem estar vaziosPor favor, forneça dados a ambos ou a um ou outro"
 
+#: .\indicators\models.py:355
+#, fuzzy
+#| msgid "Data Source"
+msgid "Data Form"
+msgstr "Fonte de Dados"
+
+#: .\indicators\models.py:356
+msgid "   Multi-records Grid"
+msgstr "Formulário de Multi-Registos"
+
+#: .\indicators\models.py:407
+#, fuzzy
+#| msgid "Categorization Name"
+msgid "Customization Form"
+msgstr "Nome da Categorização"
+
+#: .\indicators\models.py:408
+msgid "    Customization Form"
+msgstr ""
+
 #: .\indicators\models.py:429
 msgid "Theme Lookup"
 msgstr "Pesquisa Temática"
@@ -2159,13 +2068,11 @@ msgstr "Nível de prioridade"
 #, fuzzy
 #| msgid "Indicator Narrative"
 msgid "Indicator Priority"
-msgstr "Indicador Narrativo"
+msgstr "Indicador Prioridade"
 
 #: .\indicators\models.py:567
-#, fuzzy
-#| msgid "Indicators Narrative"
 msgid "Indicators Priorities"
-msgstr "Indicadores Narrativa"
+msgstr "Indicadores Prioridades"
 
 #: .\indicators\models.py:596 .\indicators\models.py:618
 #: .\indicators\models.py:647
@@ -2209,8 +2116,6 @@ msgid "publications"
 msgstr "publicações"
 
 #: .\publications\models.py:47
-#, fuzzy
-#| msgid "Resource Types"
 msgid "  Resource Types"
 msgstr "Tipos de recursos"
 
@@ -2266,7 +2171,7 @@ msgstr "Recurso de Conhecimento"
 
 #: .\publications\models.py:171
 msgid "   Knowledge Resources"
-msgstr "Recursos do Conhecimento"
+msgstr "   Recursos do Conhecimento"
 
 #: .\publications\models.py:181
 #, fuzzy
@@ -2319,14 +2224,10 @@ msgid "Tagged To:"
 msgstr "Etiqueta"
 
 #: .\publications\models.py:258
-#, fuzzy
-#| msgid "Resource Type"
 msgid "Resource Tag"
 msgstr "Etiqueta de recursos"
 
 #: .\publications\models.py:259
-#, fuzzy
-#| msgid "Resources"
 msgid "Resource Tags"
 msgstr "Etiquetas de recursos"
 
@@ -2357,6 +2258,10 @@ msgstr "Nível de rendimento"
 #: .\regions\models.py:69
 msgid "Income Group"
 msgstr "Grupo de rendimentos"
+
+#: .\regions\models.py:70
+msgid "Income Groups"
+msgstr "Grupos de rendimento"
 
 #: .\regions\models.py:80
 msgid "Sorry! This economic grouping exists"
@@ -2463,16 +2368,14 @@ msgstr ""
 "com outros registos"
 
 #: .\regions\models.py:225 .\regions\models.py:235
-#, fuzzy
-#| msgid "Regional Code"
+
 msgid "Dial Code"
-msgstr "Código padrão"
+msgstr "Código de marcação"
 
 #: .\regions\models.py:236
-#, fuzzy
-#| msgid "Regional Code"
+
 msgid "Dial Codes"
-msgstr "Código padrão"
+msgstr "Códigos de marcação"
 
 #: .\regions\models.py:247
 #, fuzzy
@@ -2482,7 +2385,7 @@ msgstr "Existe um local com nome semelhante"
 
 #: .\templates\admin\base.html:37
 msgid "Production DCT. Welcome"
-msgstr ""
+msgstr "DCT de produção. Bem-vindo"
 
 #: .\templates\admin\base.html:42
 msgid "View site"
@@ -2646,10 +2549,8 @@ msgid "UHC Clock Indicator Group"
 msgstr "Grupo de Indicadores de Relógio UHC"
 
 #: .\uhc_clock\models.py:52
-#, fuzzy
-#| msgid "  Indicators"
 msgid "  UHC Clock Indicator Groups"
-msgstr "Indicadores"
+msgstr "Grupos de indicadores de relógio UHC"
 
 #: .\uhc_clock\models.py:70
 msgid "Input"
@@ -2672,50 +2573,34 @@ msgid "Impact"
 msgstr "Impacto"
 
 #: .\uhc_clock\models.py:79
-#, fuzzy
-#| msgid "Indicator Code"
 msgid "Indicator Group"
 msgstr "Grupo de indicadores"
 
 #: .\uhc_clock\models.py:80
-#, fuzzy
-#| msgid "Indicator Theme"
 msgid "Indicator Type"
 msgstr "Tipo de indicador"
 
 #: .\uhc_clock\models.py:87
-#, fuzzy
-#| msgid "  Indicators"
 msgid "UHC Clock Indicator"
-msgstr "Indicadores"
+msgstr "Indicador do relógio UHC"
 
 #: .\uhc_clock\models.py:88
-#, fuzzy
-#| msgid "  Indicators"
 msgid "   UHC Clock Indicators"
-msgstr "Indicadores"
+msgstr " Indicadores de relógio UHC"
 
 #: .\uhc_clock\models.py:106
-#, fuzzy
-#| msgid "Type Name"
 msgid "Theme Name"
 msgstr "Nome do tema"
 
 #: .\uhc_clock\models.py:117
-#, fuzzy
-#| msgid "Indicator Code"
 msgid "UHC Indicator Group"
 msgstr "Grupo de Indicadores de UHC"
 
 #: .\uhc_clock\models.py:140
-#, fuzzy
-#| msgid "Theme"
 msgid "UHC Theme"
 msgstr "Tema da UHC"
 
 #: .\uhc_clock\models.py:141
-#, fuzzy
-#| msgid "  Resource Themes"
 msgid "  UHC Clock Themes"
 msgstr "Temas de relógios UHC"
 
@@ -2732,8 +2617,6 @@ msgid "   UHC Clock Facts"
 msgstr "   Factos do Relógio UHC"
 
 #: .\uhc_clock\models.py:200
-#, fuzzy
-#| msgid "Location"
 msgid "Country/Location"
 msgstr "País/local"
 
@@ -2744,6 +2627,11 @@ msgstr "Seleção de países"
 #: .\uhc_clock\models.py:217
 msgid "UHC Clock Country Selections"
 msgstr "Selecções de países do Relógio UHC"
+
+#, fuzzy
+#~| msgid "Categorization"
+#~ msgid "category Option"
+#~ msgstr "Categorização"
 
 #, fuzzy
 #~| msgid " Measure Types"
