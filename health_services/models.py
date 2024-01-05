@@ -65,7 +65,7 @@ class HealthServices_DataIndicators(models.Model):
     target_value = models.DecimalField(_('Target Value'),max_digits=20,
         decimal_places=3,blank=True, null=True)
     periodicity = models.ForeignKey(StgPeriodType, models.PROTECT,
-        verbose_name ='Reporting Periodicity',default=1,)  # Field name made lowercase.
+        verbose_name =_('Reporting Periodicity'),default=1,)  # Field name made lowercase.
     start_period = models.DateField(_('Starting Date'),null=False,blank=False,
         default=timezone.now,help_text=_("Start of reporting Period"))
     end_period=models.DateField(_('Ending Date'),null=True,blank=True,

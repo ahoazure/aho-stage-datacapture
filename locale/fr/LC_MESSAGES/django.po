@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 21:21+0300\n"
+"POT-Creation-Date: 2024-01-05 10:33+0300\n"
 "PO-Revision-Date: 2020-10-25 19:30+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -340,7 +340,8 @@ msgstr "    Filtre des faits"
 msgid ""
 "Filter Facts Locations, Indicators, Categoryoptions, Datasources and Periods"
 msgstr ""
-"Filtrer les faits Lieux, indicateurs, options de catégorie, sources de données et périodes"
+"Filtrer les faits Lieux, indicateurs, options de catégorie, sources de "
+"données et périodes"
 
 #: .\data_quality\models.py:88 .\data_quality\models.py:124
 #: .\data_quality\models.py:169 .\data_quality\models.py:212
@@ -807,7 +808,7 @@ msgstr "Formulaire d'enregistrement multiple"
 
 #: .\elements\models.py:163
 msgid "  Multi_Records Form"
-msgstr "Formulaire d'enregistrement multiple"
+msgstr "  Formulaire d'enregistrement multiple"
 
 #: .\elements\models.py:174
 msgid "Group Name"
@@ -1250,6 +1251,10 @@ msgstr "Services de santé"
 msgid "Calculated Value"
 msgstr "Valeur calculée"
 
+#: .\health_services\models.py:68
+msgid "Reporting Periodicity"
+msgstr "Périodicité des rapports"
+
 #: .\health_services\models.py:69
 msgid "Starting Date"
 msgstr "Date de début"
@@ -1272,7 +1277,7 @@ msgstr "Enregistrement unique"
 
 #: .\health_services\models.py:94
 msgid "    Single-Record Form"
-msgstr "Formulaire d'enregistrement unique"
+msgstr "    Formulaire d'enregistrement unique"
 
 #: .\health_services\models.py:217
 msgid "Multi-Records Form"
@@ -1280,7 +1285,7 @@ msgstr "Formulaire d'enregistrement multiple"
 
 #: .\health_services\models.py:218
 msgid "   Multi-Records Form"
-msgstr "Formulaire d'enregistrement multiple"
+msgstr "   Formulaire d'enregistrement multiple"
 
 #: .\health_services\models.py:265 .\health_services\models.py:332
 msgid "HSC Indicator"

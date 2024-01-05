@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 21:21+0300\n"
+"POT-Creation-Date: 2024-01-05 10:46+0300\n"
 "PO-Revision-Date: 2020-10-25 19:35+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -339,6 +339,7 @@ msgstr "    Filtro de factos"
 msgid ""
 "Filter Facts Locations, Indicators, Categoryoptions, Datasources and Periods"
 msgstr ""
+"Filtrar Localizações de Factos, Indicadores, Opções de Categoria, Fontes de Dados e Períodos"
 
 #: .\data_quality\models.py:88 .\data_quality\models.py:124
 #: .\data_quality\models.py:169 .\data_quality\models.py:212
@@ -398,14 +399,10 @@ msgid "Numeric Value"
 msgstr "Valor Numérico"
 
 #: .\data_quality\models.py:102
-#, fuzzy
-#| msgid "Starting Period"
 msgid "Start Period"
 msgstr "Período inicial"
 
 #: .\data_quality\models.py:104
-#, fuzzy
-#| msgid "Ending Period"
 msgid "End Period"
 msgstr "Período de Fim"
 
@@ -467,8 +464,6 @@ msgid "  Datasources"
 msgstr "  Fontes de Dados"
 
 #: .\data_quality\models.py:218
-#, fuzzy
-#| msgid "Disaggregation Option"
 msgid "Disaggregation ID"
 msgstr "ID de desagregação"
 
@@ -553,8 +548,6 @@ msgid "Value"
 msgstr "Valor"
 
 #: .\data_quality\models.py:369
-#, fuzzy
-#| msgid "Check Categoryoption"
 msgid "Check Category Option"
 msgstr "Verificar categoriaopção"
 
@@ -567,16 +560,12 @@ msgid " Check Categories"
 msgstr " Verificar categorias"
 
 #: .\data_quality\models.py:388
-#, fuzzy
-#| msgid "Admin User (Email)"
 msgid "User Name(Email)"
 msgstr "Utilizador administrador"
 
 #: .\data_quality\models.py:403
-#, fuzzy
-#| msgid "Data Source"
 msgid "Check Data Source"
-msgstr "Fonte de Dados"
+msgstr "Verificar fonte de dados"
 
 #: .\data_quality\models.py:411
 msgid "Invalid Source"
@@ -587,10 +576,8 @@ msgid " Check Sources"
 msgstr "Verificar fontes"
 
 #: .\data_quality\models.py:437
-#, fuzzy
-#| msgid " Measure Types"
 msgid "Check Measure Type"
-msgstr "Tipos de Medidas"
+msgstr "Verificar tipo de medida"
 
 #: .\data_quality\models.py:445
 msgid "Check Measure"
@@ -609,10 +596,8 @@ msgid " Check Periods"
 msgstr "Verificar períodos"
 
 #: .\data_quality\models.py:505
-#, fuzzy
-#| msgid "External Consistency"
 msgid "Check External Consistency"
-msgstr "Consistência externa"
+msgstr "Verificar a consistência externa"
 
 #: .\data_quality\models.py:513
 msgid "External Consistency"
@@ -623,10 +608,8 @@ msgid "External Consistencies"
 msgstr "Consistências externas"
 
 #: .\data_quality\models.py:539
-#, fuzzy
-#| msgid "Internal Consistency"
 msgid "Check Internal Consistency"
-msgstr "Consistência interna"
+msgstr "Verificar a consistência interna"
 
 #: .\data_quality\models.py:547
 msgid "Internal Consistency"
@@ -637,10 +620,8 @@ msgid "Internal Consistencies"
 msgstr "Consistências internas"
 
 #: .\data_quality\models.py:572
-#, fuzzy
-#| msgid "Value Consistency"
 msgid "Check Value Type Consistency"
-msgstr "Consistência de valores"
+msgstr "Verificar a consistência do tipo de valor"
 
 #: .\data_quality\models.py:580
 msgid "Value Consistency"
@@ -651,8 +632,6 @@ msgid "Value Consistencies"
 msgstr "Consistências de valores"
 
 #: .\data_quality\templates\data_quality\home.html:20
-#, fuzzy
-#| msgid "Home"
 msgid "Back Home"
 msgstr "Casa"
 
@@ -823,7 +802,7 @@ msgstr "Formulário de Multi-Registos"
 
 #: .\elements\models.py:163
 msgid "  Multi_Records Form"
-msgstr "Formulário de Multi-Registos"
+msgstr "  Formulário de Multi-Registos"
 
 #: .\elements\models.py:174
 msgid "Group Name"
@@ -983,8 +962,6 @@ msgid "Facility Country"
 msgstr "Instalação País"
 
 #: .\facilities\models.py:177
-#, fuzzy
-#| msgid " Facility Owners"
 msgid "Facility Ownership"
 msgstr "Proprietários de instalações de saúde"
 
@@ -998,8 +975,6 @@ msgid "Short Name (Abbreviation)"
 msgstr "Nome curto"
 
 #: .\facilities\models.py:183
-#, fuzzy
-#| msgid "Resource Location"
 msgid "Administrative Location"
 msgstr "Local administrativo"
 
@@ -1013,8 +988,6 @@ msgid "Email"
 msgstr "Email"
 
 #: .\facilities\models.py:193
-#, fuzzy
-#| msgid "Theme Code"
 msgid "Phone Code"
 msgstr "Código telefónico"
 
@@ -1045,18 +1018,14 @@ msgid "Longitude"
 msgstr "Longitude"
 
 #: .\facilities\models.py:204
-#, fuzzy
-#| msgid "Latitude"
 msgid "Altitude (M)"
-msgstr "Altitude"
+msgstr "Altitude (M)"
 
 #: .\facilities\models.py:205
 msgid "Geo-source (LL source)"
 msgstr "Fonte geográfica"
 
 #: .\facilities\models.py:207
-#, fuzzy
-#| msgid "Web Link (URL)"
 msgid "Web (URL)"
 msgstr "Endereço web"
 
@@ -1096,20 +1065,14 @@ msgid "Unit of provision with the same                 name exists"
 msgstr "Existe um proprietário de estabelecimento de saúde com o mesmo nome"
 
 #: .\facilities\models.py:311
-#, fuzzy
-#| msgid "Institution Code"
 msgid "Intervention Code"
 msgstr "Código de Intervenção"
 
 #: .\facilities\models.py:316
-#, fuzzy
-#| msgid "Institution Name"
 msgid "Intervention Name"
 msgstr "Nome da Intervenção"
 
 #: .\facilities\models.py:331
-#, fuzzy
-#| msgid "Facility Type"
 msgid "Facility Service Intervention"
 msgstr "Serviço de instalações Intervenção"
 
@@ -1274,6 +1237,10 @@ msgstr "Serviços de saúde"
 msgid "Calculated Value"
 msgstr "Valor calculado"
 
+#: .\health_services\models.py:68
+msgid "Reporting Periodicity"
+msgstr "Periodicidade dos relatórios"
+
 #: .\health_services\models.py:69
 msgid "Starting Date"
 msgstr "Data de início"
@@ -1296,7 +1263,7 @@ msgstr "Registo único"
 
 #: .\health_services\models.py:94
 msgid "    Single-Record Form"
-msgstr "Formulário de um registro"
+msgstr "    Formulário de um registro"
 
 #: .\health_services\models.py:217
 msgid "Multi-Records Form"
@@ -2038,10 +2005,8 @@ msgid "String Value"
 msgstr "Valor da corda"
 
 #: .\indicators\models.py:223
-#, fuzzy
-#| msgid "Indicator Narrative"
 msgid "Dashboard Priority?"
-msgstr "Indicador Prioridade"
+msgstr "Prioridade do painel de instrumentos?"
 
 #: .\indicators\models.py:240
 msgid "Indicator Data Record"
@@ -2049,7 +2014,7 @@ msgstr "Registo de Dados Indicadores"
 
 #: .\indicators\models.py:241
 msgid "    Single-record Form"
-msgstr "Formulário de registo único"
+msgstr "    Formulário de registo único"
 
 #: .\indicators\models.py:269
 #, fuzzy
@@ -2095,7 +2060,7 @@ msgstr "Fonte de Dados"
 
 #: .\indicators\models.py:356
 msgid "   Multi-records Grid"
-msgstr "Formulário de Multi-Registos"
+msgstr "   Formulário de Multi-Registos"
 
 #: .\indicators\models.py:407
 #, fuzzy
