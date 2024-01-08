@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _ # The _ is alias for gettext
-from parler.models import TranslatableModel, TranslatedFields
+from parler.models import TranslatableModel, TranslatedFields,TranslationDoesNotExist
 from django.core.exceptions import ValidationError
 from django.core.validators import (RegexValidator,MinValueValidator,
     MaxValueValidator)
@@ -229,7 +229,10 @@ class StgDatasource(TranslatableModel):
         ordering = ('translations__name',)
 
     def __str__(self):
-        return self.name #display the data source name
+        try: 
+            return self.name # return string rep for the object
+        except TranslationDoesNotExist: 
+            return '' # return empty string
 
     def clean(self): # Don't allow end_period to be greater than the start_period.
         if StgDatasource.objects.filter(

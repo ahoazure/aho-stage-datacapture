@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-05 10:46+0300\n"
+"POT-Creation-Date: 2024-01-06 11:41+0300\n"
 "PO-Revision-Date: 2020-10-25 19:35+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -277,6 +277,18 @@ msgstr "Aprovado"
 msgid "Rejected"
 msgstr "Rejeitado"
 
+#: .\data_quality\models.py:46 .\data_quality\models.py:123
+#: .\data_quality\models.py:168 .\data_quality\models.py:211
+#: .\data_quality\models.py:253 .\data_quality\models.py:278
+#: .\data_quality\models.py:317 .\data_quality\models.py:354
+#: .\data_quality\models.py:422 .\data_quality\models.py:456
+#: .\data_quality\models.py:490 .\data_quality\models.py:524
+#: .\data_quality\models.py:557 .\elements\models.py:65
+#, fuzzy
+#| msgid "Admin User (Email)"
+msgid "User Name (Email)"
+msgstr "Utilizador administrador"
+
 #: .\data_quality\models.py:49
 msgid "Locations"
 msgstr "País/local"
@@ -339,7 +351,8 @@ msgstr "    Filtro de factos"
 msgid ""
 "Filter Facts Locations, Indicators, Categoryoptions, Datasources and Periods"
 msgstr ""
-"Filtrar Localizações de Factos, Indicadores, Opções de Categoria, Fontes de Dados e Períodos"
+"Filtrar Localizações de Factos, Indicadores, Opções de Categoria, Fontes de "
+"Dados e Períodos"
 
 #: .\data_quality\models.py:88 .\data_quality\models.py:124
 #: .\data_quality\models.py:169 .\data_quality\models.py:212
@@ -426,18 +439,6 @@ msgstr "Factos"
 #: .\data_quality\models.py:112
 msgid "   Facts Dataset"
 msgstr "   Conjunto de dados"
-
-#: .\data_quality\models.py:123 .\data_quality\models.py:168
-#: .\data_quality\models.py:211 .\data_quality\models.py:253
-#: .\data_quality\models.py:278 .\data_quality\models.py:317
-#: .\data_quality\models.py:354 .\data_quality\models.py:422
-#: .\data_quality\models.py:456 .\data_quality\models.py:490
-#: .\data_quality\models.py:524 .\data_quality\models.py:557
-#: .\elements\models.py:65
-#, fuzzy
-#| msgid "Admin User (Email)"
-msgid "User Name (Email)"
-msgstr "Utilizador administrador"
 
 #: .\data_quality\models.py:131
 msgid "Measure Type ID"

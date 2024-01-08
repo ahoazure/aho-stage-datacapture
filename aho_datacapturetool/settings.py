@@ -16,7 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 
-DEBUG = False # Debug must be set to False in production for security purposes
+DEBUG = True # Debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
@@ -296,3 +296,36 @@ ADMIN_STYLE = {
     'logo-height': '35px'
 }
 
+ADMIN_REORDER = (
+    # Cross-linked models
+    {'app': 'home', 'models': ('home.StgDatasource','home.StgCategoryoption',
+    'home.StgCategoryParent','home.StgMeasuremethod','home.StgValueDatatype')},
+
+    {'app': 'indicators', 'models': ('indicators.FactDataIndicator',
+    'indicators.IndicatorProxy','indicators.StgIndicator','indicators.StgIndicatorDomain',
+    'indicators.StgIndicatorReference','indicators.aho_factsindicator_archive',
+    'indicators.StgIndicatorNarrative','indicators.StgAnalyticsNarrative',
+    'indicators.StgNarrative_Type','indicators.AhoDoamain_Lookup',)},
+
+    {'app': 'publications', 'models': ('publications.StgKnowledgeProduct',
+    'publications.StgProductDomain','publications.StgResourceCategory',
+    'publications.StgResourceType')},
+
+    {'app': 'facilities', 'models': ('facilities.StgHealthFacility',
+    'facilities.StgFacilityType','facilities.StgFacilityOwnership',
+    'facilities.StgFacilityInfrastructure','facilities.StgServiceDomain')},
+
+    {'app': 'health_workforce', 'models': ('health_workforce.StgHealthWorkforceFacts',
+    'health_workforce.StgHealthCadre','health_workforce.StgTrainingInstitution',
+    'health_workforce.StgInstitutionType','health_workforce.StgInstitutionProgrammes',
+    'health_workforce.StgAnnouncements','health_workforce.StgRecurringEvent',
+    'health_workforce.ResourceTypeProxy','health_workforce.HumanWorkforceResourceProxy')},
+
+    {'app': 'elements', 'models': ('elements.FactDataElement','elements.DataElementProxy',
+    'elements.StgDataElement','elements.StgDataElementGroup')},
+
+    {'app': 'regions', 'models': ('regions.StgLocation','regions.StgLocationLevel',
+    'regions.StgEconomicZones','regions.StgWorldbankIncomegroups',
+    'regions.StgSpecialcategorization')},
+
+)

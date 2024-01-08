@@ -43,7 +43,7 @@ STATUS_CHOICES = ( #choices for approval of indicator data by authorized users
 class Facts_DataFilter (models.Model): # requested by Serge to determine facts loaded
     filter_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, models.PROTECT, blank=True,
-        verbose_name='User Name (Email)',default=14) # request helper field
+        verbose_name=_('User Name (Email)'),default=14) # request helper field
     locations = models.ManyToManyField(StgLocation,
         db_table='dqa_filter_location_members',blank=True,
         verbose_name = _('Locations'))  # Field name made lowercase. 

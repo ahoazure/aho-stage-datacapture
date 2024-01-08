@@ -22,7 +22,7 @@ def get_admin_site(context):
 
 get_admin_site = custom_admin_menu.get_admin_site #assign as is!
 
-# Now this is the method that does the menu tweaks using the ordering dict!!!
+# This is the method that does the menu tweaks using the ordering dict!!!
 def get_app_list(context, order=True):
     admin_site = get_admin_site(context)
     request = context['request']
