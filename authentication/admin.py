@@ -215,6 +215,7 @@ class GroupAdmin(BaseGroupAdmin):
 # This query unmanaged class allows the super admin to track user activities!
 @admin.register(AhodctUserLogs)
 class AhoDCT_LogsAdmin(admin.ModelAdmin):
+
     # This function removes the add button on the admin interface
     def has_delete_permission(self, request, obj=None):
         return False
@@ -229,10 +230,13 @@ class AhoDCT_LogsAdmin(admin.ModelAdmin):
         extra_context['show_save'] = False
         return super(AhoDCT_LogsAdmin, self).changeform_view(
             request, object_id, extra_context=extra_context)
-
+ 
     list_display=['first_name', 'last_name','email',
         'location_name','record_name','action','action_time',
         'last_login',]
+    
+    list_display_links = None # disable link to chage view form
+    
     readonly_fields = ('first_name', 'last_name','email',
         'location_name','record_name','action','action_time',
         'last_login',)

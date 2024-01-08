@@ -73,7 +73,8 @@ class HealthServices_DataIndicators(models.Model):
     period = models.CharField(_('Period'),max_length=25,blank=True,null=False)
     comment = models.CharField(_('Status'),max_length=10, choices= STATUS_CHOICES,
         default=STATUS_CHOICES[0][0])  # Field name made lowercase.
-    has_lastdate = models.BooleanField(default=False,verbose_name='Show End Date?')
+    has_lastdate = models.BooleanField(default=False,
+        verbose_name=_('Show End Date?'))
     date_created = models.DateTimeField(_('Date Created'),blank=True, null=True,
         auto_now_add=True)
     date_lastupdated = models.DateTimeField(_('Date Modified'),blank=True,
@@ -334,6 +335,8 @@ class HSCPrograms_Lookup(models.Model):
     code = models.CharField(_("Indicator Code"),max_length=10, blank=True)
     program_name  = models.CharField(_("HSC Programme"),max_length=230, blank=True)
     level  = models.IntegerField(_("Level"),null=False,blank=False)
+    language_code  = models.CharField(_("Language"),max_length=10, 
+        null=False,blank=False)
 
     class Meta:
         managed = False

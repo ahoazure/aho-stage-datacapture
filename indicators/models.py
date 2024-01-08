@@ -541,7 +541,7 @@ class NHOCustomFactsindicator(models.Model):
     location = models.ForeignKey(StgLocation, models.PROTECT,
         blank=False,verbose_name = _('Location Name'))
     categoryoption = models.ForeignKey(StgCategoryoption, models.PROTECT,
-        blank=False,verbose_name = _('Disaggregation Option'), default=99)
+        blank=False,verbose_name = _('Disaggregation Option'), default=None)
     datasource = models.ForeignKey(StgDatasource, models.PROTECT,blank=False,
         null=False, verbose_name = _('Data Source'))
     measuremethod = models.ForeignKey(StgMeasuremethod, models.PROTECT,

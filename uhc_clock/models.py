@@ -58,8 +58,8 @@ class StgUHClockIndicatorsGroup(TranslatableModel):
     # The filter function need to be modified to work with django parler as follows:
     def clean(self): # Don't allow end_period to be greater than the start_period.
         if StgUHClockIndicatorsGroup.objects.filter(
-            translations__name=self.name).count() and not self.reference_id:
-            raise ValidationError({'name':_('Sorry! This indicator reference exists')})
+            translations__name=self.name).count() and not self.group_id:
+            raise ValidationError({'name':_('Sorry! This indicator group exists')})
 
     def save(self, *args, **kwargs):
         super(StgUHClockIndicatorsGroup, self).save(*args, **kwargs)

@@ -18,7 +18,7 @@ from .models import (StgUHClockIndicatorsGroup,StgUHClockIndicators,
 from django.forms import TextInput,Textarea # customize textarea row and column size
 from commoninfo.admin import (OverideImportExport,OverideExport,OverideImport,)
 from regions.models import StgLocation,StgLocationLevel
-
+from indicators.models import StgIndicator
 
 @admin.register(StgUHClockIndicatorsGroup)
 class UHCClockIndicatorGroupAdmin(TranslatableAdmin):
@@ -33,7 +33,6 @@ class UHCClockIndicatorGroupAdmin(TranslatableAdmin):
             translations__language_code=language).order_by(
             'translations__name').distinct()
         return qs
-
 
     fieldsets = (
         ('Reference Attributes', {
@@ -55,11 +54,26 @@ class UHCClockIndicatorGroupAdmin(OverideExport):
     def get_queryset(self, request):
         language = request.LANGUAGE_CODE
         qs = super().get_queryset(request).filter(
-            indicator_id__translations__language_code=language).distinct()
+            indicator_id__translations__language_code=language,
+            group__translations__language_code=language).distinct()
         return qs
 
+    def formfield_for_foreignkey(self, db_field, request =None, **kwargs):
+        groups = list(request.user.groups.values_list('user', flat=True))
+        user = request.user.id
+        user_location = request.user.location.location_id
+        language = request.LANGUAGE_CODE
 
-
+        if db_field.name == "indicator":
+            kwargs["queryset"] = StgIndicator.objects.filter(
+                translations__language_code=language).distinct()
+        
+        if db_field.name == "group":
+            kwargs["queryset"] = StgUHClockIndicatorsGroup.objects.filter(
+                translations__language_code=language).distinct()
+                # Looks up for the location level upto the country level
+        return super().formfield_for_foreignkey(db_field, request,**kwargs)
+    
     list_display=['indicator','group','Indicator_type','description',]
 
 

@@ -144,7 +144,10 @@ class Facts_DataFrameAdmin(OverideExport):
     }
 
     def get_queryset(self, request):
-        qs = super().get_queryset(request).distinct()
+        language = request.LANGUAGE_CODE
+        qs = super().get_queryset(request).filter(
+            language_code=language,
+        ).distinct()
         groups = list(request.user.groups.values_list(
             'user', flat=True))
         user = request.user.id  

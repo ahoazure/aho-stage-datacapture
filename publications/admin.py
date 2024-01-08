@@ -135,10 +135,12 @@ class ProductAdmin(TranslatableAdmin,OverideExport,ExportActionModelAdmin):
         qs = super().get_queryset(request).select_related(
             'user','type','location','categorization').prefetch_related(
             'translations','type__translations','location__translations').filter(
-                translations__language_code=language).order_by(
-            'translations__title').filter(
+                translations__language_code=language).filter(
+                type__translations__language_code=language).filter(
                 location__translations__language_code=language).order_by(
-            'location__translations__name').distinct()
+                    'translations__title').filter(
+                location__translations__language_code=language).order_by(
+                    'location__translations__name').distinct()
 
 
         # Get a query of groups the user belongs and flatten it to list object
@@ -413,7 +415,10 @@ class ResourceTaggingAdmin(OverideExport):
 
     def get_queryset(self, request):
         language = request.LANGUAGE_CODE
-        qs = super().get_queryset(request)
+        qs = super().get_queryset(request).filter(
+            publications__translations__language_code=language,
+            location__translations__language_code=language,).order_by(
+            'publications__translations__title').distinct()
 
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user',flat=True))

@@ -7,6 +7,7 @@ from parler.admin import (TranslatableAdmin,TranslatableStackedInline,
     TranslatableInlineModelAdmin,TranslatableModelForm)
 from parler.forms import (TranslatedField)
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 import data_wizard # Solution to data import madness that had refused to go
 from itertools import groupby #additional import for managing grouped dropdowm
@@ -112,8 +113,10 @@ class GroupedModelChoiceField(ModelChoiceField):
 
 
 class HealthServicesProxyForm(forms.ModelForm):
-    categoryoption = GroupedModelChoiceField(group_by_field='category',
-        queryset=StgCategoryoption.objects.all().order_by('category__category_id'),
+    categoryoption = GroupedModelChoiceField(label=_('Disaggregation Option'),
+        group_by_field='category',
+        queryset=StgCategoryoption.objects.all().order_by(
+            'category__category_id'),
     )
     '''
     Implemented after overrriding decimal place restriction that facts with >3
@@ -203,12 +206,18 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
     If a user is not assigned to a group, he/she can only own data - 01/02/2021
     """
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        language = request.LANGUAGE_CODE # get the en, fr or pt from the request
+
+        qs = super().get_queryset(request).filter(
+            indicator__translations__language_code=language).filter(
+            location__translations__language_code=language).filter(
+            categoryoption__translations__language_code=language).filter(
+            datasource__translations__language_code=language).filter(
+            measuremethod__translations__language_code=language).distinct()
+        
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
-        language = request.LANGUAGE_CODE # get the en, fr or pt from the request
-
         user_uuid = request.user.location.locationlevel.uuid
         user_level= StgLocationLevel.objects.get(uuid=user_uuid)       
         
@@ -216,13 +225,8 @@ class HealthServicesFactAdmin(ExportActionModelAdmin,OverideExport):
             'datasource','measuremethod','user').prefetch_related(
             'location__translations','indicator__translations',
             'categoryoption__translations','datasource__translations',
-            'measuremethod__translations').filter(
-                indicator__translations__language_code=language,
-                location__translations__language_code=language,
-                categoryoption__translations__language_code=language,
-                datasource__translations__language_code=language,   
-                measuremethod__translations__language_code=language,            
-                )
+            'measuremethod__translations'          
+        )
         
         if request.user.is_superuser:
             qs
@@ -699,10 +703,15 @@ class HSC_Programs_LookupAdmin(OverideExport,ExportActionModelAdmin):
             request, object_id, extra_context=extra_context)
 
     def get_queryset(self, request):
+        language = request.LANGUAGE_CODE
+
         groups = list(request.user.groups.values_list('user', flat=True))
         db_locations = StgLocation.objects.all().order_by('location_id')
-        qs = super().get_queryset(request).distinct()
+        qs = super().get_queryset(request).filter(
+            language_code=language).order_by(
+                'indicator_name').distinct()
         return qs
+    
     resource_class = HSCDomainLookupResourceExport
     actions = ExportActionModelAdmin.actions
     list_display=('indicator_name','code','program_name', 'level',)

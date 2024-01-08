@@ -204,7 +204,11 @@ class DataElementFactAdmin(ExportActionModelAdmin,OverideExport):
         user_location = request.user.location.location_id
         db_locations = StgLocation.objects.all().order_by('location_id')
         qs = super().get_queryset(request).filter(
-            dataelement__translations__language_code=language).order_by(
+            dataelement__translations__language_code=language).filter(
+            location__translations__language_code=language).filter(
+            categoryoption__translations__language_code=language).filter(
+            datasource__translations__language_code=language).filter(
+            valuetype__translations__language_code=language).order_by(
             'dataelement__translations__name').filter(
             location__translations__language_code=language).order_by(
             'location__translations__name').distinct()

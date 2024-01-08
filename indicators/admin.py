@@ -222,9 +222,9 @@ class IndicatorDomainAdmin(TranslatableAdmin,OverideExport):
     )
 
 class IndicatorProxyForm(forms.ModelForm):
-    categoryoption = GroupedModelChoiceField(group_by_field='category',
-        queryset=StgCategoryoption.objects.all().order_by('category__category_id'),
-    )
+    categoryoption = GroupedModelChoiceField(label=_('Disaggregation Option'),
+        group_by_field='category',queryset=StgCategoryoption.objects.all().order_by(
+            'category__category_id'))
     '''
     Implemented after overrriding decimal place restriction that facts with >3
     decimal places. The RoundingDecimalFormField is in serializer.py
@@ -322,7 +322,16 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
     If a user is not assigned to a group, he/she can only own data - 01/02/2021
     """
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        language = request.LANGUAGE_CODE
+        
+        qs = super().get_queryset(request).filter( # filter using session language
+            location__translations__language_code=language,
+                indicator__translations__language_code=language,
+                categoryoption__translations__language_code=language,
+                datasource__translations__language_code=language,
+                measuremethod__translations__language_code=language,
+        )
+    
         groups = list(request.user.groups.values_list('user', flat=True))
         user = request.user.id
         user_location = request.user.location.location_id
@@ -687,7 +696,15 @@ class IndicatorFactArchiveAdmin(OverideExport):
 
     def get_queryset(self, request):
         show_full_result_count = False # added 28-01-2023
-        qs = super().get_queryset(request)
+        language = request.LANGUAGE_CODE # get the en, fr or pt from the request
+
+        qs = super().get_queryset(request).filter( # filter using session language
+            location__translations__language_code=language,
+                indicator__translations__language_code=language,
+                categoryoption__translations__language_code=language,
+                datasource__translations__language_code=language,
+                measuremethod__translations__language_code=language,
+            )
 
         # Get a query of groups the user belongs and flatten it to list object
         groups = list(request.user.groups.values_list('user', flat=True))
