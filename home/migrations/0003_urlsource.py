@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('data_wizard', '0002_filesource_urlsource'),
+        # ('data_wizard', '0002_filesource_urlsource'),
         ('regions', '0001_initial'),
         ('home', '0002_filesource'),
     ]
