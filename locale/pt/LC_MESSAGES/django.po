@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-08 19:56+0300\n"
+"POT-Creation-Date: 2024-01-09 12:06+0300\n"
 "PO-Revision-Date: 2020-10-25 19:35+0000\n"
 "Last-Translator: b'Super Admin <admin@mtccl.co.ke>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1904,6 +1904,10 @@ msgstr "Importar ficheiro..."
 msgid "Import via File.."
 msgstr " Importar via ficheiro.."
 
+#: .\home\models.py:346
+msgid "File"
+msgstr "Ficheiro"
+
 #: .\home\models.py:350
 msgid "URL"
 msgstr "URL"
@@ -1944,7 +1948,7 @@ msgstr "Referência Indicadora"
 msgid "Indicator References"
 msgstr "Referências Indicadoras"
 
-#: .\indicators\models.py:64 .\uhc_clock\models.py:62
+#: .\indicators\models.py:64
 msgid "Sorry! This indicator reference exists"
 msgstr "Desculpe! Esta referência de indicador existe"
 
@@ -2642,6 +2646,12 @@ msgstr "Grupo de Indicadores de Relógio UHC"
 msgid "  UHC Clock Indicator Groups"
 msgstr " Grupos de indicadores de relógio UHC"
 
+#: .\uhc_clock\models.py:62
+#, fuzzy
+#| msgid "Sorry! This indicators theme exists"
+msgid "Sorry! This indicator group exists"
+msgstr "Desculpe! Este tema de indicadores existe"
+
 #: .\uhc_clock\models.py:70
 msgid "Input"
 msgstr "Entrada"
@@ -2723,9 +2733,6 @@ msgstr "Seleção de países"
 #: .\uhc_clock\models.py:218
 msgid "UHC Clock Country Selections"
 msgstr "Selecções de países do Relógio UHC"
-
-#~ msgid "File"
-#~ msgstr "Arquivo"
 
 #, fuzzy
 #~| msgid "Numerator Value"

@@ -343,7 +343,7 @@ class URLSource(URLsources):
     user = models.ForeignKey(CustomUser, models.PROTECT,
         verbose_name='User Name (Email)') # request helper field
     file = models.ForeignKey(FileSource, on_delete=models.CASCADE,
-                        related_name="link")
+            related_name="link",verbose_name=_('File'))
 
     class Meta:
         managed = True
