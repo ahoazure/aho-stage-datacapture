@@ -1895,7 +1895,7 @@ msgstr "Fichier d'importation"
 
 #: .\home\models.py:315
 msgid "Import via File.."
-msgstr "Importation via fichier"
+msgstr "Importer un fichier..."
 
 #: .\home\models.py:346
 msgid "File"
@@ -1907,7 +1907,7 @@ msgstr "URL"
 
 #: .\home\models.py:351
 msgid "Import via URL.."
-msgstr "Importation via URL"
+msgstr "Importer l'URL..."
 
 #: .\home\templates\login.html:10
 msgid "Login with Microsoft Azure"
@@ -2064,7 +2064,7 @@ msgstr "Formulaire de données"
 
 #: .\indicators\models.py:356
 msgid "   Multi-records Grid"
-msgstr "  Formulaire multi-enregistrements"
+msgstr "  Grille enregistrement multiple"
 
 #: .\indicators\models.py:407
 #, fuzzy
