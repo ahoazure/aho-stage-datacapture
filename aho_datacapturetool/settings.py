@@ -16,7 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 
-DEBUG = True # Debug must be set to False in production for security purposes
+DEBUG = False # Debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
@@ -186,7 +186,7 @@ DATABASES = {
         'OPTIONS': {
             # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'sql_mode': 'traditional',
-            'init_command': 'SET default_storage_engine=INNODB;',
+            'init_command': 'SET default_storage_engine=INNODB;', # changed from storage_engine 28/01/2024
             'ssl': {'ca': '/site/cert/DigiCertGlobalRootCA.crt.pem'} # Replaced with new combo certificate 03/05/2023
             },
     }
