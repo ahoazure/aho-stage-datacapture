@@ -186,7 +186,7 @@ DATABASES = {
         'OPTIONS': {
             # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'sql_mode': 'traditional',
-            'init_command': 'SET storage_engine=INNODB;',
+            # 'init_command': 'SET storage_engine=INNODB;',
             'ssl': {'ca': '/site/cert/DigiCertGlobalRootCA.crt.pem'} # Replaced with new combo certificate 03/05/2023
             },
     }
