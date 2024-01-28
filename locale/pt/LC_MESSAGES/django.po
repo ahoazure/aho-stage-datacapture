@@ -2246,10 +2246,8 @@ msgid "This marks year of publication"
 msgstr "Isto marca o início do período do relatório"
 
 #: .\publications\models.py:146
-#, fuzzy
-#| msgid "Upload File/Video(s)"
 msgid "Upload File"
-msgstr "Carregar ficheiro/vídeo(s)"
+msgstr "Carregar ficheiro"
 
 #: .\publications\models.py:148
 #, fuzzy
