@@ -249,6 +249,15 @@ class ResourceAdmin(TranslatableAdmin,ExportActionModelAdmin):
            return obj.type.name
     get_type.short_description = 'Type'
 
+    """
+    Method added 14/02/2024 due error user_id cannot be null
+    First overrride model_save method to get id of the logged in user.
+    """
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.user = request.user # only set user during the first save.
+        super().save_model(request, obj, form, change)
+
      #This function is used to register permissions for approvals.See signals,py
     def get_actions(self, request):
         actions = super(ResourceAdmin, self).get_actions(request)
@@ -536,8 +545,7 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
             qs=qs.filter(user=request.user).distinct()
         return qs  
     
-    
-    
+        
     """
     Serge requested that the form for input be restricted to user's location.
     Thus, this function is for filtering location to display country level.
@@ -603,7 +611,6 @@ class HealthworforceFactsAdmin(ExportActionModelAdmin,OverideExport):
                 translations__language_code=language).order_by(
                 'translations__name')
         
-
         if db_field.name == "measuremethod":
             kwargs["queryset"] = StgMeasuremethod.objects.prefetch_related(
                 'translations__master').filter(

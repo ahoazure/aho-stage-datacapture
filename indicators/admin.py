@@ -359,7 +359,6 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
                     measuremethod__translations__language_code=language,            
                 )
         
-
         if request.user.is_superuser:
             qs
         # returns data for AFRO and member countries
@@ -415,7 +414,8 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
                     language_code=language)
 
         if db_field.name == "indicator":
-            kwargs["queryset"] = StgIndicator.objects.select_related('reference',).prefetch_related(
+            kwargs["queryset"] = StgIndicator.objects.select_related(
+                'reference',).prefetch_related(
                 'translations__master',).filter(
                 translations__language_code=language)
 
@@ -426,11 +426,13 @@ class IndicatorFactAdmin(ExportActionModelAdmin,OverideExport):
 
         if db_field.name == "datasource":
             kwargs["queryset"] = StgDatasource.objects.prefetch_related(
-                'translations__master').filter(translations__language_code=language)
+                'translations__master').filter(
+                    translations__language_code=language)
 
         if db_field.name == "measuremethod":
             kwargs["queryset"] = StgMeasuremethod.objects.prefetch_related(
-                'translations__master').filter(translations__language_code=language)
+                'translations__master').filter(
+                    translations__language_code=language)
 
         if db_field.name == "user":
             kwargs["queryset"] = CustomUser.objects.select_related(
@@ -1142,7 +1144,6 @@ class NHOCustomizationAdmin(OverideExport,ExportActionModelAdmin):
         if not obj.pk:
             obj.user = request.user # set user from request during the first save.
         super().save_model(request, obj, form, change)
-
 
     exclude = ('user',)
 

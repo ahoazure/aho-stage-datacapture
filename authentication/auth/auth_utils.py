@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.db import IntegrityError # added 14/02/2023 due to integrity error at login
 from django.core.validators import validate_email
 from django.contrib.auth.hashers import make_password
+
 from authentication.models import CustomUser
 import msal
 import requests
@@ -126,4 +128,4 @@ def get_django_user(email,firstname,surname):
 
             except IntegrityError:
                 pass #Ignore creating new user in the database if it exists
-    return user # this gave me hard time but now returns user to auth_decorators
+    return user # gave me hard time but now returns user to auth_decorators
