@@ -113,7 +113,7 @@ def get_django_user(email,firstname,surname):
             user.username=email
             user.is_active=True
             user.is_staff=True
-            # user.save()
+            user.save()
     except CustomUser.DoesNotExist: # If does not exist, try creating a new record
         random_password = ''.join(random.choice(string.ascii_letters) for i in range(32))
         if firstname or surname is None:
@@ -124,7 +124,7 @@ def get_django_user(email,firstname,surname):
                         last_name=surname,password=make_password(random_password))
                 user.is_active = True
                 user.is_staff = True
-                # user.save()
+                user.save()
 
             except IntegrityError:
                 pass #Ignore creating new user in the database if it exists
