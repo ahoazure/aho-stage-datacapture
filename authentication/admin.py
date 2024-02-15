@@ -53,7 +53,7 @@ class UserAdmin (UserAdmin):
           return form
 
     """
-    The purpose of this method is to delegate limited role of creatting users
+    The purpose of this method is to delegate limited role of creating users
     and groups to a non-superuser. This is achieved by assigning logged in user
     location to the user being created.
     """

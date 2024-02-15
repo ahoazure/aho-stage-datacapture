@@ -1,5 +1,5 @@
 from .settings import *
-DEBUG = True # Swich off debug for security reasons
+DEBUG = False # Swich off debug for security reasons
 # Configure production domain names
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net',
     'af-aho-datacapturetool-stage.azurewebsites.net',
@@ -45,7 +45,7 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'init_command': 'SET default_storage_engine=INNODB;', # changed from storage_engine 28/01/2024
-            'ssl': {'ca': '/home/site/cert/BaltimoreTrustDigiCertifcateCombo.pem'} # Replaced with new MySQL server certificate 28/01/2024
+            'ssl': {'ca': '/home/site/cert/DigiCertGlobalRootCA.crt.pem'} # Replaced with new MySQL server certificate 28/01/2024
             },
     }
 }
