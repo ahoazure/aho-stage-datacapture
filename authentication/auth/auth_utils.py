@@ -106,21 +106,22 @@ def validate_username(username):
 
 def get_django_user(email,firstname,surname):
     # import pdb; pdb.set_trace()
+    user = None
     if not validate_username(username=email):
         return
     try:
         user = CustomUser.objects.get(email=email) #check if email exists
-        # user = CustomUser.objects.get(email=email).update(
-        # username=email,is_active=True,is_staff=True)
-        if user:
-            try:
-                user.first_name = firstname
-                user.last_name = surname
-                user.is_active=True
-                user.is_staff=True
-                user.save()
-            except ValueError as e:
-                pass
+        # import pdb; pdb.set_trace()
+
+        # if user:
+        #     try:
+        #         user.first_name = firstname
+        #         user.last_name = surname
+        #         user.is_active=True
+        #         user.is_staff=True
+        #         user.save()
+        #     except ValueError as e:
+        #         pass
 
     except CustomUser.DoesNotExist: # If does not exist, try creating a new record
         random_password = ''.join(random.choice(string.ascii_letters) for i in range(32))
@@ -136,4 +137,6 @@ def get_django_user(email,firstname,surname):
 
             except IntegrityError:
                 pass #Ignore creating new user in the database if it exists
+        import pdb; pdb.set_trace()
+
     return user # gave me hard time but now returns user to auth_decorators
