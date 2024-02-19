@@ -83,7 +83,7 @@ def callback(request):
     # import pdb; pdb.set_trace()
     user = get_django_user(email=ms_user['mail'],firstname=firstname,
             surname=surname)
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
 
     if user:
         login(request, user)
