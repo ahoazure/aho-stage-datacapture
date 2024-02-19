@@ -63,10 +63,21 @@ first name and surname. These values are passed to get_django_user in auth_utils
 """
 
 def callback(request):
+    firstname = None # initialize user first name attribute
+    surname = None # initialize user surname attribute
     result = get_token_from_code(request)
     ms_user = get_user(result['access_token'])
-    user = get_django_user(email=ms_user['mail'],firstname=ms_user['givenName'],
-            surname=ms_user['surname'],)
+    ms_user['displayName']
+
+    if ms_user['displayName']: # get other use attributes from token
+        if ms_user['displayName'].split()[0]: # get first name
+            firstname = ms_user['displayName'].split()[0]
+        if ms_user['displayName'].split()[1]:  # get surname
+            surname = ms_user['displayName'].split(' ',3)[2]
+        else:
+            surname = ms_user['displayName'].split()[1]
+    user = get_django_user(email=ms_user['mail'],firstname=firstname,
+            surname=surname)
     if user:
         login(request, user)
     else:

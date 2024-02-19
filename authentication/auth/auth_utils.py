@@ -105,15 +105,25 @@ def validate_username(username):
 
 
 def get_django_user(email,firstname,surname):
+    # id = request.user.id
+    # import pdb; pdb.set_trace()
+
     if not validate_username(username=email):
         return
     try:
         user = CustomUser.objects.get(email=email) #check if email exists
-        if user is not None: # If exists, update the email and status flags
-            user.username=email
-            user.is_active=True
-            user.is_staff=True
-            user.save()
+        # user = CustomUser.objects.get(email=email).update(
+        # username=email,is_active=True,is_staff=True)
+        if user:
+            try:
+                user.first_name = firstname
+                user.last_name = surname
+                user.is_active=True
+                user.is_staff=True
+                user.save()
+            except ValueError as e:
+                pass
+
     except CustomUser.DoesNotExist: # If does not exist, try creating a new record
         random_password = ''.join(random.choice(string.ascii_letters) for i in range(32))
         if firstname or surname is None:
