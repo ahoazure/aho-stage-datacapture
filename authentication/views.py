@@ -70,12 +70,19 @@ def callback(request):
     ms_user['displayName']
 
     if ms_user['displayName']: # get other use attributes from token
-        if ms_user['displayName'].split()[0]: # get first name
-            firstname = ms_user['displayName'].split()[0]
-        if ms_user['displayName'].split()[1]:  # get surname
-            surname = ms_user['displayName'].split(' ',3)[2]
-        else:
-            surname = ms_user['displayName'].split()[1]
+        try:
+            if ms_user['displayName'].split()[0]: # get first name
+                firstname = ms_user['displayName'].split()[0]
+            if ms_user['displayName'].split()[1]:  # get surname
+                surname = ms_user['displayName'].split(' ',3)[2]
+            else:
+                surname = ms_user['displayName'].split()[1]
+        except IndexError:
+            firstname = ms_user['mail'].split('@')[0]
+            surname = ms_user['mail'].split('@')[0]
+
+    # import pdb; pdb.set_trace()
+
     user = get_django_user(email=ms_user['mail'],firstname=firstname,
             surname=surname)
     if user:

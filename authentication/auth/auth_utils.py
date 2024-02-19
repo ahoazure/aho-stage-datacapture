@@ -105,9 +105,7 @@ def validate_username(username):
 
 
 def get_django_user(email,firstname,surname):
-    # id = request.user.id
     # import pdb; pdb.set_trace()
-
     if not validate_username(username=email):
         return
     try:
