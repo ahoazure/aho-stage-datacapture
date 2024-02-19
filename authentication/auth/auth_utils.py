@@ -133,10 +133,7 @@ def get_django_user(email,firstname,surname):
                         last_name=surname,password=make_password(random_password))
                 user.is_active = True
                 user.is_staff = True
-                user.save()
-
+                user.save()        
             except IntegrityError:
                 pass #Ignore creating new user in the database if it exists
-        import pdb; pdb.set_trace()
-
     return user # gave me hard time but now returns user to auth_decorators
