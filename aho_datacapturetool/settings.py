@@ -16,7 +16,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.environ['SECRET']
 
-DEBUG = True # Debug must be set to False in production for security purposes
+DEBUG = False # Debug must be set to False in production for security purposes
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','dct.aho.afro.who.int',
                 'af-aho-datacapturetool.azurewebsites.net',
