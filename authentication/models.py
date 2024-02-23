@@ -65,7 +65,7 @@ class CustomUser(AbstractUser):
         max_length=6)
     username = models.CharField(_('user name'),blank=False, null=False,
         max_length=150)
-    location = models.ForeignKey(StgLocation, models.PROTECT,default=None,
+    location = models.ForeignKey(StgLocation, models.PROTECT,default=1,
         verbose_name = _('Location Name'))  # Field name made lowercase.
     date_created = models.DateTimeField(blank=True, null=True, auto_now_add=True,
         verbose_name = _('Date Created'))
